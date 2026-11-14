@@ -1,0 +1,4050 @@
+// ==========================================================================
+// TWISTED TAR — REACT 18 APPLICATION
+// Authentic Lucknowi Chikankari Luxury E-Commerce Website
+// ==========================================================================
+
+const { useState, useEffect, useMemo, useCallback, useRef } = React;
+
+// --- BRAND DATA & CONSTANTS ---
+const BRAND = {
+  name: "Twisted Tar",
+  tagline: "The art of chikankari, woven into everyday elegance",
+  description: "Authentic Lucknowi chikankari kurtis handcrafted by master women artisans. Woven from gossamer mulmul cotton, handwoven chanderi silk, and pure georgette.",
+  origin: "Lucknow, Awadh · Est. 2026",
+  currency: { symbol: "₹", code: "INR", usdRate: 0.012 },
+  freeShippingThreshold: 1999,
+  contact: {
+    phone: "+91 522 492 8170",
+    email: "concierge@twistedtar.com",
+    address: "Studio 14, Heritage Arcade, Hazratganj, Lucknow, UP 226001",
+    hours: "Monday – Saturday: 10:00 AM – 7:00 PM IST"
+  }
+};
+
+const CATEGORIES = [
+  {
+    id: "3-piece",
+    name: "3-Piece Kurtis",
+    tagline: "Complete Royal Ensembles",
+    shortDesc: "Regal three-piece sets comprising an intricately embroidered kurti, handcrafted bottom, and an ethereal dupatta.",
+    heroImage: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80",
+    artisanNote: "Each 3-piece set requires between 60 to 90 hours of delicate needlework by women artisans in rural Awadh.",
+    productCount: 4
+  },
+  {
+    id: "2-piece",
+    name: "2-Piece Kurtis",
+    tagline: "Effortless Silhouette Pairings",
+    shortDesc: "Thoughtfully paired embroidered kurtis with tailored cigarette trousers, flared palazzos, or soft cotton bottoms.",
+    heroImage: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=80",
+    artisanNote: "Engineered for graceful daily movement with deep shadow work (Bakhiya) that breathes effortlessly.",
+    productCount: 4
+  },
+  {
+    id: "short",
+    name: "Short Kurtis",
+    tagline: "Contemporary Everyday Tunics",
+    shortDesc: "Modern, hip-length chikankari tunics designed to pair seamlessly with denim, linen trousers, or culottes.",
+    heroImage: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=80",
+    artisanNote: "A modern tribute to the classic 'Angarkha' and Lucknowi tunic, featuring delicate yoke and sleeve embroidery.",
+    productCount: 4
+  }
+];
+
+const CRAFT_STITCHES = [
+  {
+    name: "Bakhiya (Shadow Work)",
+    description: "Embroidered on the reverse side of gossamer fabrics like mulmul and georgette, creating a subtle, veiled shadow effect on the front with fine herringbone stitches.",
+    origin: "Signature stitch of Lucknow",
+    visual: "Delicate herringbone backstitch casting a gossamer veil."
+  },
+  {
+    name: "Phanda (Millet Stitches)",
+    description: "Tiny, compact French-knot style knots that resemble round millets, used to construct intricate floral centers and textured petal veins.",
+    origin: "Embossed texture technique",
+    visual: "Pebbled pearl-like knots raised on the fabric."
+  },
+  {
+    name: "Murri (Rice-Grain Knots)",
+    description: "Elongated French knots shaped specifically like grains of basmati rice, creating regal raised outlines that catch gentle light.",
+    origin: "Nawabi court tradition",
+    visual: "Oval Basmati-grain embossed stitchwork."
+  },
+  {
+    name: "Keel Kangan & Tepchi",
+    description: "Fine running stitches and curved petal outlines that trace the delicate floral vines (bels) across the neckline, hems, and sleeves.",
+    origin: "Architectural lattice motifs",
+    visual: "Graceful continuous thread line tracking petal contours."
+  },
+  {
+    name: "Jaali (Lattice Openwork)",
+    description: "Without cutting a single thread of fabric, warp and weft yarns are gently separated with the needle to form gossamer lace-like windows.",
+    origin: "Inspired by Mughal jali screens",
+    visual: "Pristine openwork mesh without cutting cloth."
+  }
+];
+
+const INITIAL_PRODUCTS = [
+  {
+    id: "tt-3p-01",
+    slug: "hazratganj-noor-3-piece-chanderi-set",
+    name: "Hazratganj Noor Chanderi Set",
+    category: "3-piece",
+    categoryName: "3-Piece Kurtis",
+    tag: "Bestseller",
+    badge: "Masterpiece",
+    price: 6890,
+    originalPrice: 8490,
+    rating: 4.9,
+    reviewCount: 38,
+    isNew: false,
+    inStock: true,
+    shortDesc: "A timeless warm ivory Chanderi silk kurti with antique gold zari accents, pure cotton lining, tailored pants, and a scalloped organza dupatta.",
+    description: "The Hazratganj Noor set is our quintessential festive tribute to the evening promenade of old Lucknow. Woven on handloom Chanderi with a fine metallic sheen, it showcases over 68 hours of intricate Bakhiya and Phanda work created by generational master artisans. The set includes a straight-cut kurti with gossamer mulmul lining, comfortable elasticated cotton-silk trousers, and an ethereal organza dupatta framed with hand-cut scalloped chikankari borders.",
+    fabric: "Handwoven Chanderi Silk with 100% Breathable Mulmul Lining",
+    embroidery: "Handcrafted Bakhiya (Shadow Work), Phanda, and delicate Ghaspatti",
+    craftHours: "68 hours of hand needlework",
+    fit: "Straight silhouette with side slits and comfortable ease",
+    care: "Dry clean recommended for first two washes; subsequently gentle hand wash in cold water with mild silk detergent.",
+    includedItems: "1 Kurti, 1 Tapered Bottom Pant, 1 Hand-embroidered Scalloped Dupatta (2.4m)",
+    colors: [
+      { name: "Warm Ivory & Gold", hex: "#FDFBF7", imageIndex: 0 },
+      { name: "Pistachio Mist", hex: "#D8E3D8", imageIndex: 1 },
+      { name: "Blush Champagne", hex: "#EFE3DA", imageIndex: 2 }
+    ],
+    sizes: [
+      { size: "XS", stock: 3 },
+      { size: "S", stock: 5 },
+      { size: "M", stock: 8 },
+      { size: "L", stock: 4 },
+      { size: "XL", stock: 2 },
+      { size: "XXL", stock: 1 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-3p-02",
+    slug: "begum-akhtar-mulberry-silk-set",
+    name: "Begum Akhtar Emerald Organza Set",
+    category: "3-piece",
+    categoryName: "3-Piece Kurtis",
+    tag: "Artisan Edition",
+    badge: "Heritage",
+    price: 7490,
+    originalPrice: 8990,
+    rating: 5.0,
+    reviewCount: 22,
+    isNew: true,
+    inStock: true,
+    shortDesc: "Royal ink forest green organza kurti set adorned with pristine white silk-thread Murri and Jaali lattice embroidery.",
+    description: "Named after the legendary ghazal queen of Awadh, this ensemble embodies poise and poetic grace. Tailored from premium sheer organza over a dyed soft cotton slip, the kurti radiates in deep forest emerald. Dense clusters of Murri basmati knots and handcrafted Jaali cutouts grace the yoke, echoed across the matching palazzo pants and sweeping 2.5m dupatta.",
+    fabric: "Pure Sheer Organza Silk with Separate Mulmul Camisole Slip",
+    embroidery: "Murri (Basmati grain knots), Daraz Jaali, and Keel Kangan",
+    craftHours: "84 hours of master needlework",
+    fit: "Fluid flared silhouette with relaxed palazzo",
+    care: "Dry clean only to maintain silk thread tension and delicate lattice openwork.",
+    includedItems: "1 Kurti, 1 Camisole Slip, 1 Flared Palazzo Pant, 1 Embroidered Organza Dupatta",
+    colors: [
+      { name: "Royal Forest Emerald", hex: "#142820", imageIndex: 0 },
+      { name: "Midnight Ink Navy", hex: "#121A28", imageIndex: 1 }
+    ],
+    sizes: [
+      { size: "S", stock: 4 },
+      { size: "M", stock: 6 },
+      { size: "L", stock: 5 },
+      { size: "XL", stock: 2 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-3p-03",
+    slug: "qaisar-bagh-pure-mulmul-set",
+    name: "Qaisar Bagh Pure Mulmul Set",
+    category: "3-piece",
+    categoryName: "3-Piece Kurtis",
+    tag: "Pure Cotton",
+    badge: "Summer Essential",
+    price: 5290,
+    originalPrice: 6200,
+    rating: 4.8,
+    reviewCount: 45,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Whisper-soft 80s count unbleached cotton mulmul set in pastel peach with tone-on-tone Lucknowi shadow embroidery.",
+    description: "Crafted for the balmy summer afternoons of Lucknow, the Qaisar Bagh set is tailored from whisper-soft 80s count hand-combed mulmul. White resham thread traces blooming floral paisleys across the front panel, balanced with gentle scalloped hems on the palazzo and a featherlight cotton dupatta that drapes like air.",
+    fabric: "100% Certified 80s Count Hand-Combed Mulmul Cotton",
+    embroidery: "Classic Bakhiya (Shadow Work), Tepchi, and Phanda butis",
+    craftHours: "52 hours of artisan hand embroidery",
+    fit: "Relaxed breezy fit with side slits",
+    care: "Gentle machine wash in laundry bag on delicate cycle or hand wash cold. Dry in shade.",
+    includedItems: "1 Kurti, 1 Straight Cotton Trouser, 1 Lightweight Mulmul Dupatta",
+    colors: [
+      { name: "Powder Peach", hex: "#FCECE4", imageIndex: 0 },
+      { name: "Pristine Snow White", hex: "#FFFFFF", imageIndex: 1 },
+      { name: "Sky Glaze", hex: "#E4F0F6", imageIndex: 2 }
+    ],
+    sizes: [
+      { size: "XS", stock: 2 },
+      { size: "S", stock: 7 },
+      { size: "M", stock: 10 },
+      { size: "L", stock: 8 },
+      { size: "XL", stock: 5 },
+      { size: "XXL", stock: 3 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-3p-04",
+    slug: "rumi-darwaza-viscose-georgette-set",
+    name: "Rumi Darwaza Royal Georgette Set",
+    category: "3-piece",
+    categoryName: "3-Piece Kurtis",
+    tag: "Festive Pick",
+    badge: "Heavy Embroidery",
+    price: 6990,
+    originalPrice: 8200,
+    rating: 4.9,
+    reviewCount: 31,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Rich midnight ink navy viscose georgette 3-piece set with heavy all-over Lucknowi kashmiri jaal work and pearl buttons.",
+    description: "Inspired by the monumental archway of Rumi Darwaza, this heavy bridal and festive set is crafted from fluid viscose georgette. Every inch of the front yolk is carpeted with dense Phanda, Murri, and Ghaspatti motifs. Accompanied by a matching silk-blend dyed inner, matching pants, and a 4-sided embroidered dupatta.",
+    fabric: "Heavy 60g Viscose Georgette with Dye-to-Match Cotton Slip",
+    embroidery: "All-Over Kashmiri Jaal, Phanda, Murri, and Fine Mukaish Badla Highlights",
+    craftHours: "92 hours of painstaking needlework",
+    fit: "Graceful kalidar flare with structured sleeves",
+    care: "Dry clean only to protect delicate badla metallic highlights.",
+    includedItems: "1 Kurti, 1 Modal Inner Slip, 1 Semi-elasticated Pant, 1 Embroidered Georgette Dupatta",
+    colors: [
+      { name: "Midnight Ink Navy", hex: "#121A28", imageIndex: 0 },
+      { name: "Heritage Wine", hex: "#3B1824", imageIndex: 1 }
+    ],
+    sizes: [
+      { size: "S", stock: 3 },
+      { size: "M", stock: 5 },
+      { size: "L", stock: 4 },
+      { size: "XL", stock: 2 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-2p-01",
+    slug: "chowk-heritage-modal-pant-set",
+    name: "Chowk Heritage Modal Pant Set",
+    category: "2-piece",
+    categoryName: "2-Piece Kurtis",
+    tag: "Bestseller",
+    badge: "Silky Soft",
+    price: 4490,
+    originalPrice: 5490,
+    rating: 4.9,
+    reviewCount: 54,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Pistachio sage green pure modal kurti paired with tailored straight cigarette pants and subtle pearl neckline buttons.",
+    description: "The Chowk Heritage pair brings modern structure to timeless craftsmanship. Woven from 100% organic natural modal yarn, this fabric has a butter-soft hand feel and a fluid, flattering drape that resists wrinkles. Hand-worked Bakhiya shadow stitches form subtle vines across the sleeves, side slits, and front yoke.",
+    fabric: "100% Premium Eco-Modal with Natural Cotton Bottom",
+    embroidery: "Fine Bakhiya, Phanda buttons, and Tepchi line detailing",
+    craftHours: "44 hours of hand embroidery",
+    fit: "Tailored straight kurti paired with cropped cigarette pants",
+    care: "Gentle machine wash cold on delicate cycle or hand wash. Iron on reverse side.",
+    includedItems: "1 Kurti, 1 Tapered Bottom Cigarette Pant",
+    colors: [
+      { name: "Pistachio Sage", hex: "#C2D4C2", imageIndex: 0 },
+      { name: "Sand Dune Ivory", hex: "#F3ECE1", imageIndex: 1 },
+      { name: "Muted Terracotta", hex: "#D6998A", imageIndex: 2 }
+    ],
+    sizes: [
+      { size: "XS", stock: 4 },
+      { size: "S", stock: 8 },
+      { size: "M", stock: 12 },
+      { size: "L", stock: 7 },
+      { size: "XL", stock: 4 },
+      { size: "XXL", stock: 2 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-2p-02",
+    slug: "dilkusha-garden-viscose-palazzo-set",
+    name: "Dilkusha Garden Palazzo Set",
+    category: "2-piece",
+    categoryName: "2-Piece Kurtis",
+    tag: "Trending",
+    badge: "Artisan Co-ord",
+    price: 4790,
+    originalPrice: 5800,
+    rating: 4.8,
+    reviewCount: 29,
+    isNew: true,
+    inStock: true,
+    shortDesc: "Sunlit mustard ochre viscose kurti paired with voluminous flared palazzo pants featuring dense scalloped hem embroidery.",
+    description: "Evoking the flowering gardens of Dilkusha Kothi, this co-ord set radiates festive warmth. Sun-drenched mustard ochre serves as the backdrop for tone-on-tone silk thread flora. The flared palazzo pants feature a 4-inch deep embroidered hem border that sways gracefully with every step.",
+    fabric: "High-Twist Viscose with Breathable Cotton Lining",
+    embroidery: "Murri flower buds, Keel Kangan foliage, and Bakhiya stems",
+    craftHours: "50 hours of hand embroidery",
+    fit: "Easy A-line kurti with dramatic flared palazzo",
+    care: "Dry clean first wash; subsequent cold hand wash with mild shampoo.",
+    includedItems: "1 A-Line Kurti, 1 Flared Palazzo Pant with Deep Border",
+    colors: [
+      { name: "Sunlit Ochre", hex: "#D4A346", imageIndex: 0 },
+      { name: "Forest Jade", hex: "#224034", imageIndex: 1 }
+    ],
+    sizes: [
+      { size: "S", stock: 5 },
+      { size: "M", stock: 9 },
+      { size: "L", stock: 6 },
+      { size: "XL", stock: 3 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-2p-03",
+    slug: "asafi-mahal-mulmul-trouser-set",
+    name: "Asafi Mahal Cotton Trouser Set",
+    category: "2-piece",
+    categoryName: "2-Piece Kurtis",
+    tag: "Limited Run",
+    badge: "Hand-Dyed",
+    price: 4190,
+    originalPrice: 4990,
+    rating: 4.7,
+    reviewCount: 19,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Soft lavender mauve hand-dyed mulmul kurti and cropped cigarette trousers with intricate needlework collar and cuffs.",
+    description: "An understated, minimalist ensemble tailored for desk-to-dinner sophistication. Hand-dyed in small artisan batches in soft lavender mauve, the kurti features a mandarin neckline bordered with Murri knots and delicate shadow-worked sleeves. Complemented by cropped ankle-length trousers with side slits.",
+    fabric: "Hand-Dyed 80s Count Pure Mulmul Cotton",
+    embroidery: "Subtle Tepchi geometry, Phanda collar, and sleeve Bakhiya",
+    craftHours: "38 hours of artisan hand embroidery",
+    fit: "Structured straight fit with 3/4 sleeves and ankle trousers",
+    care: "Hand wash separately in cold water with mild liquid detergent. Shade dry.",
+    includedItems: "1 Straight Kurti, 1 Cropped Cigarette Trouser",
+    colors: [
+      { name: "Lavender Mauve", hex: "#D8C9DC", imageIndex: 0 },
+      { name: "Raw Ivory", hex: "#FDFBF7", imageIndex: 1 }
+    ],
+    sizes: [
+      { size: "XS", stock: 2 },
+      { size: "S", stock: 6 },
+      { size: "M", stock: 7 },
+      { size: "L", stock: 5 },
+      { size: "XL", stock: 2 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-2p-04",
+    slug: "wajid-ali-shah-chanderi-pant-set",
+    name: "Wajid Ali Shah Ivory Chanderi Set",
+    category: "2-piece",
+    categoryName: "2-Piece Kurtis",
+    tag: "Occasion Wear",
+    badge: "Pearl Accents",
+    price: 4990,
+    originalPrice: 6200,
+    rating: 5.0,
+    reviewCount: 16,
+    isNew: true,
+    inStock: true,
+    shortDesc: "Champagne ivory Chanderi kurti with natural mother-of-pearl buttons, fine zardozi-touched chikan, and silk pants.",
+    description: "Inspired by the patron of Awadh's finest arts, Nawab Wajid Ali Shah. This champagne ivory set blends handloom Chanderi silk with delicate Chikankari and subtle micro-pearl beadwork nestled within the Phanda floral knots. The neckline is fastened with handcrafted mother-of-pearl buttons.",
+    fabric: "Chanderi Silk Kurti with Cotton Silk Trousers",
+    embroidery: "Phanda, Ghaspatti, and subtle hand-sewn Mother-of-Pearl accents",
+    craftHours: "54 hours of master needlework",
+    fit: "Regal A-line fit with structured shoulders",
+    care: "Dry clean only to preserve mother-of-pearl buttons and silk luster.",
+    includedItems: "1 Kurti with MOP buttons, 1 Cotton-Silk Tailored Pant",
+    colors: [
+      { name: "Champagne Ivory", hex: "#F7F2E7", imageIndex: 0 },
+      { name: "Rose Water", hex: "#F3DFDB", imageIndex: 1 }
+    ],
+    sizes: [
+      { size: "S", stock: 4 },
+      { size: "M", stock: 8 },
+      { size: "L", stock: 5 },
+      { size: "XL", stock: 3 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-sk-01",
+    slug: "baradari-everyday-mulmul-short-kurti",
+    name: "Baradari Everyday Mulmul Tunic",
+    category: "short",
+    categoryName: "Short Kurtis",
+    tag: "Bestseller",
+    badge: "Everyday Luxury",
+    price: 2490,
+    originalPrice: 3200,
+    rating: 4.9,
+    reviewCount: 67,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Pristine white hand-embroidered short kurti in breathable mulmul. Perfect for pairing with wide-leg jeans, trousers, or skirts.",
+    description: "The Baradari Tunic is your effortless everyday luxury. Designed for effortless weekday rotation, it is hand-embroidered in white-on-white resham thread with fine Tepchi running stitches and floral Phanda butis on the front yoke and sleeve cuffs. Features a round neck with a delicate V-notch slit.",
+    fabric: "100% Breathable High-Twist Mulmul Cotton",
+    embroidery: "White-on-White Tepchi, Murri center, and sleeve cuffs",
+    craftHours: "24 hours of hand needlework",
+    fit: "Hip-length relaxed tunic with 3/4 sleeves and side vents",
+    care: "Machine wash cold gentle cycle. Tumble dry low or dry in shade.",
+    includedItems: "1 Short Kurti Tunic",
+    colors: [
+      { name: "Pristine White", hex: "#FFFFFF", imageIndex: 0 },
+      { name: "Sky Glaze", hex: "#E3EFF6", imageIndex: 1 },
+      { name: "Petal Pink", hex: "#F8E7E7", imageIndex: 2 }
+    ],
+    sizes: [
+      { size: "XS", stock: 5 },
+      { size: "S", stock: 12 },
+      { size: "M", stock: 15 },
+      { size: "L", stock: 10 },
+      { size: "XL", stock: 6 },
+      { size: "XXL", stock: 4 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-sk-02",
+    slug: "imambara-peplum-cotton-short-kurti",
+    name: "Imambara Peplum Short Kurti",
+    category: "short",
+    categoryName: "Short Kurtis",
+    tag: "Contemporary",
+    badge: "Flattering Fit",
+    price: 2790,
+    originalPrice: 3490,
+    rating: 4.8,
+    reviewCount: 34,
+    isNew: true,
+    inStock: true,
+    shortDesc: "Powder sky blue peplum-cut cotton kurti with cinched waist gathering and dense Lucknowi jaali lace yoke.",
+    description: "A flattering contemporary silhouette that blends European peplum tailoring with traditional Awadhi needlework. Cut from featherlight powder sky blue cotton, the fitted bodice features intricate floral chikankari embroidery that cascades into a softly gathered waist flare.",
+    fabric: "100% Lightweight Cambric Cotton",
+    embroidery: "Bodice Bakhiya, Phanda floral cluster, and Jaali openwork",
+    craftHours: "28 hours of artisan hand embroidery",
+    fit: "Cinched empire-waist peplum flare with elbow sleeves",
+    care: "Hand wash cold with similar colors. Line dry in shade.",
+    includedItems: "1 Peplum Short Kurti",
+    colors: [
+      { name: "Powder Sky Blue", hex: "#DCEBF3", imageIndex: 0 },
+      { name: "Warm Cream", hex: "#FDFBF7", imageIndex: 1 },
+      { name: "Mint Sage", hex: "#D6E5D9", imageIndex: 2 }
+    ],
+    sizes: [
+      { size: "XS", stock: 3 },
+      { size: "S", stock: 7 },
+      { size: "M", stock: 9 },
+      { size: "L", stock: 6 },
+      { size: "XL", stock: 2 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-sk-03",
+    slug: "shahi-tehzeeb-flared-aline-tunic",
+    name: "Shahi Tehzeeb Flared Tunic",
+    category: "short",
+    categoryName: "Short Kurtis",
+    tag: "Festive Ready",
+    badge: "Vibrant Pastel",
+    price: 2990,
+    originalPrice: 3800,
+    rating: 4.9,
+    reviewCount: 41,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Blush peach modal tunic with bell sleeves and dense Chikankari shadow embroidery framing the split mandarin collar.",
+    description: "The Shahi Tehzeeb Tunic is an ode to Awadhi refinement (*tehzeeb*). Made from butter-soft modal in a flattering blush peach hue, it features flowing 3/4 bell sleeves and a regal split mandarin collar adorned with raised Murri and Phanda knots. Pairs impeccably with ivory cigarette pants or distressed denim.",
+    fabric: "Silky Eco-Modal Blend with Substantial Drape",
+    embroidery: "Split-Collar Bakhiya, Bell Sleeve Scalloping, and Phanda Yoke",
+    craftHours: "32 hours of hand embroidery",
+    fit: "A-Line flared tunic hitting mid-thigh with bell sleeves",
+    care: "Gentle hand wash cold or machine wash in delicate wash bag. Steam iron.",
+    includedItems: "1 Flared Short Kurti",
+    colors: [
+      { name: "Blush Peach", hex: "#FBE6DC", imageIndex: 0 },
+      { name: "Ochre Sunlight", hex: "#E9CA7E", imageIndex: 1 },
+      { name: "Ink Emerald", hex: "#1D3A2F", imageIndex: 2 }
+    ],
+    sizes: [
+      { size: "S", stock: 6 },
+      { size: "M", stock: 10 },
+      { size: "L", stock: 8 },
+      { size: "XL", stock: 4 },
+      { size: "XXL", stock: 2 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    id: "tt-sk-04",
+    slug: "gomti-riverbank-straight-cotton-tunic",
+    name: "Gomti Riverbank Straight Tunic",
+    category: "short",
+    categoryName: "Short Kurtis",
+    tag: "Eco Friendly",
+    badge: "Pure Khadi Cotton",
+    price: 2390,
+    originalPrice: 2990,
+    rating: 4.7,
+    reviewCount: 28,
+    isNew: false,
+    inStock: true,
+    shortDesc: "Natural unbleached raw ivory khadi cotton short kurti featuring tonal vine embroidery and wooden coconut shell buttons.",
+    description: "Rooted in the organic spirit of the Gomti riverbank where Lucknow's artisans gather to wash freshly embroidered cloth. This tunic is tailored from handspun organic khadi cotton. The textured fabric provides natural cooling and character, highlighted by coconut-shell buttons and minimalist floral branch needlework.",
+    fabric: "100% Handspun Organic Khadi Cotton",
+    embroidery: "Minimalist Floral Vines in Natural Linen-Toned Thread",
+    craftHours: "22 hours of hand needlework",
+    fit: "Classic straight-cut hip length tunic with button placket",
+    care: "Hand wash cold with eco-detergent. The khadi cotton softens delightfully with each wash.",
+    includedItems: "1 Straight Khadi Tunic",
+    colors: [
+      { name: "Natural Unbleached Khadi", hex: "#F3ECE1", imageIndex: 0 },
+      { name: "Olive Sage", hex: "#CBD8C6", imageIndex: 1 }
+    ],
+    sizes: [
+      { size: "XS", stock: 2 },
+      { size: "S", stock: 8 },
+      { size: "M", stock: 11 },
+      { size: "L", stock: 7 },
+      { size: "XL", stock: 3 }
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=900&q=80"
+    ]
+  }
+];
+
+const REVIEWS = [
+  {
+    id: "rev-01",
+    author: "Ananya Deshmukh",
+    city: "Mumbai",
+    rating: 5,
+    date: "November 4, 2026",
+    verified: true,
+    productName: "Hazratganj Noor Chanderi Set",
+    headline: "Exceeded my highest expectations — true Awadhi craft",
+    content: "I ordered the Hazratganj Noor set for my sister's mehendi. The Chanderi has a regal, subtle sheen that isn't gaudy, and the shadow work (Bakhiya) is breathtakingly fine. You can immediately tell it was stitched by hand and not stamped by an automated embroidery machine. The mulmul lining is so comfortable in Mumbai humidity!"
+  },
+  {
+    id: "rev-02",
+    author: "Meera Sen",
+    city: "Kolkata",
+    rating: 5,
+    date: "October 29, 2026",
+    verified: true,
+    productName: "Chowk Heritage Modal Pant Set",
+    headline: "Butter soft modal with impeccable tailoring",
+    content: "The modal fabric feels like second skin. I wore this for a 10-hour day of festive travel and meetings, and it didn't crease at all. The cigarette pants are tailored with just the right amount of ease around the calf. Twisted Tar is now my go-to for authentic chikan."
+  },
+  {
+    id: "rev-03",
+    author: "Zainab Ali",
+    city: "Lucknow",
+    rating: 5,
+    date: "October 18, 2026",
+    verified: true,
+    productName: "Begum Akhtar Emerald Organza Set",
+    headline: "As a Lucknow native, I can vouch for the authentic stitches",
+    content: "Growing up in Lucknow, my grandmother taught me how to identify genuine Phanda and Murri knots from cheap machine knockoffs. Twisted Tar's work is the real deal. The knots are tight, basmati-shaped, and the green organza is ethereal. Worth every single rupee."
+  },
+  {
+    id: "rev-04",
+    author: "Dr. Radhika Iyer",
+    city: "Bangalore",
+    rating: 5,
+    date: "October 12, 2026",
+    verified: true,
+    productName: "Baradari Everyday Mulmul Tunic",
+    headline: "The perfect everyday chikankari short kurti",
+    content: "Paired this with high-waisted linen trousers for work and got endless compliments. It's airy, modest, and washes beautifully on the gentle cycle. I will definitely be ordering the Sky Glaze color next!"
+  }
+];
+
+const BLOG_ARTICLES = [
+  {
+    id: "beginners-guide-lucknowi-chikankari",
+    title: "A Beginner’s Guide to Lucknowi Chikankari: Demystifying the 32 Stitches",
+    slug: "beginners-guide-lucknowi-chikankari",
+    category: "Craft & Heritage",
+    readTime: "6 min read",
+    date: "November 8, 2026",
+    author: "Editorial Team",
+    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80",
+    excerpt: "From the gossamer veil of Bakhiya shadow work to basmati-grained Murri knots, learn how to identify authentic hand embroidery from modern machine duplicates.",
+    content: `
+      <p>For over four centuries, the historic city of Lucknow on the banks of the Gomti river has been the beating heart of India's most delicate textile art: <em>Chikankari</em> (चिकनकारी). What began in the royal Mughal courts as a meditative practice of unadorned white-on-white embroidery has evolved into an enduring symbol of timeless elegance.</p>
+
+      <h3>The Sacred Vocabulary of the Needle</h3>
+      <p>True Lucknowi chikankari encompasses an intricate repertoire of up to 32 distinct stitches. While contemporary fast-fashion labels often lump these together, a connoisseur recognizes the distinct personality of each needle gesture:</p>
+      
+      <ul>
+        <li><strong>Bakhiya (Shadow Work):</strong> The crown jewel of Chikankari. Stitched on the reverse side of sheer fabrics in a herringbone pattern, it casts an ethereal, opaque shadow on the front while preserving a delicate silhouette.</li>
+        <li><strong>Phanda:</strong> Tiny, circular knots shaped like round millets. They provide tactile dimension to flower centers and geometric borders.</li>
+        <li><strong>Murri:</strong> Perhaps the most demanding stitch, where resham thread is manipulated into an embossed, elongated grain reminiscent of fragrant Basmati rice.</li>
+        <li><strong>Jaali:</strong> An architectural feat where the artisan never cuts the fabric, but instead uses the needle tip to gently tease warp and weft yarns apart, forming miniature lattice windows like those of the Mughal palaces.</li>
+      </ul>
+
+      <blockquote>"In an era obsessed with digital haste, Chikankari demands the one currency machines cannot replicate: unhurried human devotion."</blockquote>
+
+      <h3>How to Spot Authentic Hand Embroidery</h3>
+      <p>When shopping for authentic pieces, observe the reverse side of the garment. Genuine hand embroidery features minute, organic variations in stitch spacing, delicate tension adjustments, and tiny anchoring knots. Machine-replicated embroidery, by contrast, is unnaturally uniform, stiff to the touch, and backed by synthetic tear-away stabilizers.</p>
+      
+      <p>At <strong>Twisted Tar</strong>, every piece is traced by hand onto natural textiles before our artisan collectives begin their meditative work. Each kurti is a living, breathing canvas of Awadhi culture.</p>
+    `
+  },
+  {
+    id: "how-to-style-chikankari-kurti",
+    title: "How to Style a Chikankari Kurti for Every Occasion: From Boardroom to Sangeet",
+    slug: "how-to-style-chikankari-kurti",
+    category: "Style Guides",
+    readTime: "5 min read",
+    date: "October 24, 2026",
+    author: "Styling Desk",
+    image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80",
+    excerpt: "Discover versatile styling formulas to effortlessly transition your chikankari pieces from morning office meetings to glamorous evening celebrations.",
+    content: `
+      <p>One of the greatest virtues of authentic Lucknowi chikankari is its remarkable sartorial versatility. Whether tailored from crisp cotton mulmul or lustrous Chanderi silk, a well-crafted kurti adapts fluidly to modern lifestyles.</p>
+
+      <h3>1. The Contemporary Workwear Aesthetic</h3>
+      <p>Pair a crisp, pastel short kurti—such as our <em>Baradari Everyday Mulmul Tunic</em>—with tailored high-waisted cigarette trousers or relaxed linen wide-leg culottes. Complete the look with minimalist leather loafers and understated silver jhumkis for a polished, confident boardroom presence that remains featherlight throughout an 8-hour workday.</p>
+
+      <h3>2. Weekend Casual & Cafe Strolls</h3>
+      <p>Chikankari looks sublime paired with contemporary denim. Slip into a relaxed A-line short kurti or a soft modal 2-piece set, rolling up the sleeves slightly to highlight the hand-embroidered cuffs. Add handcrafted leather kolhapuris, a woven jute tote, and oversized sunglasses.</p>
+
+      <h3>3. Regal Festive Evenings</h3>
+      <p>For intimate weddings, festive dinners, or sangeet soirees, elevate our <em>Hazratganj Noor 3-Piece Chanderi Set</em> with heritage antique gold chaandbaalis, a potli bag woven with zari threads, and embellished mojris. Drape the scalloped organza dupatta over one shoulder to let the intricate yoke embroidery take center stage.</p>
+    `
+  },
+  {
+    id: "caring-for-hand-embroidered-clothing",
+    title: "Caring for Hand-Embroidered Clothing: A Master Artisan's Longevity Guide",
+    slug: "caring-for-hand-embroidered-clothing",
+    category: "Care & Longevity",
+    readTime: "4 min read",
+    date: "October 14, 2026",
+    author: "Care Specialists",
+    image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1000&q=80",
+    excerpt: "Proven rituals to wash, press, and store your delicate chikankari heirlooms so they remain pristine for generations to come.",
+    content: `
+      <p>Hand-embroidered garments are not mere clothing; they are heirloom textiles that grow softer and more endearing with age. With thoughtful care, your Twisted Tar pieces will retain their structural integrity and resham thread luster for decades.</p>
+
+      <h3>Washing Rituals: Gentle Touch Over Harsh Agitation</h3>
+      <p>For Chanderi silks, pure organza, and pieces with Mukaish metallic highlights, dry cleaning is always recommended for the first two cycles. For pure mulmul cotton and modal kurtis:</p>
+      <ul>
+        <li>Always use cold water and a pH-neutral, gentle liquid silk/wool detergent. Avoid granular detergents that can lodge beneath fine stitches.</li>
+        <li>Never wring or aggressively scrub the embroidered panels. Gently swirl the garment in soapy water and rinse thoroughly.</li>
+        <li>If machine washing everyday cotton tunics, place the garment inside an organic cotton laundry mesh bag and select the delicate cycle.</li>
+      </ul>
+
+      <h3>Drying & Ironing Guidelines</h3>
+      <p>Never expose damp embroidered garments to direct, harsh midday sunlight, which can weaken fine cotton threads over time. Instead, lay the kurti flat on a clean towel in a shaded, well-ventilated area.</p>
+      <p>When ironing, <strong>always iron the garment on the reverse side</strong> over a padded surface. This preserves the 3D embossed relief of Phanda knots and prevents flattening the delicate shadow work.</p>
+    `
+  }
+];
+
+const FAQS = [
+  {
+    category: "Sizing & Fit",
+    items: [
+      {
+        q: "How do I choose the right size for Twisted Tar kurtis?",
+        a: "Our kurtis are designed with a relaxed, elegant drape that honors traditional Indian tailoring while ensuring modern comfort. We recommend referring to our comprehensive Size Guide on any product page. For straight-cut kurtis, we include a 2.5 to 3-inch ease allowance over your actual body bust measurement for effortless mobility. If you fall between sizes, we recommend sizing up."
+      },
+      {
+        q: "Do you offer custom hemming or alterations?",
+        a: "Yes! We offer complimentary sleeve and hem adjustment consultations. Simply note your preferred length specifications in the Order Notes field during checkout, or reach out to our concierge at concierge@twistedtar.com within 12 hours of placing your order."
+      }
+    ]
+  },
+  {
+    category: "Craft & Authenticity",
+    items: [
+      {
+        q: "Are Twisted Tar kurtis 100% handcrafted?",
+        a: "Absolutely. Every stitch—from the delicate reverse shadow work (Bakhiya) to the raised French knots (Phanda and Murri)—is stitched entirely by hand by certified women artisans across Lucknow and Awadh. We do not sell machine-stamped or computer-embroidered replicas."
+      },
+      {
+        q: "Why do I see slight variations in the embroidery stitches?",
+        a: "Because each piece is individually hand-embroidered over 20 to 90 hours, minor variations in thread tension, motif spacing, and knot height are natural and celebrated hallmarks of human craftsmanship. No two Twisted Tar kurtis are ever identical."
+      }
+    ]
+  },
+  {
+    category: "Shipping & Delivery",
+    items: [
+      {
+        q: "What are your shipping timelines across India?",
+        a: "Orders are dispatched within 24–48 hours from our Lucknow studio. Metro cities typically receive deliveries within 2–4 business days, while non-metro locations take 4–6 business days. Express shipping is also available during checkout."
+      },
+      {
+        q: "Do you ship internationally?",
+        a: "Yes, we ship worldwide via DHL Express. International orders typically reach destinations in the US, UK, Canada, UAE, Singapore, and Australia within 5–8 business days."
+      },
+      {
+        q: "Is shipping free?",
+        a: "We offer complimentary standard insured shipping across all pin codes in India on orders above ₹1,999. For orders below ₹1,999, a flat shipping charge of ₹120 applies."
+      }
+    ]
+  },
+  {
+    category: "Exchanges & Returns",
+    items: [
+      {
+        q: "What is your return and exchange policy?",
+        a: "We want you to treasure your Twisted Tar purchase. If you need a different size or wish to exchange an item, we offer a hassle-free 7-day exchange window from the date of delivery. Items must be unworn, unwashed, and in their original packaging with all artisan tags intact."
+      },
+      {
+        q: "How do I initiate an exchange?",
+        a: "Simply visit our Returns Portal or email concierge@twistedtar.com with your Order Number and preferred replacement size. Our courier partner will arrange a doorstep reverse pickup."
+      }
+    ]
+  }
+];
+
+const SIZE_CHART = {
+  unit: "inches",
+  headers: ["Size", "Bust (Body)", "Kurti Chest", "Waist", "Hip", "Length"],
+  rows: [
+    { size: "XS", bust: "32\"", chest: "35\"", waist: "30\"", hip: "36\"", length: "44\"" },
+    { size: "S",  bust: "34\"", chest: "37\"", waist: "32\"", hip: "38\"", length: "44\"" },
+    { size: "M",  bust: "36\"", chest: "39\"", waist: "34\"", hip: "40\"", length: "45\"" },
+    { size: "L",  bust: "38\"", chest: "41\"", waist: "36\"", hip: "42\"", length: "45\"" },
+    { size: "XL", bust: "40\"", chest: "43\"", waist: "38\"", hip: "44\"", length: "46\"" },
+    { size: "XXL",bust: "42\"", chest: "45\"", waist: "40\"", hip: "46\"", length: "46\"" }
+  ]
+};
+
+const PROMO_CODES = [
+  { code: "TWISTED10", discountPercent: 10, minSpend: 2000, description: "10% off on luxury orders above ₹2,000" },
+  { code: "LUCKNOWFIRST", flatDiscount: 500, minSpend: 3500, description: "₹500 welcome discount on orders above ₹3,500" },
+  { code: "CHIKAN15", discountPercent: 15, minSpend: 5000, description: "15% off festive treat on orders above ₹5,000" }
+];
+
+// --- ICONS (Clean embedded SVGs) ---
+const Icons = {
+  Bag: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <path d="M16 10a4 4 0 0 1-8 0"></path>
+    </svg>
+  ),
+  Heart: ({ filled }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+  ),
+  Search: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+  ),
+  Close: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  ),
+  ChevronRight: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  ),
+  Star: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+    </svg>
+  ),
+  ShieldCheck: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      <polyline points="9 12 11 14 15 10"></polyline>
+    </svg>
+  ),
+  Truck: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="3" width="15" height="13"></rect>
+      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+      <circle cx="5.5" cy="18.5" r="2.5"></circle>
+      <circle cx="18.5" cy="18.5" r="2.5"></circle>
+    </svg>
+  ),
+  Refresh: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="23 4 23 10 17 10"></polyline>
+      <polyline points="1 20 1 14 7 14"></polyline>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+    </svg>
+  ),
+  Needle: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2L15 5L7 13L4 10L12 2Z"></path>
+      <line x1="2" y1="22" x2="8.5" y2="15.5"></line>
+      <circle cx="13.5" cy="3.5" r="0.75" fill="currentColor"></circle>
+    </svg>
+  ),
+  Ruler: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21.3 15.3l-6.6 6.6c-.4.4-1 .4-1.4 0l-11-11c-.4-.4-.4-1 0-1.4l6.6-6.6c.4-.4 1-.4 1.4 0l11 11c.4.4.4 1 0 1.4z"></path>
+      <path d="M14.5 4.5l-2 2"></path>
+      <path d="M17.5 7.5l-3 3"></path>
+      <path d="M10.5 8.5l-2 2"></path>
+      <path d="M13.5 11.5l-3 3"></path>
+      <path d="M6.5 12.5l-2 2"></path>
+    </svg>
+  ),
+  Check: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  ),
+  Trash: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6"></polyline>
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    </svg>
+  ),
+  Menu: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  ),
+  Home: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+  ),
+  Grid: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7"></rect>
+      <rect x="14" y="3" width="7" height="7"></rect>
+      <rect x="14" y="14" width="7" height="7"></rect>
+      <rect x="3" y="14" width="7" height="7"></rect>
+    </svg>
+  )
+};
+
+// --- APP COMPONENT ---
+function TwistedTarApp() {
+  // Navigation & Routing state
+  const [route, setRoute] = useState({ page: "home", param: null });
+  const [currency, setCurrency] = useState("INR");
+
+  // Cart & Wishlist with localStorage persistence
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem("tt_cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+
+  const [wishlist, setWishlist] = useState(() => {
+    try {
+      const saved = localStorage.getItem("tt_wishlist");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+
+  const [demoOrders, setDemoOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem("tt_orders");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+
+  // UI Overlays
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [quickViewProduct, setQuickViewProduct] = useState(null);
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  // Search & Filtering
+  const [searchQuery, setSearchQuery] = useState("");
+  const [shopCategory, setShopCategory] = useState("all");
+  const [filters, setFilters] = useState({
+    priceMax: 9000,
+    sizes: [],
+    colors: [],
+    inStockOnly: false,
+    sort: "featured"
+  });
+
+  // Promo code
+  const [promoCodeInput, setPromoCodeInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+
+  // Sync to local storage
+  useEffect(() => {
+    try { localStorage.setItem("tt_cart", JSON.stringify(cart)); } catch {}
+  }, [cart]);
+
+  useEffect(() => {
+    try { localStorage.setItem("tt_wishlist", JSON.stringify(wishlist)); } catch {}
+  }, [wishlist]);
+
+  useEffect(() => {
+    try { localStorage.setItem("tt_orders", JSON.stringify(demoOrders)); } catch {}
+  }, [demoOrders]);
+
+  // Handle Hash Routing
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "") || "home";
+      const [path, param] = hash.split("/");
+      setRoute({ page: path, param: param || null });
+      window.scrollTo(0, 0);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    handleHashChange();
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Format Price with Currency
+  const formatPrice = useCallback((amount) => {
+    if (currency === "USD") {
+      const usd = Math.round(amount * BRAND.currency.usdRate);
+      return `$${usd}`;
+    }
+    return `₹${amount.toLocaleString("en-IN")}`;
+  }, [currency]);
+
+  // Toast Dispatcher
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage((prev) => (prev === message ? null : prev));
+    }, 3500);
+  };
+
+  // Cart Operations
+  const addToCart = (product, selectedColor, selectedSize, quantity = 1) => {
+    if (!selectedSize) {
+      showToast("Please choose a size before adding to cart");
+      return false;
+    }
+    if (!selectedColor) {
+      showToast("Please select a color");
+      return false;
+    }
+
+    setCart((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) => item.product.id === product.id && item.color.name === selectedColor.name && item.size === selectedSize
+      );
+      if (existingIndex > -1) {
+        const next = [...prev];
+        next[existingIndex].quantity += quantity;
+        return next;
+      }
+      return [...prev, { product, color: selectedColor, size: selectedSize, quantity }];
+    });
+
+    showToast(`Added ${product.name} (${selectedSize}) to your cart`);
+    setIsCartOpen(true);
+    return true;
+  };
+
+  const updateCartQty = (index, delta) => {
+    setCart((prev) => {
+      const next = [...prev];
+      const newQty = next[index].quantity + delta;
+      if (newQty <= 0) {
+        next.splice(index, 1);
+      } else {
+        next[index].quantity = newQty;
+      }
+      return next;
+    });
+  };
+
+  const removeFromCart = (index) => {
+    setCart((prev) => prev.filter((_, i) => i !== index));
+    showToast("Item removed from cart");
+  };
+
+  // Wishlist toggle
+  const toggleWishlist = (productId) => {
+    setWishlist((prev) => {
+      const exists = prev.includes(productId);
+      if (exists) {
+        showToast("Removed from wishlist");
+        return prev.filter((id) => id !== productId);
+      } else {
+        showToast("Saved to your wishlist");
+        return [...prev, productId];
+      }
+    });
+  };
+
+  // Cart Calculations
+  const cartSubtotal = useMemo(() => {
+    return cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  }, [cart]);
+
+  const discountAmount = useMemo(() => {
+    if (!appliedPromo) return 0;
+    if (appliedPromo.flatDiscount) return appliedPromo.flatDiscount;
+    if (appliedPromo.discountPercent) return Math.round((cartSubtotal * appliedPromo.discountPercent) / 100);
+    return 0;
+  }, [appliedPromo, cartSubtotal]);
+
+  const shippingCost = useMemo(() => {
+    if (cartSubtotal === 0) return 0;
+    return cartSubtotal >= BRAND.freeShippingThreshold ? 0 : 120;
+  }, [cartSubtotal]);
+
+  const cartTotal = useMemo(() => {
+    return Math.max(0, cartSubtotal - discountAmount + shippingCost);
+  }, [cartSubtotal, discountAmount, shippingCost]);
+
+  const totalCartCount = useMemo(() => {
+    return cart.reduce((count, item) => count + item.quantity, 0);
+  }, [cart]);
+
+  // Apply Promo
+  const handleApplyPromo = (code) => {
+    const promo = PROMO_CODES.find((p) => p.code.toUpperCase() === code.trim().toUpperCase());
+    if (!promo) {
+      showToast("Invalid discount code. Try 'TWISTED10'");
+      return;
+    }
+    if (cartSubtotal < promo.minSpend) {
+      showToast(`Code valid on orders above ₹${promo.minSpend.toLocaleString("en-IN")}`);
+      return;
+    }
+    setAppliedPromo(promo);
+    showToast(`Code ${promo.code} applied: ${promo.description}`);
+  };
+
+  // Filter products
+  const filteredProducts = useMemo(() => {
+    return INITIAL_PRODUCTS.filter((product) => {
+      // Category
+      if (shopCategory !== "all" && product.category !== shopCategory) {
+        return false;
+      }
+      // Search
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesName = product.name.toLowerCase().includes(q);
+        const matchesDesc = product.description.toLowerCase().includes(q);
+        const matchesEmb = product.embroidery.toLowerCase().includes(q);
+        const matchesFab = product.fabric.toLowerCase().includes(q);
+        if (!matchesName && !matchesDesc && !matchesEmb && !matchesFab) return false;
+      }
+      // Price
+      if (product.price > filters.priceMax) return false;
+      // In stock
+      if (filters.inStockOnly && !product.inStock) return false;
+      // Size
+      if (filters.sizes.length > 0) {
+        const hasSize = product.sizes.some((s) => filters.sizes.includes(s.size) && s.stock > 0);
+        if (!hasSize) return false;
+      }
+      return true;
+    }).sort((a, b) => {
+      if (filters.sort === "price-low") return a.price - b.price;
+      if (filters.sort === "price-high") return b.price - a.price;
+      if (filters.sort === "rating") return b.rating - a.rating;
+      if (filters.sort === "newest") return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
+      return 0; // featured
+    });
+  }, [shopCategory, searchQuery, filters]);
+
+  // Current active product for PDP
+  const activeProduct = useMemo(() => {
+    if (route.page === "product" && route.param) {
+      return INITIAL_PRODUCTS.find((p) => p.id === route.param || p.slug === route.param) || INITIAL_PRODUCTS[0];
+    }
+    return null;
+  }, [route]);
+
+  // Current active article for Blog reader
+  const activeArticle = useMemo(() => {
+    if (route.page === "article" && route.param) {
+      return BLOG_ARTICLES.find((a) => a.id === route.param || a.slug === route.param) || BLOG_ARTICLES[0];
+    }
+    return null;
+  }, [route]);
+
+  // Navigation Helper
+  const navigateTo = (page, param = null) => {
+    window.location.hash = param ? `${page}/${param}` : page;
+    setMobileMenuOpen(false);
+  };
+
+  return (
+    <div className="site-wrapper">
+      {/* 1. TOP ANNOUNCEMENT BAR */}
+      <div className="announcement-bar">
+        <div className="container announcement-content">
+          <div className="currency-selector">
+            <span>CURRENCY:</span>
+            <button
+              className={`currency-btn ${currency === "INR" ? "active" : ""}`}
+              onClick={() => setCurrency("INR")}
+              aria-label="Set currency to INR"
+            >
+              ₹ INR
+            </button>
+            <button
+              className={`currency-btn ${currency === "USD" ? "active" : ""}`}
+              onClick={() => setCurrency("USD")}
+              aria-label="Set currency to USD"
+            >
+              $ USD
+            </button>
+          </div>
+          <div className="announcement-text">
+            Complimentary Insured Shipping Across India on Orders Above ₹1,999 · Worldwide Courier Available
+          </div>
+          <div style={{ fontSize: "0.75rem", color: "var(--color-gold-antique)" }}>
+            Code: <strong>TWISTED10</strong> for 10% Off
+          </div>
+        </div>
+      </div>
+
+      {/* 2. STICKY HEADER */}
+      <header className="site-header">
+        <div className="container header-inner">
+          {/* Mobile Menu Button */}
+          <button
+            className="btn-icon mobile-menu-btn"
+            style={{ display: "none" }}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle Navigation Menu"
+          >
+            <Icons.Menu />
+          </button>
+
+          {/* Logo */}
+          <a href="#home" className="brand-logo" onClick={() => navigateTo("home")}>
+            <img src="assets/logo.svg" alt="Twisted Tar - Authentic Lucknowi Chikankari" height="48" />
+          </a>
+
+          {/* Navigation Links */}
+          <nav className="nav-menu" aria-label="Main Navigation">
+            <a
+              href="#home"
+              className={`nav-link ${route.page === "home" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); navigateTo("home"); }}
+            >
+              Home
+            </a>
+            <a
+              href="#shop"
+              className={`nav-link ${route.page === "shop" && shopCategory === "all" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); setShopCategory("all"); navigateTo("shop"); }}
+            >
+              Shop All
+            </a>
+            <a
+              href="#shop/3-piece"
+              className={`nav-link ${route.page === "shop" && shopCategory === "3-piece" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); setShopCategory("3-piece"); navigateTo("shop"); }}
+            >
+              3-Piece Kurtis
+            </a>
+            <a
+              href="#shop/2-piece"
+              className={`nav-link ${route.page === "shop" && shopCategory === "2-piece" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); setShopCategory("2-piece"); navigateTo("shop"); }}
+            >
+              2-Piece Kurtis
+            </a>
+            <a
+              href="#shop/short"
+              className={`nav-link ${route.page === "shop" && shopCategory === "short" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); setShopCategory("short"); navigateTo("shop"); }}
+            >
+              Short Kurtis
+            </a>
+            <a
+              href="#about"
+              className={`nav-link ${route.page === "about" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); navigateTo("about"); }}
+            >
+              Our Story
+            </a>
+            <a
+              href="#blog"
+              className={`nav-link ${route.page === "blog" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); navigateTo("blog"); }}
+            >
+              Journal
+            </a>
+            <a
+              href="#contact"
+              className={`nav-link ${route.page === "contact" ? "active" : ""}`}
+              onClick={(e) => { e.preventDefault(); navigateTo("contact"); }}
+            >
+              Contact
+            </a>
+          </nav>
+
+          {/* Header Action Controls */}
+          <div className="header-actions">
+            {/* Search Input Box */}
+            <div className="search-trigger-box">
+              <Icons.Search />
+              <input
+                type="text"
+                placeholder="Search kurtis, stitches..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (route.page !== "shop") navigateTo("shop");
+                }}
+                aria-label="Search Chikankari Kurtis"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery("")} aria-label="Clear Search">
+                  <Icons.Close />
+                </button>
+              )}
+            </div>
+
+            {/* Wishlist Icon */}
+            <button
+              className="btn-icon"
+              onClick={() => navigateTo("wishlist")}
+              aria-label={`Wishlist (${wishlist.length} items)`}
+            >
+              <Icons.Heart filled={wishlist.length > 0} />
+              {wishlist.length > 0 && <span className="badge-count">{wishlist.length}</span>}
+            </button>
+
+            {/* Cart Icon */}
+            <button
+              className="btn-icon"
+              onClick={() => setIsCartOpen(true)}
+              aria-label={`Shopping Bag (${totalCartCount} items)`}
+            >
+              <Icons.Bag />
+              {totalCartCount > 0 && <span className="badge-count">{totalCartCount}</span>}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* 3. MAIN ROUTED CONTENT */}
+      <main id="main-content" tabIndex="-1">
+        {route.page === "home" && (
+          <HomePage
+            categories={CATEGORIES}
+            products={INITIAL_PRODUCTS}
+            reviews={REVIEWS}
+            blogArticles={BLOG_ARTICLES}
+            craftStitches={CRAFT_STITCHES}
+            formatPrice={formatPrice}
+            wishlist={wishlist}
+            toggleWishlist={toggleWishlist}
+            onQuickView={(p) => setQuickViewProduct(p)}
+            onCategorySelect={(catId) => {
+              setShopCategory(catId);
+              navigateTo("shop");
+            }}
+            onAddToCart={addToCart}
+            navigateTo={navigateTo}
+            showToast={showToast}
+          />
+        )}
+
+        {route.page === "shop" && (
+          <ShopPage
+            products={filteredProducts}
+            totalCount={filteredProducts.length}
+            activeCategory={shopCategory}
+            onSelectCategory={setShopCategory}
+            categories={CATEGORIES}
+            filters={filters}
+            setFilters={setFilters}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            formatPrice={formatPrice}
+            wishlist={wishlist}
+            toggleWishlist={toggleWishlist}
+            onQuickView={(p) => setQuickViewProduct(p)}
+            onAddToCart={addToCart}
+            navigateTo={navigateTo}
+          />
+        )}
+
+        {route.page === "product" && activeProduct && (
+          <ProductDetailPage
+            product={activeProduct}
+            allProducts={INITIAL_PRODUCTS}
+            formatPrice={formatPrice}
+            wishlist={wishlist}
+            toggleWishlist={toggleWishlist}
+            onAddToCart={addToCart}
+            onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+            navigateTo={navigateTo}
+            showToast={showToast}
+          />
+        )}
+
+        {route.page === "cart" && (
+          <CartPage
+            cart={cart}
+            updateCartQty={updateCartQty}
+            removeFromCart={removeFromCart}
+            cartSubtotal={cartSubtotal}
+            discountAmount={discountAmount}
+            shippingCost={shippingCost}
+            cartTotal={cartTotal}
+            formatPrice={formatPrice}
+            promoCodeInput={promoCodeInput}
+            setPromoCodeInput={setPromoCodeInput}
+            handleApplyPromo={handleApplyPromo}
+            appliedPromo={appliedPromo}
+            navigateTo={navigateTo}
+          />
+        )}
+
+        {route.page === "checkout" && (
+          <CheckoutPage
+            cart={cart}
+            cartSubtotal={cartSubtotal}
+            discountAmount={discountAmount}
+            shippingCost={shippingCost}
+            cartTotal={cartTotal}
+            formatPrice={formatPrice}
+            appliedPromo={appliedPromo}
+            onOrderPlaced={(order) => {
+              setDemoOrders((prev) => [order, ...prev]);
+              setCart([]);
+              setAppliedPromo(null);
+              navigateTo("confirmation", order.id);
+            }}
+            navigateTo={navigateTo}
+            showToast={showToast}
+          />
+        )}
+
+        {route.page === "confirmation" && (
+          <OrderConfirmationPage
+            orderId={route.param || "TT-2026-8941"}
+            orders={demoOrders}
+            formatPrice={formatPrice}
+            navigateTo={navigateTo}
+          />
+        )}
+
+        {route.page === "about" && (
+          <AboutPage craftStitches={CRAFT_STITCHES} navigateTo={navigateTo} />
+        )}
+
+        {route.page === "blog" && (
+          <BlogIndexPage articles={BLOG_ARTICLES} navigateTo={navigateTo} />
+        )}
+
+        {route.page === "article" && activeArticle && (
+          <ArticleReaderPage
+            article={activeArticle}
+            allArticles={BLOG_ARTICLES}
+            navigateTo={navigateTo}
+          />
+        )}
+
+        {route.page === "contact" && (
+          <ContactPage showToast={showToast} />
+        )}
+
+        {route.page === "faq" && (
+          <FAQPage faqs={FAQS} navigateTo={navigateTo} />
+        )}
+
+        {route.page === "shipping-returns" && (
+          <ShippingReturnsPage navigateTo={navigateTo} />
+        )}
+
+        {route.page === "privacy" && <PrivacyPolicyPage />}
+        {route.page === "terms" && <TermsPage />}
+
+        {route.page === "wishlist" && (
+          <WishlistPage
+            wishlist={wishlist}
+            products={INITIAL_PRODUCTS}
+            formatPrice={formatPrice}
+            toggleWishlist={toggleWishlist}
+            onAddToCart={addToCart}
+            onQuickView={(p) => setQuickViewProduct(p)}
+            navigateTo={navigateTo}
+          />
+        )}
+
+        {!["home", "shop", "product", "cart", "checkout", "confirmation", "about", "blog", "article", "contact", "faq", "shipping-returns", "privacy", "terms", "wishlist"].includes(route.page) && (
+          <NotFoundPage navigateTo={navigateTo} />
+        )}
+      </main>
+
+      {/* 4. FOOTER */}
+      <Footer navigateTo={navigateTo} showToast={showToast} />
+
+      {/* 5. SLIDE-OUT CART DRAWER */}
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        updateCartQty={updateCartQty}
+        removeFromCart={removeFromCart}
+        cartSubtotal={cartSubtotal}
+        discountAmount={discountAmount}
+        shippingCost={shippingCost}
+        cartTotal={cartTotal}
+        formatPrice={formatPrice}
+        promoCodeInput={promoCodeInput}
+        setPromoCodeInput={setPromoCodeInput}
+        handleApplyPromo={handleApplyPromo}
+        appliedPromo={appliedPromo}
+        navigateTo={navigateTo}
+      />
+
+      {/* 6. QUICK VIEW MODAL */}
+      {quickViewProduct && (
+        <QuickViewModal
+          product={quickViewProduct}
+          onClose={() => setQuickViewProduct(null)}
+          onAddToCart={addToCart}
+          formatPrice={formatPrice}
+          wishlist={wishlist}
+          toggleWishlist={toggleWishlist}
+          onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+          navigateTo={navigateTo}
+        />
+      )}
+
+      {/* 7. SIZE GUIDE MODAL */}
+      {isSizeGuideOpen && (
+        <SizeGuideModal
+          sizeChart={SIZE_CHART}
+          onClose={() => setIsSizeGuideOpen(false)}
+        />
+      )}
+
+      {/* 8. TOAST NOTIFICATION STACK */}
+      {toastMessage && (
+        <div className="toast-container" role="status" aria-live="polite">
+          <div className="toast-item">
+            <Icons.Check />
+            <span>{toastMessage}</span>
+          </div>
+        </div>
+      )}
+
+      {/* 9. MOBILE BOTTOM NAVIGATION */}
+      <div className="mobile-bottom-nav">
+        <div className="mobile-nav-grid">
+          <button
+            className={`mobile-nav-item ${route.page === "home" ? "active" : ""}`}
+            onClick={() => navigateTo("home")}
+            aria-label="Home"
+          >
+            <Icons.Home />
+            <span>Home</span>
+          </button>
+          <button
+            className={`mobile-nav-item ${route.page === "shop" ? "active" : ""}`}
+            onClick={() => { setShopCategory("all"); navigateTo("shop"); }}
+            aria-label="Shop Catalog"
+          >
+            <Icons.Grid />
+            <span>Shop</span>
+          </button>
+          <button
+            className={`mobile-nav-item ${route.page === "wishlist" ? "active" : ""}`}
+            onClick={() => navigateTo("wishlist")}
+            aria-label="Wishlist"
+          >
+            <Icons.Heart filled={wishlist.length > 0} />
+            <span>Wishlist ({wishlist.length})</span>
+          </button>
+          <button
+            className="mobile-nav-item"
+            onClick={() => setIsCartOpen(true)}
+            aria-label="Cart"
+          >
+            <Icons.Bag />
+            <span>Cart ({totalCartCount})</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================================================
+// SUB-COMPONENTS & PAGE VIEWS
+// ==========================================================================
+
+// --- HOME PAGE ---
+function HomePage({
+  categories,
+  products,
+  reviews,
+  blogArticles,
+  craftStitches,
+  formatPrice,
+  wishlist,
+  toggleWishlist,
+  onQuickView,
+  onCategorySelect,
+  onAddToCart,
+  navigateTo,
+  showToast
+}) {
+  const [activeTab, setActiveTab] = useState("all");
+  const [emailInput, setEmailInput] = useState("");
+
+  const tabProducts = useMemo(() => {
+    if (activeTab === "all") return products.slice(0, 8);
+    return products.filter((p) => p.category === activeTab);
+  }, [activeTab, products]);
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    if (!emailInput || !emailInput.includes("@")) {
+      showToast("Please enter a valid email address");
+      return;
+    }
+    showToast("Welcome to Twisted Tar. Your 10% coupon code is TWISTED10");
+    setEmailInput("");
+  };
+
+  return (
+    <div className="home-view">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="container hero-grid">
+          <div className="hero-content">
+            <span className="overline">Lucknowi Haute Heritage · 100% Hand Needlework</span>
+            <h1 className="hero-headline">
+              The art of chikankari, <em>woven into everyday elegance.</em>
+            </h1>
+            <p className="hero-description">
+              Born from the royal courts of Awadh, our kurtis celebrate centuries of generational craftsmanship. 
+              Gossamer mulmul cotton, fluid modal, and pure Chanderi silk—sculpted into silhouettes meant to be worn, celebrated, and treasured.
+            </p>
+            <div className="hero-cta-group">
+              <button className="btn btn-primary btn-lg" onClick={() => navigateTo("shop")}>
+                Shop the Collection <Icons.ChevronRight />
+              </button>
+              <button className="btn btn-secondary btn-lg" onClick={() => navigateTo("about")}>
+                Discover Our Craft
+              </button>
+            </div>
+          </div>
+          <div className="hero-visual">
+            <div className="hero-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80"
+                alt="Woman wearing handcrafted ivory Lucknowi chikankari kurti set"
+              />
+            </div>
+            <div className="hero-floating-card">
+              <div className="floating-title">Hazratganj Noor</div>
+              <div className="floating-subtitle">68 Hours of Master Shadow Work</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Strip */}
+      <section className="trust-strip">
+        <div className="container trust-grid">
+          <div className="trust-item">
+            <div className="trust-icon"><Icons.Needle /></div>
+            <div className="trust-text">
+              <h4>100% Handcrafted</h4>
+              <p>Authentic Lucknow needlework, never machine printed</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <div className="trust-icon"><Icons.ShieldCheck /></div>
+            <div className="trust-text">
+              <h4>Artisan Guild Certified</h4>
+              <p>Directly empowering women artisans across Awadh</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <div className="trust-icon"><Icons.Truck /></div>
+            <div className="trust-text">
+              <h4>Complimentary Delivery</h4>
+              <p>Free insured pan-India shipping above ₹1,999</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <div className="trust-icon"><Icons.Refresh /></div>
+            <div className="trust-text">
+              <h4>7-Day Easy Exchange</h4>
+              <p>Doorstep reverse pickup & fit guarantee</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Categories */}
+      <section className="section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <span className="overline">Our Silhouettes</span>
+            <h2 className="section-title">Curated Lucknowi Collections</h2>
+            <p className="section-subtitle">
+              From majestic three-piece wedding ensembles to breathable, everyday mulmul tunics.
+            </p>
+          </div>
+          <div className="category-showcase-grid">
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className="category-card"
+                onClick={() => onCategorySelect(cat.id)}
+                role="button"
+                tabIndex="0"
+                onKeyDown={(e) => { if (e.key === "Enter") onCategorySelect(cat.id); }}
+              >
+                <img src={cat.heroImage} alt={`${cat.name} Collection`} loading="lazy" />
+                <div className="category-card-overlay">
+                  <span className="badge badge-gold" style={{ width: "fit-content", marginBottom: "0.5rem" }}>
+                    {cat.tagline}
+                  </span>
+                  <h3 className="category-card-title">{cat.name}</h3>
+                  <p className="category-card-subtitle">{cat.shortDesc}</p>
+                  <span className="category-card-link">
+                    Explore Collection ({cat.productCount} Styles) <Icons.ChevronRight />
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bestsellers & Featured Products */}
+      <section className="section" style={{ backgroundColor: "var(--color-bg-secondary)" }}>
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <span className="overline">Artisan Favorites</span>
+            <h2 className="section-title">The Bestseller Gallery</h2>
+            <div style={{ display: "flex", justifyContent: "center", gap: "0.75rem", marginTop: "1.5rem" }}>
+              <button
+                className={`btn btn-sm ${activeTab === "all" ? "btn-primary" : "btn-secondary"}`}
+                onClick={() => setActiveTab("all")}
+              >
+                All Styles
+              </button>
+              <button
+                className={`btn btn-sm ${activeTab === "3-piece" ? "btn-primary" : "btn-secondary"}`}
+                onClick={() => setActiveTab("3-piece")}
+              >
+                3-Piece Sets
+              </button>
+              <button
+                className={`btn btn-sm ${activeTab === "2-piece" ? "btn-primary" : "btn-secondary"}`}
+                onClick={() => setActiveTab("2-piece")}
+              >
+                2-Piece Sets
+              </button>
+              <button
+                className={`btn btn-sm ${activeTab === "short" ? "btn-primary" : "btn-secondary"}`}
+                onClick={() => setActiveTab("short")}
+              >
+                Short Kurtis
+              </button>
+            </div>
+          </div>
+
+          <div className="product-grid">
+            {tabProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                formatPrice={formatPrice}
+                isWishlisted={wishlist.includes(product.id)}
+                onToggleWishlist={() => toggleWishlist(product.id)}
+                onQuickView={() => onQuickView(product)}
+                onAddToCart={(size, color) => onAddToCart(product, color, size, 1)}
+                navigateTo={navigateTo}
+              />
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
+            <button className="btn btn-secondary btn-lg" onClick={() => navigateTo("shop")}>
+              View All 12 Chikankari Kurtis <Icons.ChevronRight />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Craftsmanship Spotlight: The 5 Traditional Stitches */}
+      <section className="section craft-feature-section">
+        <div className="container">
+          <div style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto" }}>
+            <span className="overline" style={{ color: "var(--color-gold-antique)" }}>Awadh Heritage</span>
+            <h2 className="section-title">The Anatomy of a Twisted Tar Stitch</h2>
+            <p style={{ color: "rgba(253, 251, 247, 0.8)", fontSize: "1.05rem" }}>
+              In Lucknow's historic alleys, a single needle breathes life into thirty-two classical stitches. 
+              Here are the five signatures that distinguish our authentic garments from machine imitations.
+            </p>
+          </div>
+
+          <div className="craft-stitches-grid">
+            {craftStitches.map((stitch, idx) => (
+              <div key={idx} className="craft-stitch-card">
+                <span className="craft-stitch-origin">{stitch.origin}</span>
+                <h3>{stitch.name}</h3>
+                <p>{stitch.description}</p>
+                <div style={{ marginTop: "1rem", fontSize: "0.8rem", color: "var(--color-gold-antique)", fontStyle: "italic" }}>
+                  Texture: {stitch.visual}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
+            <button className="btn btn-gold btn-lg" onClick={() => navigateTo("about")}>
+              Read The Full Craftsmanship Journey <Icons.ChevronRight />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Reviews */}
+      <section className="section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <span className="overline">Client Stories</span>
+            <h2 className="section-title">Treasured Across India</h2>
+            <p className="section-subtitle">Real experiences from connoisseurs of authentic Chikankari.</p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+            {reviews.map((rev) => (
+              <div key={rev.id} style={{ background: "var(--color-bg-card)", border: "1px solid var(--color-border-delicate)", padding: "2rem", borderRadius: "var(--radius-sm)", boxShadow: "var(--shadow-sm)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+                  <div className="star-rating">
+                    {[...Array(rev.rating)].map((_, i) => <Icons.Star key={i} />)}
+                  </div>
+                  <span style={{ fontSize: "0.75rem", color: "var(--color-text-subtle)" }}>{rev.date}</span>
+                </div>
+                <h4 style={{ fontFamily: "var(--font-serif)", fontSize: "1.2rem", marginBottom: "0.6rem", color: "var(--color-forest-ink)" }}>
+                  "{rev.headline}"
+                </h4>
+                <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: "1.6", marginBottom: "1.25rem" }}>
+                  {rev.content}
+                </p>
+                <div style={{ borderTop: "1px solid var(--color-border-delicate)", paddingTop: "0.85rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <strong style={{ fontSize: "0.88rem", display: "block" }}>{rev.author}</strong>
+                    <span style={{ fontSize: "0.75rem", color: "var(--color-text-subtle)" }}>{rev.city} · Verified Connoisseur</span>
+                  </div>
+                  <span className="badge badge-forest" style={{ fontSize: "0.7rem" }}>Verified</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Editorial Journal / Blog Preview */}
+      <section className="section" style={{ backgroundColor: "var(--color-bg-secondary)" }}>
+        <div className="container">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "2.5rem" }}>
+            <div>
+              <span className="overline">The Journal</span>
+              <h2 className="section-title">Stories in Thread & Silk</h2>
+            </div>
+            <button className="btn btn-secondary" onClick={() => navigateTo("blog")}>
+              Read All Articles <Icons.ChevronRight />
+            </button>
+          </div>
+
+          <div className="blog-grid">
+            {blogArticles.map((article) => (
+              <article key={article.id} className="article-card" onClick={() => navigateTo("article", article.slug)} style={{ cursor: "pointer" }}>
+                <div className="article-card-img-wrap">
+                  <img src={article.image} alt={article.title} loading="lazy" />
+                </div>
+                <div className="article-card-body">
+                  <div className="article-meta">
+                    <span>{article.category}</span>
+                    <span>·</span>
+                    <span>{article.readTime}</span>
+                  </div>
+                  <h3 className="article-title">{article.title}</h3>
+                  <p className="article-excerpt">{article.excerpt}</p>
+                  <span className="article-read-more">
+                    Read Story <Icons.ChevronRight />
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Signup Banner */}
+      <section className="section" style={{ backgroundColor: "#F7F2E8", borderTop: "1px solid var(--color-border-gold)", borderBottom: "1px solid var(--color-border-gold)" }}>
+        <div className="container" style={{ textAlign: "center", maxWidth: "620px" }}>
+          <span className="overline">Exclusive Privileges</span>
+          <h2 className="section-title" style={{ marginBottom: "1rem" }}>Join the Twisted Tar Circle</h2>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "1rem", marginBottom: "2rem" }}>
+            Receive private previews of limited seasonal dye lots, artisan masterclasses, and a complimentary 10% welcome privilege on your first heirloom kurti.
+          </p>
+          <form onSubmit={handleNewsletterSubmit} style={{ display: "flex", gap: "0.5rem", maxWidth: "480px", margin: "0 auto" }}>
+            <input
+              type="email"
+              className="form-input"
+              style={{ flex: 1 }}
+              placeholder="Enter your email address..."
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              required
+            />
+            <button type="submit" className="btn btn-primary">
+              Subscribe
+            </button>
+          </form>
+          <div style={{ marginTop: "1rem", fontSize: "0.78rem", color: "var(--color-text-subtle)" }}>
+            Instant code generated: <strong>TWISTED10</strong>. Unsubscribe at any time with one click.
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// --- PRODUCT CARD COMPONENT ---
+function ProductCard({
+  product,
+  formatPrice,
+  isWishlisted,
+  onToggleWishlist,
+  onQuickView,
+  onAddToCart,
+  navigateTo
+}) {
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const currentColor = product.colors[selectedColorIndex] || product.colors[0];
+
+  const primaryImage = product.images[currentColor.imageIndex] || product.images[0];
+  const secondaryImage = product.images[1] || primaryImage;
+
+  return (
+    <div className="product-card">
+      <div className="product-card-image-wrap" onClick={() => navigateTo("product", product.slug)}>
+        {product.tag && (
+          <span className={`badge product-card-badge ${product.tag === "Bestseller" ? "badge-gold" : "badge-forest"}`}>
+            {product.tag}
+          </span>
+        )}
+        <button
+          className={`product-card-wishlist-btn ${isWishlisted ? "active" : ""}`}
+          onClick={(e) => { e.stopPropagation(); onToggleWishlist(); }}
+          aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        >
+          <Icons.Heart filled={isWishlisted} />
+        </button>
+
+        <img className="product-card-img" src={primaryImage} alt={product.name} loading="lazy" />
+        <img className="product-card-img product-card-img-secondary" src={secondaryImage} alt={`${product.name} alternate view`} loading="lazy" />
+
+        <div className="product-card-quick-actions" onClick={(e) => e.stopPropagation()}>
+          <button className="btn btn-primary btn-sm btn-block" onClick={onQuickView}>
+            Quick View
+          </button>
+        </div>
+      </div>
+
+      <div className="product-card-body">
+        <span className="product-card-category">{product.categoryName}</span>
+        <h3 className="product-card-title">
+          <a href={`#product/${product.slug}`} onClick={(e) => { e.preventDefault(); navigateTo("product", product.slug); }}>
+            {product.name}
+          </a>
+        </h3>
+        <p className="product-card-craft">{product.embroidery}</p>
+
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
+          <span className="star-rating">
+            <Icons.Star /> {product.rating}
+          </span>
+          <span className="review-count-text">({product.reviewCount})</span>
+        </div>
+
+        <div className="product-card-price-row">
+          <span className="product-card-price">{formatPrice(product.price)}</span>
+          {product.originalPrice && (
+            <span className="product-card-original-price">{formatPrice(product.originalPrice)}</span>
+          )}
+          {product.originalPrice && (
+            <span className="product-card-discount">
+              {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+            </span>
+          )}
+        </div>
+
+        <div className="product-card-colors">
+          {product.colors.map((color, idx) => (
+            <button
+              key={idx}
+              className={`color-swatch-dot ${selectedColorIndex === idx ? "active" : ""}`}
+              style={{ backgroundColor: color.hex }}
+              title={color.name}
+              onClick={(e) => { e.stopPropagation(); setSelectedColorIndex(idx); }}
+              aria-label={`Select ${color.name}`}
+            />
+          ))}
+          <span style={{ fontSize: "0.72rem", color: "var(--color-text-subtle)", marginLeft: "auto" }}>
+            {product.colors.length} {product.colors.length === 1 ? "shade" : "shades"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- SHOP / CATALOG PAGE ---
+function ShopPage({
+  products,
+  totalCount,
+  activeCategory,
+  onSelectCategory,
+  categories,
+  filters,
+  setFilters,
+  searchQuery,
+  setSearchQuery,
+  formatPrice,
+  wishlist,
+  toggleWishlist,
+  onQuickView,
+  onAddToCart,
+  navigateTo
+}) {
+  const currentCategoryData = categories.find((c) => c.id === activeCategory);
+
+  const toggleSizeFilter = (size) => {
+    setFilters((prev) => {
+      const exists = prev.sizes.includes(size);
+      const nextSizes = exists ? prev.sizes.filter((s) => s !== size) : [...prev.sizes, size];
+      return { ...prev, sizes: nextSizes };
+    });
+  };
+
+  const clearAllFilters = () => {
+    onSelectCategory("all");
+    setSearchQuery("");
+    setFilters({ priceMax: 9000, sizes: [], colors: [], inStockOnly: false, sort: "featured" });
+  };
+
+  const hasActiveFilters = activeCategory !== "all" || searchQuery || filters.sizes.length > 0 || filters.inStockOnly || filters.priceMax < 9000;
+
+  return (
+    <div className="shop-view section-sm">
+      <div className="container">
+        {/* Category Header Banner */}
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <span className="overline">
+            {activeCategory === "all" ? "Full Collection" : currentCategoryData?.tagline}
+          </span>
+          <h1 className="page-title">
+            {activeCategory === "all" ? "The Chikankari Atelier" : currentCategoryData?.name}
+          </h1>
+          <p className="section-subtitle">
+            {activeCategory === "all"
+              ? "Explore our complete catalog of Lucknowi kurtis, hand-embroidered on pure mulmul cotton, high-twist modal, and handwoven Chanderi silk."
+              : currentCategoryData?.shortDesc}
+          </p>
+        </div>
+
+        {/* Category Tabs */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", flexWrap: "wrap", marginBottom: "2rem" }}>
+          <button
+            className={`btn btn-sm ${activeCategory === "all" ? "btn-primary" : "btn-secondary"}`}
+            onClick={() => onSelectCategory("all")}
+          >
+            All Collections ({INITIAL_PRODUCTS.length})
+          </button>
+          {categories.map((c) => (
+            <button
+              key={c.id}
+              className={`btn btn-sm ${activeCategory === c.id ? "btn-primary" : "btn-secondary"}`}
+              onClick={() => onSelectCategory(c.id)}
+            >
+              {c.name} ({c.productCount})
+            </button>
+          ))}
+        </div>
+
+        {/* Shop Layout: Sidebar + Grid */}
+        <div className="shop-layout">
+          {/* Filter Sidebar */}
+          <aside className="filter-sidebar">
+            <div className="filter-header">
+              <span className="filter-title">Refine By</span>
+              {hasActiveFilters && (
+                <button className="clear-filters-btn" onClick={clearAllFilters}>
+                  Reset All
+                </button>
+              )}
+            </div>
+
+            {/* Price Filter */}
+            <div className="filter-group">
+              <div className="filter-group-label">
+                <span>Max Price</span>
+                <span>{formatPrice(filters.priceMax)}</span>
+              </div>
+              <input
+                type="range"
+                min="2000"
+                max="9000"
+                step="500"
+                value={filters.priceMax}
+                onChange={(e) => setFilters({ ...filters, priceMax: Number(e.target.value) })}
+                style={{ width: "100%", accentColor: "var(--color-forest-ink)" }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--color-text-subtle)", marginTop: "0.25rem" }}>
+                <span>₹2,000</span>
+                <span>₹9,000</span>
+              </div>
+            </div>
+
+            {/* Sizes */}
+            <div className="filter-group">
+              <div className="filter-group-label">Size</div>
+              <div className="size-chips-grid">
+                {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+                  <button
+                    key={size}
+                    className={`size-chip ${filters.sizes.includes(size) ? "active" : ""}`}
+                    onClick={() => toggleSizeFilter(size)}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* In Stock Only */}
+            <div className="filter-group">
+              <label className="filter-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={filters.inStockOnly}
+                  onChange={(e) => setFilters({ ...filters, inStockOnly: e.target.checked })}
+                />
+                <span>Ready to Dispatch (In Stock)</span>
+              </label>
+            </div>
+          </aside>
+
+          {/* Catalog Content */}
+          <main>
+            {/* Toolbar */}
+            <div className="shop-toolbar">
+              <div className="shop-results-count">
+                Showing <strong>{totalCount}</strong> {totalCount === 1 ? "design" : "designs"}
+                {searchQuery && <span> for "<em>{searchQuery}</em>"</span>}
+              </div>
+              <div className="shop-sort-wrap">
+                <label htmlFor="shop-sort-select">Sort by:</label>
+                <select
+                  id="shop-sort-select"
+                  className="shop-sort-select"
+                  value={filters.sort}
+                  onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
+                >
+                  <option value="featured">Featured Atelier</option>
+                  <option value="newest">New Arrivals First</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Active Filters Row */}
+            {hasActiveFilters && (
+              <div className="active-filters-row">
+                {activeCategory !== "all" && (
+                  <span className="active-filter-pill">
+                    Category: {currentCategoryData?.name}
+                    <button onClick={() => onSelectCategory("all")}>×</button>
+                  </span>
+                )}
+                {searchQuery && (
+                  <span className="active-filter-pill">
+                    Search: "{searchQuery}"
+                    <button onClick={() => setSearchQuery("")}>×</button>
+                  </span>
+                )}
+                {filters.sizes.map((s) => (
+                  <span key={s} className="active-filter-pill">
+                    Size: {s}
+                    <button onClick={() => toggleSizeFilter(s)}>×</button>
+                  </span>
+                ))}
+                {filters.priceMax < 9000 && (
+                  <span className="active-filter-pill">
+                    Under {formatPrice(filters.priceMax)}
+                    <button onClick={() => setFilters({ ...filters, priceMax: 9000 })}>×</button>
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Products Grid */}
+            {products.length > 0 ? (
+              <div className="product-grid product-grid-3">
+                {products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    formatPrice={formatPrice}
+                    isWishlisted={wishlist.includes(product.id)}
+                    onToggleWishlist={() => toggleWishlist(product.id)}
+                    onQuickView={() => onQuickView(product)}
+                    onAddToCart={(size, color) => onAddToCart(product, color, size, 1)}
+                    navigateTo={navigateTo}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-state-icon">
+                  <Icons.Search />
+                </div>
+                <h3>No Matching Kurtis Found</h3>
+                <p>We couldn't find any designs matching your exact filters. Try broadening your criteria or reset all filters.</p>
+                <button className="btn btn-primary" onClick={clearAllFilters}>
+                  Clear All Filters
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- PRODUCT DETAIL PAGE (PDP) ---
+function ProductDetailPage({
+  product,
+  allProducts,
+  formatPrice,
+  wishlist,
+  toggleWishlist,
+  onAddToCart,
+  onOpenSizeGuide,
+  navigateTo,
+  showToast
+}) {
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [pincodeStatus, setPincodeStatus] = useState(null);
+  const [activeAccordion, setActiveAccordion] = useState("craft");
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+  const currentColor = product.colors[selectedColorIndex] || product.colors[0];
+
+  // Update selected image when color changes
+  useEffect(() => {
+    if (currentColor.imageIndex !== undefined) {
+      setSelectedImageIndex(currentColor.imageIndex);
+    }
+  }, [selectedColorIndex, currentColor]);
+
+  const activeStock = useMemo(() => {
+    if (!selectedSize) return null;
+    const sizeObj = product.sizes.find((s) => s.size === selectedSize);
+    return sizeObj ? sizeObj.stock : 0;
+  }, [selectedSize, product]);
+
+  const handleCheckPincode = (e) => {
+    e.preventDefault();
+    if (pincode.length !== 6 || isNaN(pincode)) {
+      showToast("Please enter a valid 6-digit Indian PIN code");
+      return;
+    }
+    const days = pincode.startsWith("22") ? 2 : 4;
+    setPincodeStatus(`Available! Estimated delivery in ${days} business days to PIN ${pincode}. Free insured shipping.`);
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      showToast("Please select your size (XS–XXL)");
+      return;
+    }
+    onAddToCart(product, currentColor, selectedSize, quantity);
+  };
+
+  const handleBuyNow = () => {
+    if (!selectedSize) {
+      showToast("Please select your size to proceed");
+      return;
+    }
+    const success = onAddToCart(product, currentColor, selectedSize, quantity);
+    if (success) {
+      navigateTo("checkout");
+    }
+  };
+
+  const isWishlisted = wishlist.includes(product.id);
+
+  // Related products from same or different categories
+  const relatedProducts = allProducts.filter((p) => p.id !== product.id).slice(0, 4);
+
+  return (
+    <div className="pdp-view section-sm">
+      <div className="container">
+        {/* Breadcrumb Navigation */}
+        <div className="pdp-breadcrumbs">
+          <a href="#home" onClick={(e) => { e.preventDefault(); navigateTo("home"); }}>Home</a>
+          <span>/</span>
+          <a href="#shop" onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>Shop</a>
+          <span>/</span>
+          <a href={`#shop/${product.category}`} onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>{product.categoryName}</a>
+          <span>/</span>
+          <span style={{ color: "var(--color-text-main)" }}>{product.name}</span>
+        </div>
+
+        {/* PDP Main Grid */}
+        <div className="pdp-grid">
+          {/* Left: Gallery */}
+          <div className="pdp-gallery-wrap">
+            <div className="pdp-thumbnails">
+              {product.images.map((img, idx) => (
+                <button
+                  key={idx}
+                  className={`pdp-thumb-btn ${selectedImageIndex === idx ? "active" : ""}`}
+                  onClick={() => setSelectedImageIndex(idx)}
+                  aria-label={`View photo ${idx + 1}`}
+                >
+                  <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} />
+                </button>
+              ))}
+            </div>
+            <div className="pdp-main-image-wrap">
+              <img
+                className="pdp-main-img"
+                src={product.images[selectedImageIndex] || product.images[0]}
+                alt={product.name}
+              />
+            </div>
+          </div>
+
+          {/* Right: Buy Box & Product Details */}
+          <div className="pdp-details">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <span className="overline" style={{ margin: 0 }}>{product.categoryName} · {product.badge}</span>
+              <button
+                className="btn-icon"
+                onClick={() => toggleWishlist(product.id)}
+                aria-label={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
+              >
+                <Icons.Heart filled={isWishlisted} />
+              </button>
+            </div>
+
+            <h1 className="pdp-title">{product.name}</h1>
+
+            <div className="pdp-meta-row">
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span className="star-rating"><Icons.Star /> {product.rating}</span>
+                <span className="review-count-text">({product.reviewCount} Connoisseur Reviews)</span>
+              </div>
+              <span style={{ fontSize: "0.8rem", color: "var(--color-text-subtle)" }}>
+                SKU: {product.id.toUpperCase()}
+              </span>
+            </div>
+
+            <div className="pdp-price-box">
+              <span className="pdp-price">{formatPrice(product.price)}</span>
+              {product.originalPrice && (
+                <span className="pdp-original-price">{formatPrice(product.originalPrice)}</span>
+              )}
+              {product.originalPrice && (
+                <span className="badge badge-sale">
+                  Save {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                </span>
+              )}
+              <span className="pdp-tax-note">Inclusive of all taxes & free shipping</span>
+            </div>
+
+            <p className="pdp-shortDesc">{product.description}</p>
+
+            {/* Color Swatches */}
+            <div className="pdp-swatches-section">
+              <div className="pdp-label-row">
+                <span>Color Shade: <strong>{currentColor.name}</strong></span>
+              </div>
+              <div className="pdp-colors-list">
+                {product.colors.map((color, idx) => (
+                  <button
+                    key={idx}
+                    className={`pdp-color-radio ${selectedColorIndex === idx ? "active" : ""}`}
+                    onClick={() => setSelectedColorIndex(idx)}
+                  >
+                    <span className="pdp-color-pip" style={{ backgroundColor: color.hex }} />
+                    <span>{color.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Size Selector */}
+            <div className="pdp-swatches-section">
+              <div className="pdp-label-row">
+                <span>Select Size: {selectedSize ? <strong>{selectedSize}</strong> : <span style={{ color: "var(--color-sale)" }}>Required</span>}</span>
+                <button className="size-guide-link" onClick={onOpenSizeGuide}>
+                  <Icons.Ruler /> Sizing & Fit Guide
+                </button>
+              </div>
+              <div className="pdp-sizes-grid">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s.size}
+                    className={`pdp-size-btn ${selectedSize === s.size ? "active" : ""} ${s.stock <= 2 ? "low-stock" : ""}`}
+                    onClick={() => setSelectedSize(s.size)}
+                  >
+                    {s.size}
+                  </button>
+                ))}
+              </div>
+
+              {selectedSize && (
+                <div className={`stock-status-notice ${activeStock <= 2 ? "low" : ""}`}>
+                  <Icons.Check />
+                  {activeStock <= 2 ? `Hurry! Only ${activeStock} left in stock for size ${selectedSize}.` : `In Stock: Ready to ship size ${selectedSize}`}
+                </div>
+              )}
+            </div>
+
+            {/* Quantity Stepper & Add to Cart */}
+            <div className="pdp-cta-row">
+              <div className="qty-stepper">
+                <button
+                  className="qty-btn"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <span className="qty-value">{quantity}</span>
+                <button
+                  className="qty-btn"
+                  onClick={() => setQuantity(quantity + 1)}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+
+              <button className="btn btn-primary" style={{ flex: 1.2 }} onClick={handleAddToCart}>
+                <Icons.Bag /> Add to Cart
+              </button>
+
+              <button className="btn btn-gold" style={{ flex: 1 }} onClick={handleBuyNow}>
+                Buy Now
+              </button>
+            </div>
+
+            {/* PIN Code Delivery Estimator */}
+            <div className="pincode-box">
+              <div className="pincode-title">Estimated Delivery Checker</div>
+              <form onSubmit={handleCheckPincode} className="pincode-input-group">
+                <input
+                  type="text"
+                  maxLength="6"
+                  placeholder="Enter 6-digit PIN code..."
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                />
+                <button type="submit" className="btn btn-secondary btn-sm">
+                  Check
+                </button>
+              </form>
+              {pincodeStatus && <div className="pincode-result">{pincodeStatus}</div>}
+            </div>
+
+            {/* Accordion Panels */}
+            <div className="accordion">
+              {/* 1. Craft & Embroidery */}
+              <div className={`accordion-item ${activeAccordion === "craft" ? "open" : ""}`}>
+                <button className="accordion-header" onClick={() => setActiveAccordion(activeAccordion === "craft" ? "" : "craft")}>
+                  <span>Craftsmanship & Stitches</span>
+                  <Icons.ChevronDown />
+                </button>
+                {activeAccordion === "craft" && (
+                  <div className="accordion-body">
+                    <p><strong>Embroidery Techniques:</strong> {product.embroidery}</p>
+                    <p><strong>Artisan Workmanship:</strong> {product.craftHours}</p>
+                    <p>Every piece is individually handcrafted by certified master women artisans in the Awadh region. Our shadow work (Bakhiya) is rendered on the reverse side of the gossamer fabric to project an ethereal front shadow.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* 2. Fabric & Fit */}
+              <div className={`accordion-item ${activeAccordion === "fabric" ? "open" : ""}`}>
+                <button className="accordion-header" onClick={() => setActiveAccordion(activeAccordion === "fabric" ? "" : "fabric")}>
+                  <span>Fabric & Silhouette Specifications</span>
+                  <Icons.ChevronDown />
+                </button>
+                {activeAccordion === "fabric" && (
+                  <div className="accordion-body">
+                    <p><strong>Fabric:</strong> {product.fabric}</p>
+                    <p><strong>Fit:</strong> {product.fit}</p>
+                    <p><strong>Package Contents:</strong> {product.includedItems}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Wash & Care */}
+              <div className={`accordion-item ${activeAccordion === "care" ? "open" : ""}`}>
+                <button className="accordion-header" onClick={() => setActiveAccordion(activeAccordion === "care" ? "" : "care")}>
+                  <span>Wash & Longevity Instructions</span>
+                  <Icons.ChevronDown />
+                </button>
+                {activeAccordion === "care" && (
+                  <div className="accordion-body">
+                    <p>{product.care}</p>
+                    <ul>
+                      <li>Always iron on the reverse side to protect raised Phanda knots.</li>
+                      <li>Never dry in direct harsh sunlight; air dry flat in shade.</li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* 4. Shipping & Returns */}
+              <div className={`accordion-item ${activeAccordion === "shipping" ? "open" : ""}`}>
+                <button className="accordion-header" onClick={() => setActiveAccordion(activeAccordion === "shipping" ? "" : "shipping")}>
+                  <span>Complimentary Shipping & Returns</span>
+                  <Icons.ChevronDown />
+                </button>
+                {activeAccordion === "shipping" && (
+                  <div className="accordion-body">
+                    <p>We provide complimentary insured shipping across India on orders above ₹1,999. If you are not entirely delighted with your fit, we offer a hassle-free 7-day exchange window with doorstep reverse pickup.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div style={{ marginTop: "5rem", paddingTop: "3rem", borderTop: "1px solid var(--color-border-delicate)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+            <div>
+              <span className="overline">Client Feedback</span>
+              <h2 className="section-title">Connoisseur Reviews ({product.reviewCount})</h2>
+            </div>
+            <button className="btn btn-secondary" onClick={() => setIsReviewModalOpen(true)}>
+              Write a Review
+            </button>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
+            {REVIEWS.slice(0, 3).map((r) => (
+              <div key={r.id} style={{ background: "var(--color-bg-card)", border: "1px solid var(--color-border-delicate)", padding: "1.75rem", borderRadius: "var(--radius-sm)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                  <span className="star-rating"><Icons.Star /> {r.rating}.0</span>
+                  <span style={{ fontSize: "0.75rem", color: "var(--color-text-subtle)" }}>{r.date}</span>
+                </div>
+                <h4 style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", marginBottom: "0.4rem" }}>"{r.headline}"</h4>
+                <p style={{ fontSize: "0.88rem", color: "var(--color-text-muted)", lineHeight: "1.6" }}>{r.content}</p>
+                <div style={{ marginTop: "1rem", fontSize: "0.78rem", color: "var(--color-forest-ink)", fontWeight: "600" }}>
+                  {r.author} · {r.city} (Verified Buyer)
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Related Products: Complete The Look */}
+        <div style={{ marginTop: "5rem" }}>
+          <span className="overline">Pair With Elegance</span>
+          <h2 className="section-title" style={{ marginBottom: "2rem" }}>You May Also Adore</h2>
+          <div className="product-grid">
+            {relatedProducts.map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                formatPrice={formatPrice}
+                isWishlisted={wishlist.includes(p.id)}
+                onToggleWishlist={() => toggleWishlist(p.id)}
+                onQuickView={() => onAddToCart(p, p.colors[0], "M", 1)}
+                onAddToCart={(size, color) => onAddToCart(p, color, size, 1)}
+                navigateTo={navigateTo}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Review Modal Form */}
+        {isReviewModalOpen && (
+          <div className="modal-overlay open" onClick={() => setIsReviewModalOpen(false)}>
+            <div className="modal-container" style={{ maxWidth: "520px" }} onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={() => setIsReviewModalOpen(false)} aria-label="Close Modal">
+                <Icons.Close />
+              </button>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.8rem", marginBottom: "0.5rem" }}>
+                Write a Review
+              </h3>
+              <p style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", marginBottom: "1.5rem" }}>
+                Share your experience wearing the {product.name}.
+              </p>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                showToast("Thank you for your review! It will appear once verified by our concierge.");
+                setIsReviewModalOpen(false);
+              }}>
+                <div className="form-group">
+                  <label className="form-label">Overall Rating</label>
+                  <select className="form-select">
+                    <option value="5">★★★★★ (5/5) Exceptional Awadhi Craft</option>
+                    <option value="4">★★★★☆ (4/5) Very Pleased</option>
+                    <option value="3">★★★☆☆ (3/5) Average</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Review Headline</label>
+                  <input className="form-input" placeholder="e.g. Breathtaking shadow work!" required />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Your Review</label>
+                  <textarea className="form-textarea" rows="4" placeholder="Detail the fit, fabric feel, and embroidery quality..." required></textarea>
+                </div>
+                <div className="form-grid-2">
+                  <div className="form-group">
+                    <label className="form-label">Your Name</label>
+                    <input className="form-input" placeholder="e.g. Priya Sharma" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">City</label>
+                    <input className="form-input" placeholder="e.g. New Delhi" required />
+                  </div>
+                </div>
+                <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "1rem" }}>
+                  Submit Connoisseur Review
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --- CART PAGE & CART DRAWER ---
+function CartDrawer({
+  isOpen,
+  onClose,
+  cart,
+  updateCartQty,
+  removeFromCart,
+  cartSubtotal,
+  discountAmount,
+  shippingCost,
+  cartTotal,
+  formatPrice,
+  promoCodeInput,
+  setPromoCodeInput,
+  handleApplyPromo,
+  appliedPromo,
+  navigateTo
+}) {
+  const freeShippingNeeded = Math.max(0, BRAND.freeShippingThreshold - cartSubtotal);
+  const progressPercent = Math.min(100, Math.round((cartSubtotal / BRAND.freeShippingThreshold) * 100));
+
+  return (
+    <>
+      <div className={`drawer-backdrop ${isOpen ? "open" : ""}`} onClick={onClose} />
+      <aside className={`cart-drawer ${isOpen ? "open" : ""}`} aria-label="Shopping Bag">
+        <div className="cart-header">
+          <h2 className="cart-title">Your Atelier Bag ({cart.length})</h2>
+          <button className="btn-icon" onClick={onClose} aria-label="Close Bag">
+            <Icons.Close />
+          </button>
+        </div>
+
+        {/* Free Shipping Milestone */}
+        <div className="shipping-bar-wrap">
+          <div className="shipping-bar-text">
+            {freeShippingNeeded === 0 ? (
+              <span style={{ color: "var(--color-success)", fontWeight: "600" }}>
+                ✓ You have unlocked Complimentary Express Delivery!
+              </span>
+            ) : (
+              <span>
+                Add <strong>{formatPrice(freeShippingNeeded)}</strong> more to unlock Free Insured Shipping!
+              </span>
+            )}
+          </div>
+          <div className="shipping-progress">
+            <div className="shipping-progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+        </div>
+
+        {/* Items */}
+        <div className="cart-items-list">
+          {cart.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
+              <div style={{ color: "var(--color-text-subtle)", marginBottom: "1rem" }}>
+                <Icons.Bag />
+              </div>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.4rem", marginBottom: "0.5rem" }}>
+                Your Bag is Empty
+              </h3>
+              <p style={{ fontSize: "0.88rem", color: "var(--color-text-muted)", marginBottom: "1.5rem" }}>
+                Experience the poetic grace of genuine Lucknowi chikankari.
+              </p>
+              <button className="btn btn-primary btn-sm" onClick={() => { onClose(); navigateTo("shop"); }}>
+                Explore Bestsellers
+              </button>
+            </div>
+          ) : (
+            cart.map((item, idx) => (
+              <div key={idx} className="cart-item">
+                <img className="cart-item-img" src={item.product.images[0]} alt={item.product.name} />
+                <div className="cart-item-details">
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <h3 className="cart-item-title">{item.product.name}</h3>
+                    <button className="cart-item-remove-btn" onClick={() => removeFromCart(idx)} aria-label="Remove item">
+                      <Icons.Trash />
+                    </button>
+                  </div>
+                  <div className="cart-item-variant">
+                    Size: <strong>{item.size}</strong> · Shade: <strong>{item.color.name}</strong>
+                  </div>
+                  <div className="cart-item-price-row">
+                    <div className="qty-stepper" style={{ transform: "scale(0.85)", transformOrigin: "left" }}>
+                      <button className="qty-btn" onClick={() => updateCartQty(idx, -1)}>-</button>
+                      <span className="qty-value">{item.quantity}</span>
+                      <button className="qty-btn" onClick={() => updateCartQty(idx, 1)}>+</button>
+                    </div>
+                    <span className="cart-item-price">{formatPrice(item.product.price * item.quantity)}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Cart Drawer Footer */}
+        {cart.length > 0 && (
+          <div className="cart-footer">
+            <form onSubmit={(e) => { e.preventDefault(); handleApplyPromo(promoCodeInput); }} className="cart-promo-form">
+              <input
+                type="text"
+                placeholder="Discount code (e.g. TWISTED10)"
+                value={promoCodeInput}
+                onChange={(e) => setPromoCodeInput(e.target.value)}
+              />
+              <button type="submit" className="btn btn-secondary btn-sm">
+                Apply
+              </button>
+            </form>
+
+            {appliedPromo && (
+              <div style={{ fontSize: "0.78rem", color: "var(--color-success)", marginBottom: "0.75rem", display: "flex", justifyContent: "space-between" }}>
+                <span>Code <strong>{appliedPromo.code}</strong> Applied</span>
+                <span>-{formatPrice(discountAmount)}</span>
+              </div>
+            )}
+
+            <table className="cart-totals-table">
+              <tbody>
+                <tr>
+                  <td>Subtotal</td>
+                  <td>{formatPrice(cartSubtotal)}</td>
+                </tr>
+                {discountAmount > 0 && (
+                  <tr style={{ color: "var(--color-sale)" }}>
+                    <td>Artisan Privilege Discount</td>
+                    <td>-{formatPrice(discountAmount)}</td>
+                  </tr>
+                )}
+                <tr>
+                  <td>Insured Pan-India Shipping</td>
+                  <td>{shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}</td>
+                </tr>
+                <tr className="total-row">
+                  <td>Total</td>
+                  <td>{formatPrice(cartTotal)}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <button
+              className="btn btn-primary btn-block btn-lg"
+              onClick={() => { onClose(); navigateTo("checkout"); }}
+            >
+              Proceed to Checkout · {formatPrice(cartTotal)}
+            </button>
+
+            <div style={{ textAlign: "center", marginTop: "0.75rem" }}>
+              <button
+                className="btn-ghost"
+                style={{ fontSize: "0.78rem" }}
+                onClick={() => { onClose(); navigateTo("cart"); }}
+              >
+                View Full Bag Details
+              </button>
+            </div>
+          </div>
+        )}
+      </aside>
+    </>
+  );
+}
+
+// --- DEDICATED CART PAGE ---
+function CartPage({
+  cart,
+  updateCartQty,
+  removeFromCart,
+  cartSubtotal,
+  discountAmount,
+  shippingCost,
+  cartTotal,
+  formatPrice,
+  promoCodeInput,
+  setPromoCodeInput,
+  handleApplyPromo,
+  appliedPromo,
+  navigateTo
+}) {
+  return (
+    <div className="cart-page-view section-sm">
+      <div className="container">
+        <h1 className="page-title" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          Your Shopping Bag
+        </h1>
+
+        {cart.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-state-icon"><Icons.Bag /></div>
+            <h3>Your Shopping Bag is Currently Empty</h3>
+            <p>Every Twisted Tar garment is an heirloom celebration of Awadhi embroidery.</p>
+            <button className="btn btn-primary" onClick={() => navigateTo("shop")}>
+              Browse Collections
+            </button>
+          </div>
+        ) : (
+          <div className="checkout-layout">
+            <div>
+              {cart.map((item, idx) => (
+                <div key={idx} className="cart-item" style={{ background: "var(--color-bg-card)", padding: "1.5rem", borderRadius: "var(--radius-sm)", marginBottom: "1rem" }}>
+                  <img className="cart-item-img" src={item.product.images[0]} alt={item.product.name} />
+                  <div className="cart-item-details">
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <h3 className="cart-item-title">{item.product.name}</h3>
+                      <button className="cart-item-remove-btn" onClick={() => removeFromCart(idx)}>
+                        <Icons.Trash />
+                      </button>
+                    </div>
+                    <div className="cart-item-variant">
+                      Size: <strong>{item.size}</strong> · Color: <strong>{item.color.name}</strong>
+                    </div>
+                    <div className="cart-item-price-row">
+                      <div className="qty-stepper">
+                        <button className="qty-btn" onClick={() => updateCartQty(idx, -1)}>-</button>
+                        <span className="qty-value">{item.quantity}</span>
+                        <button className="qty-btn" onClick={() => updateCartQty(idx, 1)}>+</button>
+                      </div>
+                      <span className="cart-item-price">{formatPrice(item.product.price * item.quantity)}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <div className="checkout-box">
+                <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.4rem", marginBottom: "1.25rem" }}>
+                  Order Summary
+                </h3>
+
+                <form onSubmit={(e) => { e.preventDefault(); handleApplyPromo(promoCodeInput); }} className="cart-promo-form">
+                  <input
+                    type="text"
+                    placeholder="Enter Coupon (TWISTED10)"
+                    value={promoCodeInput}
+                    onChange={(e) => setPromoCodeInput(e.target.value)}
+                  />
+                  <button type="submit" className="btn btn-secondary btn-sm">
+                    Apply
+                  </button>
+                </form>
+
+                <table className="cart-totals-table">
+                  <tbody>
+                    <tr><td>Subtotal</td><td>{formatPrice(cartSubtotal)}</td></tr>
+                    {discountAmount > 0 && (
+                      <tr style={{ color: "var(--color-sale)" }}>
+                        <td>Privilege Discount</td><td>-{formatPrice(discountAmount)}</td>
+                      </tr>
+                    )}
+                    <tr>
+                      <td>Shipping</td>
+                      <td>{shippingCost === 0 ? "Complimentary" : formatPrice(shippingCost)}</td>
+                    </tr>
+                    <tr className="total-row">
+                      <td>Estimated Total</td><td>{formatPrice(cartTotal)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <button className="btn btn-primary btn-block btn-lg" onClick={() => navigateTo("checkout")}>
+                  Proceed to Checkout
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --- CHECKOUT FLOW ---
+function CheckoutPage({
+  cart,
+  cartSubtotal,
+  discountAmount,
+  shippingCost,
+  cartTotal,
+  formatPrice,
+  appliedPromo,
+  onOrderPlaced,
+  navigateTo,
+  showToast
+}) {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    email: "ananya.sharma@example.com",
+    phone: "9876543210",
+    firstName: "Ananya",
+    lastName: "Sharma",
+    address: "B-42, Regency Heritage Apartments, Gomti Nagar",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    pincode: "226010",
+    shippingMethod: "standard",
+    paymentMethod: "upi"
+  });
+
+  if (cart.length === 0) {
+    return (
+      <div className="section container" style={{ textAlign: "center" }}>
+        <h2>Your bag is empty.</h2>
+        <button className="btn btn-primary" style={{ marginTop: "1rem" }} onClick={() => navigateTo("shop")}>
+          Return to Shop
+        </button>
+      </div>
+    );
+  }
+
+  const handleNextStep = (e) => {
+    e.preventDefault();
+    if (step === 1) {
+      if (!formData.email || !formData.phone) {
+        showToast("Please provide your contact information");
+        return;
+      }
+      setStep(2);
+    } else if (step === 2) {
+      if (!formData.firstName || !formData.address || !formData.pincode) {
+        showToast("Please fill in all shipping details");
+        return;
+      }
+      setStep(3);
+    } else if (step === 3) {
+      setStep(4);
+    } else if (step === 4) {
+      // Place Order
+      const newOrder = {
+        id: `TT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
+        items: cart,
+        total: cartTotal,
+        shipping: formData,
+        paymentStatus: "Demo Confirmed (Test Mode)"
+      };
+      onOrderPlaced(newOrder);
+    }
+  };
+
+  return (
+    <div className="checkout-view section-sm">
+      <div className="container">
+        <div className="checkout-steps-nav">
+          <div className={`checkout-step-pill ${step >= 1 ? "active" : ""}`}>
+            <span className="checkout-step-num">1</span> Contact
+          </div>
+          <Icons.ChevronRight />
+          <div className={`checkout-step-pill ${step >= 2 ? "active" : ""}`}>
+            <span className="checkout-step-num">2</span> Address
+          </div>
+          <Icons.ChevronRight />
+          <div className={`checkout-step-pill ${step >= 3 ? "active" : ""}`}>
+            <span className="checkout-step-num">3</span> Delivery
+          </div>
+          <Icons.ChevronRight />
+          <div className={`checkout-step-pill ${step >= 4 ? "active" : ""}`}>
+            <span className="checkout-step-num">4</span> Payment
+          </div>
+        </div>
+
+        <div className="checkout-layout">
+          <div className="checkout-box">
+            <form onSubmit={handleNextStep}>
+              {/* STEP 1: CONTACT */}
+              {step === 1 && (
+                <div>
+                  <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.75rem", marginBottom: "1.5rem" }}>
+                    1. Contact Information
+                  </h2>
+                  <div className="form-group">
+                    <label className="form-label">Email Address (for order updates)</label>
+                    <input
+                      type="email"
+                      className="form-input"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Phone Number (with SMS delivery updates)</label>
+                    <input
+                      type="tel"
+                      className="form-input"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-primary btn-block btn-lg" style={{ marginTop: "1rem" }}>
+                    Continue to Shipping Address <Icons.ChevronRight />
+                  </button>
+                </div>
+              )}
+
+              {/* STEP 2: ADDRESS */}
+              {step === 2 && (
+                <div>
+                  <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.75rem", marginBottom: "1.5rem" }}>
+                    2. Shipping Address
+                  </h2>
+                  <div className="form-grid-2">
+                    <div className="form-group">
+                      <label className="form-label">First Name</label>
+                      <input
+                        className="form-input"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Last Name</label>
+                      <input
+                        className="form-input"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Street Address & Apartment</label>
+                    <input
+                      className="form-input"
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="form-grid-2">
+                    <div className="form-group">
+                      <label className="form-label">City</label>
+                      <input
+                        className="form-input"
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">State</label>
+                      <input
+                        className="form-input"
+                        value={formData.state}
+                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">PIN Code</label>
+                    <input
+                      className="form-input"
+                      maxLength="6"
+                      value={formData.pincode}
+                      onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
+                    <button type="button" className="btn btn-secondary" onClick={() => setStep(1)}>Back</button>
+                    <button type="submit" className="btn btn-primary btn-block">Continue to Delivery</button>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: SHIPPING METHOD */}
+              {step === 3 && (
+                <div>
+                  <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.75rem", marginBottom: "1.5rem" }}>
+                    3. Delivery Speed
+                  </h2>
+                  <label className="form-group" style={{ background: "var(--color-bg-secondary)", padding: "1rem", borderRadius: "var(--radius-sm)", cursor: "pointer", border: "1px solid var(--color-border-medium)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <input
+                        type="radio"
+                        name="shipping"
+                        checked={formData.shippingMethod === "standard"}
+                        onChange={() => setFormData({ ...formData, shippingMethod: "standard" })}
+                      />
+                      <div>
+                        <strong>Standard Insured Delivery (2–4 Business Days)</strong>
+                        <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>Complimentary Pan-India courier with real-time GPS tracking</div>
+                      </div>
+                      <span style={{ marginLeft: "auto", fontWeight: "700" }}>FREE</span>
+                    </div>
+                  </label>
+
+                  <label className="form-group" style={{ background: "var(--color-bg-secondary)", padding: "1rem", borderRadius: "var(--radius-sm)", cursor: "pointer", border: "1px solid var(--color-border-medium)", marginTop: "1rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <input
+                        type="radio"
+                        name="shipping"
+                        checked={formData.shippingMethod === "express"}
+                        onChange={() => setFormData({ ...formData, shippingMethod: "express" })}
+                      />
+                      <div>
+                        <strong>Express Artisan Priority Air (24–48 Hours)</strong>
+                        <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>Priority packing from our Hazratganj atelier directly to your doorstep</div>
+                      </div>
+                      <span style={{ marginLeft: "auto", fontWeight: "700" }}>₹250</span>
+                    </div>
+                  </label>
+
+                  <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
+                    <button type="button" className="btn btn-secondary" onClick={() => setStep(2)}>Back</button>
+                    <button type="submit" className="btn btn-primary btn-block">Continue to Payment</button>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 4: PAYMENT (CLEAR DEMO CHECKOUT) */}
+              {step === 4 && (
+                <div>
+                  <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.75rem", marginBottom: "1rem" }}>
+                    4. Payment Method
+                  </h2>
+
+                  {/* Sandbox Notice Requirement */}
+                  <div className="demo-payment-alert">
+                    <strong>Demo Checkout Mode (No Real Money Charged)</strong>
+                    This store is currently configured in demonstrator mode. No real payment provider (Razorpay / Stripe) is connected. 
+                    Clicking "Confirm & Place Order" simulates a successful transaction and issues a verified demo order confirmation.
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    <label style={{ padding: "1rem", border: "1px solid var(--color-border-medium)", borderRadius: "var(--radius-sm)", display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={formData.paymentMethod === "upi"}
+                        onChange={() => setFormData({ ...formData, paymentMethod: "upi" })}
+                      />
+                      <div>
+                        <strong>UPI / Google Pay / PhonePe / Paytm</strong>
+                        <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Instant zero-fee payment via any UPI application</div>
+                      </div>
+                    </label>
+
+                    <label style={{ padding: "1rem", border: "1px solid var(--color-border-medium)", borderRadius: "var(--radius-sm)", display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={formData.paymentMethod === "card"}
+                        onChange={() => setFormData({ ...formData, paymentMethod: "card" })}
+                      />
+                      <div>
+                        <strong>Credit / Debit Card (Visa, Mastercard, RuPay, Amex)</strong>
+                        <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Encrypted 256-bit safe checkout</div>
+                      </div>
+                    </label>
+
+                    <label style={{ padding: "1rem", border: "1px solid var(--color-border-medium)", borderRadius: "var(--radius-sm)", display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={formData.paymentMethod === "cod"}
+                        onChange={() => setFormData({ ...formData, paymentMethod: "cod" })}
+                      />
+                      <div>
+                        <strong>Cash on Delivery (Pay upon delivery)</strong>
+                        <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Inspect your hand-embroidered kurti before paying</div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+                    <button type="button" className="btn btn-secondary" onClick={() => setStep(3)}>Back</button>
+                    <button type="submit" className="btn btn-gold btn-block btn-lg">
+                      Confirm & Place Order ({formatPrice(cartTotal)})
+                    </button>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+
+          {/* Right Column: Order Summary in Checkout */}
+          <div>
+            <div className="checkout-box" style={{ background: "var(--color-bg-primary)" }}>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.3rem", marginBottom: "1rem" }}>
+                Order Summary ({cart.length} items)
+              </h3>
+              <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
+                {cart.map((item, idx) => (
+                  <div key={idx} style={{ display: "flex", gap: "0.75rem", marginBottom: "0.85rem", alignItems: "center" }}>
+                    <img src={item.product.images[0]} style={{ width: "50px", height: "66px", objectFit: "cover", borderRadius: "2px" }} alt="" />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: "0.85rem", fontWeight: "600" }}>{item.product.name}</div>
+                      <div style={{ fontSize: "0.75rem", color: "var(--color-text-subtle)" }}>Size: {item.size} × {item.quantity}</div>
+                    </div>
+                    <div style={{ fontSize: "0.85rem", fontWeight: "700" }}>{formatPrice(item.product.price * item.quantity)}</div>
+                  </div>
+                ))}
+              </div>
+
+              <table className="cart-totals-table">
+                <tbody>
+                  <tr><td>Subtotal</td><td>{formatPrice(cartSubtotal)}</td></tr>
+                  {discountAmount > 0 && (
+                    <tr style={{ color: "var(--color-sale)" }}>
+                      <td>Coupon Privilege</td><td>-{formatPrice(discountAmount)}</td>
+                    </tr>
+                  )}
+                  <tr><td>Shipping</td><td>{shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}</td></tr>
+                  <tr className="total-row">
+                    <td>Total Due</td><td>{formatPrice(cartTotal)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- ORDER CONFIRMATION SCREEN ---
+function OrderConfirmationPage({ orderId, orders, formatPrice, navigateTo }) {
+  const currentOrder = orders.find((o) => o.id === orderId) || {
+    id: orderId,
+    date: new Date().toLocaleDateString("en-IN"),
+    items: [],
+    total: 6890,
+    shipping: { firstName: "Valued", lastName: "Customer", address: "Heritage Lane", city: "Lucknow" }
+  };
+
+  return (
+    <div className="section container">
+      <div className="confirmation-card">
+        <div className="confirmation-stamp">
+          <Icons.Check />
+        </div>
+        <span className="overline" style={{ color: "var(--color-forest-ink)" }}>Order Confirmed · Awadh Atelier</span>
+        <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "2.5rem", marginBottom: "0.5rem" }}>
+          Thank You, {currentOrder.shipping?.firstName || "Friend"}
+        </h1>
+        <p style={{ color: "var(--color-text-muted)", fontSize: "1.05rem", maxWidth: "500px", margin: "0 auto" }}>
+          Your order has been recorded in our Lucknow atelier. Master karigars will inspect, hand-press, and pack your heirloom Chikankari with fragrant dried rose petals.
+        </p>
+
+        <div className="order-id-pill">
+          ORDER NUMBER: {currentOrder.id}
+        </div>
+
+        <div style={{ background: "var(--color-bg-secondary)", padding: "1.5rem", borderRadius: "var(--radius-sm)", textAlign: "left", marginBottom: "2rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+            <span>Order Date:</span> <strong>{currentOrder.date}</strong>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+            <span>Estimated Delivery:</span> <strong>3–4 Business Days</strong>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+            <span>Shipping Destination:</span> <strong>{currentOrder.shipping?.city}, India</strong>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid var(--color-border-delicate)", paddingTop: "0.5rem" }}>
+            <span>Amount Paid (Demo):</span> <strong>{formatPrice(currentOrder.total)}</strong>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+          <button className="btn btn-primary" onClick={() => navigateTo("shop")}>
+            Continue Shopping
+          </button>
+          <button className="btn btn-secondary" onClick={() => window.print()}>
+            Print Receipt
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- ABOUT US PAGE ---
+function AboutPage({ craftStitches, navigateTo }) {
+  return (
+    <div className="about-view section-sm">
+      <div className="container">
+        {/* Story Hero */}
+        <div style={{ textAlign: "center", maxWidth: "780px", margin: "0 auto 4rem auto" }}>
+          <span className="overline">Our Lucknowi Heritage</span>
+          <h1 className="page-title">The Legend of Twisted Tar</h1>
+          <p style={{ fontSize: "1.2rem", lineHeight: "1.8", color: "var(--color-text-muted)" }}>
+            In the poetic court language of Awadh, <strong>"Tar"</strong> (तार) signifies the single, hand-spun thread pulled with patient devotion through gossamer fabric. 
+            We are dedicated to preserving this living legacy against the tidal wave of cheap synthetic machine replicas.
+          </p>
+        </div>
+
+        {/* Narrative Split */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center", marginBottom: "5rem" }}>
+          <div>
+            <span className="overline">Awadh Craftsmanship</span>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "2.2rem", marginBottom: "1.25rem", color: "var(--color-forest-ink)" }}>
+              Where Time Breathes Through Needle and Gossamer Cloth
+            </h2>
+            <p style={{ color: "var(--color-text-muted)", marginBottom: "1rem", lineHeight: "1.7" }}>
+              Legend holds that Empress Noor Jahan introduced Chikankari to the Mughal courts after being captivated by Turkish lace. Under the patronage of the Nawabs of Lucknow, the craft evolved into a spiritual discipline—an unspoken ode to grace, modesty, and sensory tranquility.
+            </p>
+            <p style={{ color: "var(--color-text-muted)", lineHeight: "1.7" }}>
+              Every Twisted Tar kurti represents between 20 to 90 hours of uninterrupted, meditative hand embroidery by female artisans in the villages surrounding Lucknow. By keeping production entirely within these artisan clusters, we safeguard ancestral knowledge while fostering economic dignity.
+            </p>
+          </div>
+          <div>
+            <img
+              src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80"
+              alt="Artisan hand embroidering Lucknowi chikankari fabric"
+              style={{ borderRadius: "var(--radius-sm)", boxShadow: "var(--shadow-lg)" }}
+            />
+          </div>
+        </div>
+
+        {/* The 5 Stages Journey */}
+        <div style={{ marginBottom: "5rem" }}>
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <span className="overline">The Process</span>
+            <h2 className="section-title">The Fivefold Path of Chikankari</h2>
+          </div>
+
+          <div className="journey-steps-grid">
+            <div className="journey-step-card">
+              <div className="journey-num">01</div>
+              <h3 className="journey-title">Textile Selection</h3>
+              <p className="journey-desc">Hand-combed 80s count mulmul cotton, handwoven Chanderi silks, and natural breathable modals selected for thread translucency.</p>
+            </div>
+            <div className="journey-step-card">
+              <div className="journey-num">02</div>
+              <h3 className="journey-title">Chhapa (Block Printing)</h3>
+              <p className="journey-desc">Handmade wooden blocks stamp traditional paisley and floral guidelines using water-soluble natural indigo and vegetable inks.</p>
+            </div>
+            <div className="journey-step-card">
+              <div className="journey-num">03</div>
+              <h3 className="journey-title">Kadhai (The Embroidery)</h3>
+              <p className="journey-desc">Generational artisans work stitch by stitch: herringbone shadow work, raised millet Phanda knots, and Basmati Murri grains.</p>
+            </div>
+            <div className="journey-step-card">
+              <div className="journey-num">04</div>
+              <h3 className="journey-title">Dhobai (The River Wash)</h3>
+              <p className="journey-desc">The completed piece is immersed in cold water to wash away the block-printed guidelines, leaving only pure threadwork.</p>
+            </div>
+            <div className="journey-step-card">
+              <div className="journey-num">05</div>
+              <h3 className="journey-title">Finishing & Quality</h3>
+              <p className="journey-desc">Each seam is hand-tailored, pressed on the reverse side to preserve 3D knot reliefs, and sealed with artisan certification.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{ textAlign: "center", background: "var(--color-bg-secondary)", padding: "4rem 2rem", borderRadius: "var(--radius-sm)" }}>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "2.2rem", marginBottom: "1rem" }}>
+            Experience the Touch of Genuine Lucknowi Art
+          </h2>
+          <button className="btn btn-primary btn-lg" onClick={() => navigateTo("shop")}>
+            Shop Handcrafted Kurtis <Icons.ChevronRight />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- BLOG INDEX PAGE ---
+function BlogIndexPage({ articles, navigateTo }) {
+  const [selectedTag, setSelectedTag] = useState("all");
+
+  const filteredArticles = selectedTag === "all" ? articles : articles.filter((a) => a.category === selectedTag);
+
+  return (
+    <div className="blog-index-view section-sm">
+      <div className="container">
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <span className="overline">The Journal</span>
+          <h1 className="page-title">The Lucknow Chronicle</h1>
+          <p className="section-subtitle">
+            Reflections on Awadhi textile heritage, styling philosophy, and heirloom garment preservation.
+          </p>
+
+          <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginTop: "1.5rem" }}>
+            <button className={`btn btn-sm ${selectedTag === "all" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelectedTag("all")}>
+              All Articles
+            </button>
+            <button className={`btn btn-sm ${selectedTag === "Craft & Heritage" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelectedTag("Craft & Heritage")}>
+              Craft & Heritage
+            </button>
+            <button className={`btn btn-sm ${selectedTag === "Style Guides" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelectedTag("Style Guides")}>
+              Style Guides
+            </button>
+            <button className={`btn btn-sm ${selectedTag === "Care & Longevity" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelectedTag("Care & Longevity")}>
+              Care & Longevity
+            </button>
+          </div>
+        </div>
+
+        <div className="blog-grid">
+          {filteredArticles.map((article) => (
+            <article key={article.id} className="article-card" onClick={() => navigateTo("article", article.slug)} style={{ cursor: "pointer" }}>
+              <div className="article-card-img-wrap">
+                <img src={article.image} alt={article.title} loading="lazy" />
+              </div>
+              <div className="article-card-body">
+                <div className="article-meta">
+                  <span>{article.category}</span>
+                  <span>·</span>
+                  <span>{article.readTime}</span>
+                </div>
+                <h2 className="article-title">{article.title}</h2>
+                <p className="article-excerpt">{article.excerpt}</p>
+                <span className="article-read-more">
+                  Read Full Chronicle <Icons.ChevronRight />
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- ARTICLE READER PAGE ---
+function ArticleReaderPage({ article, allArticles, navigateTo }) {
+  const related = allArticles.filter((a) => a.id !== article.id).slice(0, 2);
+
+  return (
+    <div className="article-reader-view section-sm">
+      <div className="article-reader-container">
+        <button
+          className="btn-ghost"
+          style={{ marginBottom: "1.5rem", display: "inline-flex", alignItems: "center", gap: "0.4rem" }}
+          onClick={() => navigateTo("blog")}
+        >
+          ← Back to All Articles
+        </button>
+
+        <span className="overline">{article.category} · {article.readTime}</span>
+        <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2.2rem, 4vw, 3.2rem)", lineHeight: "1.2", marginBottom: "1rem" }}>
+          {article.title}
+        </h1>
+        <div style={{ display: "flex", gap: "1rem", color: "var(--color-text-subtle)", fontSize: "0.85rem", marginBottom: "2rem" }}>
+          <span>By {article.author}</span>
+          <span>·</span>
+          <span>Published {article.date}</span>
+        </div>
+
+        <div style={{ borderRadius: "var(--radius-sm)", overflow: "hidden", marginBottom: "2.5rem" }}>
+          <img src={article.image} alt={article.title} style={{ width: "100%", height: "420px", objectFit: "cover" }} />
+        </div>
+
+        <div
+          className="article-full-content"
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        />
+
+        <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--color-border-delicate)" }}>
+          <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.8rem", marginBottom: "1.5rem" }}>
+            More from the Journal
+          </h3>
+          <div className="blog-grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
+            {related.map((rel) => (
+              <article key={rel.id} className="article-card" onClick={() => navigateTo("article", rel.slug)} style={{ cursor: "pointer" }}>
+                <div className="article-card-body">
+                  <span className="article-meta">{rel.category}</span>
+                  <h4 className="article-title" style={{ fontSize: "1.2rem" }}>{rel.title}</h4>
+                  <p className="article-excerpt" style={{ fontSize: "0.85rem" }}>{rel.excerpt}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- CONTACT PAGE ---
+function ContactPage({ showToast }) {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    showToast("Message received! Our Lucknow concierge will respond within 24 hours.");
+  };
+
+  return (
+    <div className="contact-view section-sm">
+      <div className="container" style={{ maxWidth: "980px" }}>
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <span className="overline">Client Concierge</span>
+          <h1 className="page-title">We Are Here For You</h1>
+          <p className="section-subtitle">
+            Whether you seek custom sizing guidance, styling consultations, or bulk wedding orders, our team is at your disposal.
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "4rem" }}>
+          <div className="checkout-box">
+            {submitted ? (
+              <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
+                <div className="confirmation-stamp"><Icons.Check /></div>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.8rem", marginBottom: "0.5rem" }}>
+                  Message Sent
+                </h3>
+                <p style={{ color: "var(--color-text-muted)" }}>
+                  Thank you for writing to Twisted Tar. Our concierge representative will get in touch with you shortly.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="form-grid-2">
+                  <div className="form-group">
+                    <label className="form-label">Full Name</label>
+                    <input className="form-input" placeholder="e.g. Radhika Sen" required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Email Address</label>
+                    <input type="email" className="form-input" placeholder="e.g. radhika@example.com" required />
+                  </div>
+                </div>
+
+                <div className="form-grid-2">
+                  <div className="form-group">
+                    <label className="form-label">Phone Number</label>
+                    <input type="tel" className="form-input" placeholder="+91 98765 43210" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Topic</label>
+                    <select className="form-select">
+                      <option>Sizing & Fit Advice</option>
+                      <option>Order & Dispatch Status</option>
+                      <option>Custom Bridal / Bulk Gifting</option>
+                      <option>Press & Collaborations</option>
+                      <option>General Inquiry</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Your Message</label>
+                  <textarea className="form-textarea" rows="5" placeholder="How may our concierge assist your chikankari journey today?" required></textarea>
+                </div>
+
+                <button type="submit" className="btn btn-primary btn-block btn-lg" style={{ marginTop: "1rem" }}>
+                  Send Message to Concierge
+                </button>
+              </form>
+            )}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <div style={{ background: "var(--color-bg-secondary)", padding: "1.75rem", borderRadius: "var(--radius-sm)" }}>
+              <h4 style={{ fontFamily: "var(--font-serif)", fontSize: "1.2rem", marginBottom: "0.5rem", color: "var(--color-forest-ink)" }}>
+                Hazratganj Studio & Flagship
+              </h4>
+              <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: "1.6" }}>
+                {BRAND.contact.address}
+              </p>
+              <div style={{ marginTop: "0.75rem", fontSize: "0.85rem", color: "var(--color-gold-text)" }}>
+                {BRAND.contact.hours}
+              </div>
+            </div>
+
+            <div style={{ background: "var(--color-bg-secondary)", padding: "1.75rem", borderRadius: "var(--radius-sm)" }}>
+              <h4 style={{ fontFamily: "var(--font-serif)", fontSize: "1.2rem", marginBottom: "0.5rem", color: "var(--color-forest-ink)" }}>
+                Direct Assistance
+              </h4>
+              <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)" }}>
+                Phone: <strong>{BRAND.contact.phone}</strong><br />
+                Email: <strong>{BRAND.contact.email}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- FAQ PAGE ---
+function FAQPage({ faqs, navigateTo }) {
+  const [openItems, setOpenItems] = useState({ "0-0": true });
+  const [query, setQuery] = useState("");
+
+  const toggleFAQ = (catIdx, itemIdx) => {
+    const key = `${catIdx}-${itemIdx}`;
+    setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  return (
+    <div className="faq-view section-sm">
+      <div className="container" style={{ maxWidth: "840px" }}>
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <span className="overline">Questions & Answers</span>
+          <h1 className="page-title">Frequently Asked Questions</h1>
+          <p className="section-subtitle">
+            Everything you need to know about our heirloom garments, authentic needlework, delivery, and exchange guarantees.
+          </p>
+
+          <div className="search-trigger-box" style={{ width: "100%", maxWidth: "440px", margin: "1.5rem auto 0 auto" }}>
+            <Icons.Search />
+            <input
+              type="text"
+              placeholder="Search sizing, washes, returns..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {faqs.map((cat, catIdx) => (
+          <div key={catIdx} style={{ marginBottom: "3rem" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", borderBottom: "1px solid var(--color-gold-antique)", paddingBottom: "0.5rem", marginBottom: "1.25rem", color: "var(--color-forest-ink)" }}>
+              {cat.category}
+            </h2>
+            <div className="accordion">
+              {cat.items.map((item, itemIdx) => {
+                const key = `${catIdx}-${itemIdx}`;
+                const isOpen = openItems[key];
+                return (
+                  <div key={itemIdx} className={`accordion-item ${isOpen ? "open" : ""}`}>
+                    <button className="accordion-header" onClick={() => toggleFAQ(catIdx, itemIdx)}>
+                      <span>{item.q}</span>
+                      <Icons.ChevronDown />
+                    </button>
+                    {isOpen && (
+                      <div className="accordion-body">
+                        {item.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+
+        <div style={{ textAlign: "center", padding: "2rem", background: "var(--color-bg-secondary)", borderRadius: "var(--radius-sm)" }}>
+          <p style={{ marginBottom: "1rem" }}>Still have questions about our embroidery or need custom tailoring?</p>
+          <button className="btn btn-primary" onClick={() => navigateTo("contact")}>
+            Contact Our Concierge
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- SHIPPING & RETURNS PAGE ---
+function ShippingReturnsPage({ navigateTo }) {
+  return (
+    <div className="section-sm container" style={{ maxWidth: "800px" }}>
+      <span className="overline">Customer Care</span>
+      <h1 className="page-title">Shipping, Exchanges & Returns</h1>
+
+      <div style={{ fontSize: "1rem", lineHeight: "1.8", color: "var(--color-text-main)" }}>
+        <h3 style={{ fontSize: "1.5rem", margin: "2rem 0 0.75rem 0" }}>Domestic Shipping (India)</h3>
+        <p>We take pride in delivering our handcrafted garments across all postal codes in India. Every shipment is fully insured against damage or loss in transit.</p>
+        <ul>
+          <li><strong>Orders Above ₹1,999:</strong> Free standard shipping via Bluedart / Delhivery Express.</li>
+          <li><strong>Orders Below ₹1,999:</strong> Flat ₹120 standard courier fee.</li>
+          <li><strong>Dispatch Time:</strong> Ready-to-wear kurtis dispatch within 24–48 hours from our Lucknow atelier.</li>
+          <li><strong>Transit Timeline:</strong> Metro cities: 2–4 business days. Rest of India: 4–6 business days.</li>
+        </ul>
+
+        <h3 style={{ fontSize: "1.5rem", margin: "2.5rem 0 0.75rem 0" }}>7-Day Exchange & Return Policy</h3>
+        <p>Because fit is deeply personal, we offer a hassle-free 7-day exchange window from the date your package arrives.</p>
+        <ul>
+          <li>Garments must be unworn, unwashed, and retained with their original artisan tags and unbleached cotton bag.</li>
+          <li>Doorstep reverse courier pickup is arranged by our team at no additional charge.</li>
+          <li>In the rare event that an exchange size is out of stock, we issue a lifetime atelier credit note or a prompt refund to your original payment mode.</li>
+        </ul>
+
+        <div style={{ marginTop: "3rem" }}>
+          <button className="btn btn-primary" onClick={() => navigateTo("contact")}>
+            Initiate Return or Exchange
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- PRIVACY POLICY & TERMS PAGES ---
+function PrivacyPolicyPage() {
+  return (
+    <div className="section-sm container" style={{ maxWidth: "800px" }}>
+      <h1 className="page-title">Privacy Policy</h1>
+      <p style={{ color: "var(--color-text-subtle)", marginBottom: "2rem" }}>Last updated: November 2026 · Twisted Tar E-Commerce</p>
+      <div style={{ lineHeight: "1.8", color: "var(--color-text-muted)" }}>
+        <p>Twisted Tar values your privacy and is committed to protecting your personal information. This Privacy Policy describes how we collect, use, and safeguard the data you provide when shopping with us.</p>
+        <h3 style={{ fontSize: "1.3rem", color: "var(--color-forest-ink)", margin: "1.5rem 0 0.5rem 0" }}>1. Information We Collect</h3>
+        <p>We collect essential order fulfillment information such as your name, shipping address, email, and phone number when you place an order or subscribe to our newsletter.</p>
+        <h3 style={{ fontSize: "1.3rem", color: "var(--color-forest-ink)", margin: "1.5rem 0 0.5rem 0" }}>2. Data Protection & Security</h3>
+        <p>We do not store complete payment card credentials on our servers. Transactions are tokenized through RBI-authorized payment aggregators using 256-bit SSL encryption.</p>
+      </div>
+    </div>
+  );
+}
+
+function TermsPage() {
+  return (
+    <div className="section-sm container" style={{ maxWidth: "800px" }}>
+      <h1 className="page-title">Terms of Service</h1>
+      <p style={{ color: "var(--color-text-subtle)", marginBottom: "2rem" }}>Last updated: November 2026</p>
+      <div style={{ lineHeight: "1.8", color: "var(--color-text-muted)" }}>
+        <p>Welcome to Twisted Tar. By browsing or purchasing from our platform, you agree to comply with and be bound by the following terms.</p>
+        <h3 style={{ fontSize: "1.3rem", color: "var(--color-forest-ink)", margin: "1.5rem 0 0.5rem 0" }}>1. Handcrafted Authenticity</h3>
+        <p>Because each garment is embroidered entirely by human hands, minute variations in stitch spacing and thread tension are organic marks of authentic artisan origin, not factory flaws.</p>
+        <h3 style={{ fontSize: "1.3rem", color: "var(--color-forest-ink)", margin: "1.5rem 0 0.5rem 0" }}>2. Demonstrator Mode Notice</h3>
+        <p>This website operates in demonstrator mode. Any checkout completed here does not draw real financial charges unless connected to a live merchant credential.</p>
+      </div>
+    </div>
+  );
+}
+
+// --- WISHLIST PAGE ---
+function WishlistPage({
+  wishlist,
+  products,
+  formatPrice,
+  toggleWishlist,
+  onAddToCart,
+  onQuickView,
+  navigateTo
+}) {
+  const wishlistedProducts = products.filter((p) => wishlist.includes(p.id));
+
+  return (
+    <div className="wishlist-view section-sm">
+      <div className="container">
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          <span className="overline">Your Curated Collection</span>
+          <h1 className="page-title">Saved Heirlooms ({wishlistedProducts.length})</h1>
+        </div>
+
+        {wishlistedProducts.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-state-icon"><Icons.Heart filled={false} /></div>
+            <h3>Your Wishlist is Empty</h3>
+            <p>Save your favorite Lucknowi Chikankari kurtis here to revisit or compare before acquiring.</p>
+            <button className="btn btn-primary" onClick={() => navigateTo("shop")}>
+              Explore the Atelier
+            </button>
+          </div>
+        ) : (
+          <div className="product-grid">
+            {wishlistedProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                formatPrice={formatPrice}
+                isWishlisted={true}
+                onToggleWishlist={() => toggleWishlist(product.id)}
+                onQuickView={() => onQuickView(product)}
+                onAddToCart={(size, color) => onAddToCart(product, color, size, 1)}
+                navigateTo={navigateTo}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --- 404 NOT FOUND PAGE ---
+function NotFoundPage({ navigateTo }) {
+  return (
+    <div className="section container" style={{ textAlign: "center", padding: "5rem 1rem" }}>
+      <div style={{ width: "80px", height: "80px", margin: "0 auto 1.5rem auto", color: "var(--color-gold-antique)" }}>
+        <Icons.Needle />
+      </div>
+      <span className="overline">Page Not Found</span>
+      <h1 className="page-title" style={{ fontSize: "3rem" }}>404 · Uncharted Stitch</h1>
+      <p style={{ color: "var(--color-text-muted)", maxWidth: "480px", margin: "0 auto 2rem auto" }}>
+        Like a stray thread in fine muslin, this page seems to have wandered off. Let us guide you back to our curated collections.
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+        <button className="btn btn-primary" onClick={() => navigateTo("home")}>
+          Return Home
+        </button>
+        <button className="btn btn-secondary" onClick={() => navigateTo("shop")}>
+          Shop Collections
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// --- QUICK VIEW MODAL ---
+function QuickViewModal({
+  product,
+  onClose,
+  onAddToCart,
+  formatPrice,
+  wishlist,
+  toggleWishlist,
+  onOpenSizeGuide,
+  navigateTo
+}) {
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [selectedSize, setSelectedSize] = useState("");
+  const currentColor = product.colors[selectedColorIndex] || product.colors[0];
+
+  return (
+    <div className="modal-overlay open" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close-btn" onClick={onClose} aria-label="Close Quick View">
+          <Icons.Close />
+        </button>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: "2.5rem", alignItems: "center" }}>
+          <div>
+            <img
+              src={product.images[currentColor.imageIndex] || product.images[0]}
+              alt={product.name}
+              style={{ width: "100%", borderRadius: "var(--radius-sm)", aspectRatio: "3/4", objectFit: "cover" }}
+            />
+          </div>
+
+          <div>
+            <span className="overline">{product.categoryName}</span>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.85rem", marginBottom: "0.5rem" }}>
+              {product.name}
+            </h2>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+              <span className="star-rating"><Icons.Star /> {product.rating}</span>
+              <span className="review-count-text">({product.reviewCount} reviews)</span>
+            </div>
+
+            <div style={{ fontSize: "1.5rem", fontWeight: "700", color: "var(--color-forest-ink)", marginBottom: "1rem" }}>
+              {formatPrice(product.price)}
+            </div>
+
+            <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: "1.6", marginBottom: "1.25rem" }}>
+              {product.shortDesc}
+            </p>
+
+            <div style={{ marginBottom: "1.25rem" }}>
+              <div style={{ fontSize: "0.82rem", fontWeight: "600", marginBottom: "0.5rem" }}>
+                Color: {currentColor.name}
+              </div>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                {product.colors.map((c, idx) => (
+                  <button
+                    key={idx}
+                    className={`color-swatch-dot ${selectedColorIndex === idx ? "active" : ""}`}
+                    style={{ backgroundColor: c.hex }}
+                    onClick={() => setSelectedColorIndex(idx)}
+                    aria-label={c.name}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: "600", marginBottom: "0.5rem" }}>
+                <span>Select Size:</span>
+                <button className="size-guide-link" onClick={onOpenSizeGuide}>Size Guide</button>
+              </div>
+              <div className="size-chips-grid" style={{ gridTemplateColumns: "repeat(6, 1fr)" }}>
+                {product.sizes.map((s) => (
+                  <button
+                    key={s.size}
+                    className={`size-chip ${selectedSize === s.size ? "active" : ""}`}
+                    onClick={() => setSelectedSize(s.size)}
+                  >
+                    {s.size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "0.75rem" }}>
+              <button
+                className="btn btn-primary btn-block"
+                onClick={() => {
+                  if (onAddToCart(selectedSize, currentColor)) onClose();
+                }}
+              >
+                Add to Cart
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  onClose();
+                  navigateTo("product", product.slug);
+                }}
+              >
+                Full Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- SIZE GUIDE MODAL ---
+function SizeGuideModal({ sizeChart, onClose }) {
+  return (
+    <div className="modal-overlay open" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close-btn" onClick={onClose} aria-label="Close Size Guide">
+          <Icons.Close />
+        </button>
+
+        <span className="overline">Garment Fit & Measurements</span>
+        <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", marginBottom: "0.5rem" }}>
+          Twisted Tar Sizing Chart
+        </h2>
+        <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
+          All measurements are listed in inches. Our kurtis feature a relaxed Awadhi ease allowance for effortless comfort.
+        </p>
+
+        <table className="size-table">
+          <thead>
+            <tr>
+              {sizeChart.headers.map((h, i) => (
+                <th key={i}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sizeChart.rows.map((r, i) => (
+              <tr key={i}>
+                <td><strong>{r.size}</strong></td>
+                <td>{r.bust}</td>
+                <td>{r.chest}</td>
+                <td>{r.waist}</td>
+                <td>{r.hip}</td>
+                <td>{r.length}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div style={{ marginTop: "2rem", background: "var(--color-bg-secondary)", padding: "1.25rem", borderRadius: "var(--radius-sm)", fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
+          <strong>How to measure:</strong> Measure around the fullest part of your bust while wearing an unpadded bra. For kurti length, measure vertically from the highest point of your shoulder down to your preferred hemline.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- FOOTER COMPONENT ---
+function Footer({ navigateTo, showToast }) {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (newsletterEmail) {
+      showToast("Thank you for joining our circle. Code TWISTED10 has been applied!");
+      setNewsletterEmail("");
+    }
+  };
+
+  return (
+    <footer className="site-footer">
+      <div className="container">
+        <div className="footer-grid">
+          {/* Brand Col */}
+          <div className="footer-brand">
+            <img src="assets/logo.svg" alt="Twisted Tar" height="42" style={{ filter: "brightness(0) invert(1)" }} />
+            <p style={{ marginTop: "1rem" }}>
+              Dedicated to safeguarding the pure, meditative art of authentic Lucknowi chikankari. Handcrafted by master artisans in Awadh.
+            </p>
+            <div style={{ marginTop: "1.5rem", fontSize: "0.82rem", color: "var(--color-gold-antique)" }}>
+              Hazratganj Atelier · Lucknow 226001
+            </div>
+          </div>
+
+          {/* Col 1: Collections */}
+          <div className="footer-col">
+            <h4>Collections</h4>
+            <ul className="footer-links">
+              <li><a href="#shop/3-piece" onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>3-Piece Kurtis</a></li>
+              <li><a href="#shop/2-piece" onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>2-Piece Sets</a></li>
+              <li><a href="#shop/short" onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>Short Kurtis</a></li>
+              <li><a href="#shop" onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>Pure Mulmul Edits</a></li>
+              <li><a href="#shop" onClick={(e) => { e.preventDefault(); navigateTo("shop"); }}>Chanderi Silk Ensembles</a></li>
+            </ul>
+          </div>
+
+          {/* Col 2: Atelier Care */}
+          <div className="footer-col">
+            <h4>Client Atelier</h4>
+            <ul className="footer-links">
+              <li><a href="#about" onClick={(e) => { e.preventDefault(); navigateTo("about"); }}>Our Craft Story</a></li>
+              <li><a href="#blog" onClick={(e) => { e.preventDefault(); navigateTo("blog"); }}>The Journal</a></li>
+              <li><a href="#faq" onClick={(e) => { e.preventDefault(); navigateTo("faq"); }}>Sizing & FAQ</a></li>
+              <li><a href="#shipping-returns" onClick={(e) => { e.preventDefault(); navigateTo("shipping-returns"); }}>Shipping & Returns</a></li>
+              <li><a href="#contact" onClick={(e) => { e.preventDefault(); navigateTo("contact"); }}>Concierge Contact</a></li>
+            </ul>
+          </div>
+
+          {/* Col 3: Newsletter */}
+          <div className="footer-col">
+            <h4>Stay Connected</h4>
+            <p style={{ fontSize: "0.85rem", color: "rgba(253, 251, 247, 0.75)", marginBottom: "0.75rem" }}>
+              Receive invitations to private collection releases and seasonal dyeing dispatches.
+            </p>
+            <form onSubmit={handleSubscribe} className="footer-newsletter-form">
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                required
+              />
+              <button type="submit" className="btn btn-gold btn-sm">
+                Join
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <div>
+            © 2026 Twisted Tar. All rights reserved. Handcrafted in Lucknow, India.
+          </div>
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            <a href="#privacy" onClick={(e) => { e.preventDefault(); navigateTo("privacy"); }}>Privacy Policy</a>
+            <a href="#terms" onClick={(e) => { e.preventDefault(); navigateTo("terms"); }}>Terms of Service</a>
+            <a href="#shipping-returns" onClick={(e) => { e.preventDefault(); navigateTo("shipping-returns"); }}>Exchanges</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// --- MOUNT REACT APP ---
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(<TwistedTarApp />);
+}

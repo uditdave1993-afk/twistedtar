@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 76" width="340" height="76" fill="none" role="img" aria-label="Twisted Tar - Authentic Lucknowi Chikankari">
+  <defs>
+    <!-- Refined antique gold gradient -->
+    <linearGradient id="goldThreadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D9B775"/>
+      <stop offset="50%" stop-color="#C5A262"/>
+      <stop offset="100%" stop-color="#9C7735"/>
+    </linearGradient>
+    <!-- Deep forest tone -->
+    <linearGradient id="forestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#213D32"/>
+      <stop offset="100%" stop-color="#142820"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Insignia Mark (Left) -->
+  <g transform="translate(6, 6)">
+    <!-- Outer delicate ornamental ring with fine stitch dashes -->
+    <circle cx="32" cy="32" r="30" stroke="#C5A262" stroke-width="1" stroke-dasharray="2 3" opacity="0.65" />
+    <circle cx="32" cy="32" r="26.5" stroke="#142820" stroke-width="0.8" opacity="0.3" />
+
+    <!-- Center Chikankari Motif: Twisted Threads (Tar) forming a stylized Petal & Needle Loop -->
+    <!-- Thread 1: Forest Green curve -->
+    <path d="M32 9 C38 18, 48 26, 44 38 C40 50, 24 51, 20 39 C17 30, 26 21, 32 9 Z" 
+          stroke="url(#forestGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Thread 2: Entwined Gold Tar forming shadow leaf -->
+    <path d="M32 9 C26 18, 16 26, 20 38 C24 50, 40 51, 44 39 C47 30, 38 21, 32 9 Z" 
+          stroke="url(#goldThreadGrad)" stroke-width="1.4" stroke-dasharray="4 1.5" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Inner Core: Stylized Murri Knot & Needle Eye -->
+    <circle cx="32" cy="35" r="3.2" fill="#C5A262" />
+    <circle cx="32" cy="35" r="1.4" fill="#FDFBF7" />
+    <path d="M32 10 L32 17" stroke="#C5A262" stroke-width="1.5" stroke-linecap="round" />
+    <circle cx="32" cy="11" r="0.8" fill="#142820" />
+    
+    <!-- Four subtle corner stitch dots (Phanda stitches) -->
+    <circle cx="32" cy="48" r="1.2" fill="#C5A262" />
+    <circle cx="21" cy="35" r="1.1" fill="#C5A262" opacity="0.75" />
+    <circle cx="43" cy="35" r="1.1" fill="#C5A262" opacity="0.75" />
+  </g>
+
+  <!-- Typography: Wordmark (Right) -->
+  <g transform="translate(82, 12)">
+    <!-- Primary Brand Wordmark: TWISTED TAR -->
+    <text x="0" y="30" font-family="'Cormorant Garamond', Georgia, serif" font-size="29" font-weight="600" letter-spacing="3.2" fill="#142820">
+      TWISTED TAR
+    </text>
+    
+    <!-- Subtitle: LUCKNOWI CHIKANKARI -->
+    <text x="1.5" y="47" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="8" font-weight="600" letter-spacing="4.5" fill="#967028">
+      LUCKNOWI CHIKANKARI
+    </text>
+
+    <!-- Refined Divider Filament -->
+    <line x1="1.5" y1="52" x2="204" y2="52" stroke="#C5A262" stroke-width="0.7" opacity="0.45" />
+    
+    <!-- Awadh Heritage Stamp -->
+    <text x="212" y="47" font-family="'Cormorant Garamond', Georgia, serif" font-size="9" font-style="italic" fill="#585E5A">
+      Est. 2026
+    </text>
+  </g>
+</svg>

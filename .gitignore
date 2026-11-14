@@ -1,0 +1,13 @@
+# AI Skills & Agent Directory
+.agents/
+.github/
+
+# Portable tools
+.mingit/
+*.zip
+serve.ps1
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+*.log
