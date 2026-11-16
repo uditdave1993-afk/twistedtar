@@ -136,7 +136,9 @@
         <div class="metric-card">
           <div class="metric-header">
             <span>Published Products</span>
-            <div class="metric-icon-box">👗</div>
+            <div class="metric-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            </div>
           </div>
           <div class="metric-val">${publishedProds}</div>
           <div class="metric-sub">${draftProds} draft items in preparation</div>
@@ -145,7 +147,9 @@
         <div class="metric-card">
           <div class="metric-header">
             <span>Draft Items</span>
-            <div class="metric-icon-box">📝</div>
+            <div class="metric-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </div>
           </div>
           <div class="metric-val">${draftProds}</div>
           <div class="metric-sub">Awaiting catalog release</div>
@@ -154,7 +158,9 @@
         <div class="metric-card">
           <div class="metric-header">
             <span>Website Pages</span>
-            <div class="metric-icon-box">📄</div>
+            <div class="metric-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
           </div>
           <div class="metric-val">${pages.length}</div>
           <div class="metric-sub">CMS managed web pages</div>
@@ -163,7 +169,9 @@
         <div class="metric-card">
           <div class="metric-header">
             <span>Product Categories</span>
-            <div class="metric-icon-box">🗂️</div>
+            <div class="metric-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            </div>
           </div>
           <div class="metric-val">${categories.length}</div>
           <div class="metric-sub">Active suit & kurti categories</div>
@@ -172,7 +180,9 @@
         <div class="metric-card">
           <div class="metric-header">
             <span>Media Library</span>
-            <div class="metric-icon-box">🖼️</div>
+            <div class="metric-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
           </div>
           <div class="metric-val">${media.length}</div>
           <div class="metric-sub">High-res catalog assets</div>
@@ -181,7 +191,9 @@
         <div class="metric-card">
           <div class="metric-header">
             <span>Average SEO Score</span>
-            <div class="metric-icon-box">⭐</div>
+            <div class="metric-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
           </div>
           <div class="metric-val" style="color: var(--admin-success);">91/100</div>
           <div class="metric-sub">Rank Math health index</div>
