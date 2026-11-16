@@ -1,6 +1,6 @@
 // ==============================================================================
 // TWISTED TAR — ADMIN DASHBOARD JAVASCRIPT CONTROLLER
-// Complete E-Commerce CMS, Visual Editor & Rank Math SEO Suite
+// Complete E-Commerce CMS, Visual Editor & Advanced SEO Suite
 // ==============================================================================
 
 (function() {
@@ -196,7 +196,7 @@
             </div>
           </div>
           <div class="metric-val" style="color: var(--admin-success);">91/100</div>
-          <div class="metric-sub">Rank Math health index</div>
+          <div class="metric-sub">Search health index</div>
         </div>
       </div>
 
@@ -445,7 +445,7 @@
             </span>
           </td>
           <td>
-            <span class="status-pill ${scoreClass}" title="Rank Math Score">
+            <span class="status-pill ${scoreClass}" title="SEO Score">
               ${seoScore}/100
             </span>
           </td>
@@ -574,13 +574,13 @@
   }
 
   // ==============================================================================
-  // 6. RANK MATH-STYLE SEO SUITE
+  // 6. ADVANCED SEO SUITE
   // ==============================================================================
   function renderSeoSuite(container) {
     const products = window.TwistedTarDB.getProducts();
     const currentProd = state.seoSelectedEntity || products[0];
 
-    const seoEval = window.TwistedTarDB.calculateRankMathSeoScore({
+    const seoEval = window.TwistedTarDB.calculateSeoScore({
       title: currentProd.seo ? currentProd.seo.title : currentProd.name,
       metaDescription: currentProd.seo ? currentProd.seo.description : currentProd.shortDesc,
       focusKeyword: (currentProd.seo && currentProd.seo.focusKeyword) || "chikankari kurti",
@@ -593,7 +593,7 @@
     container.innerHTML = `
       <div class="page-header-row">
         <div class="page-title-box">
-          <h1>Rank Math SEO Suite & Sitemap Generator</h1>
+          <h1>Advanced SEO Suite & Sitemap Generator</h1>
           <p class="page-subtitle">Real-time content audit, SERP search snippet simulation, XML sitemap generation, and schema metadata.</p>
         </div>
         <div class="page-actions-box">
@@ -619,7 +619,7 @@
       </div>
 
       <div class="editor-card" style="padding: 2rem;">
-        <!-- RANK MATH SEO SCORE HEADER -->
+        <!-- SEO SCORE HEADER -->
         <div class="rank-math-header">
           <div class="seo-score-meter">
             <div class="score-circle ${seoEval.status}">
@@ -630,7 +630,7 @@
                 ${seoEval.score >= 80 ? 'Excellent Search Optimization' : seoEval.score >= 50 ? 'Moderate Search Health' : 'Needs Optimization'}
               </div>
               <div class="score-label-desc">
-                Rank Math Real-Time Evaluation Engine &middot; ${seoEval.wordCount} Words &middot; Keyword Density: ${seoEval.density}%
+                Real-Time Search Evaluation Engine &middot; ${seoEval.wordCount} Words &middot; Keyword Density: ${seoEval.density}%
               </div>
             </div>
           </div>
@@ -922,10 +922,10 @@
               <input type="text" id="modal_prod_img" class="form-input" value="${prod.images && prod.images[0] ? escapeHtml(prod.images[0]) : ''}" />
             </div>
 
-            <!-- EMBEDDED RANK MATH SEO FIELDS -->
+            <!-- EMBEDDED SEO FIELDS -->
             <div style="background: #F8FAFC; border: 1px solid var(--admin-border); border-radius: 8px; padding: 1.25rem; margin-top: 1rem;">
               <h4 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--admin-primary);">
-                ⭐ Rank Math SEO Settings
+                ⭐ Search Engine Optimization (SEO)
               </h4>
               <div class="form-group">
                 <label class="form-label">Focus Keyword</label>
@@ -1027,7 +1027,7 @@
             </div>
 
             <div style="background: #F8FAFC; border: 1px solid var(--admin-border); border-radius: 8px; padding: 1.25rem;">
-              <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">Rank Math Search Meta</h4>
+              <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">Search Engine Meta & Snippet</h4>
               <div class="form-group">
                 <label class="form-label">Focus Keyword</label>
                 <input type="text" id="page_modal_kw" class="form-input" value="${escapeHtml(page.focusKeyword || '')}" />

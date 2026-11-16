@@ -1,6 +1,6 @@
 # ==============================================================================
 # Twisted Tar — Authentic Lucknowi Chikankari Atelier
-# Robots.txt Specification (Rank Math Optimized)
+# Robots.txt Specification (Search Engine Optimized)
 # ==============================================================================
 
 User-agent: *

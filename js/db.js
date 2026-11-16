@@ -443,8 +443,8 @@
     }
   };
 
-  // --- RANK MATH-STYLE REAL-TIME SEO ENGINE ---
-  function calculateRankMathSeoScore({ title, metaDescription, focusKeyword, slug, contentText, headings = [], images = [] }) {
+  // --- REAL-TIME SEO AUDIT & CONTENT OPTIMIZATION ENGINE ---
+  function calculateSeoScore({ title, metaDescription, focusKeyword, slug, contentText, headings = [], images = [] }) {
     if (!focusKeyword || focusKeyword.trim() === "") {
       return {
         score: 40,
@@ -781,7 +781,7 @@ Sitemap: ${baseUrl}/sitemap.xml
     },
 
     // Utilities
-    calculateRankMathSeoScore,
+    calculateSeoScore,
     generateXmlSitemap,
     generateRobotsTxt
   };

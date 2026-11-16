@@ -1,6 +1,6 @@
 /* ==============================================================================
    TWISTED TAR — ATELIER EXECUTIVE ADMIN DASHBOARD STYLESHEET
-   Luxury Lucknowi Chikankari E-Commerce CMS & Rank Math-Style SEO Suite
+   Luxury Lucknowi Chikankari E-Commerce CMS & Advanced SEO Suite
    ============================================================================== */
 
 :root {
@@ -829,9 +829,9 @@ h1, h2, h3, h4 {
 }
 
 /* ==============================================================================
-   RANK MATH-STYLE SEO PANEL
+   ADVANCED SEO INTELLIGENCE PANEL
    ============================================================================== */
-.rank-math-panel {
+.seo-panel, .rank-math-panel {
   background: #FFFFFF;
   border: 1px solid var(--admin-border);
   border-radius: 12px;
@@ -840,7 +840,7 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow-card);
 }
 
-.rank-math-header {
+.seo-panel-header, .rank-math-header {
   display: flex;
   align-items: center;
   justify-content: space-between;

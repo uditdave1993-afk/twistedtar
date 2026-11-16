@@ -1,6 +1,6 @@
 # Twisted Tar — Atelier E-Commerce CMS & Backend Architecture
 
-Welcome to the backend infrastructure for **Twisted Tar** (Luxury Lucknowi Chikankari Atelier). This architecture transforms the static storefront into a fully manageable, database-driven e-commerce platform with a professional administration dashboard and Rank Math-style SEO engine.
+Welcome to the backend infrastructure for **Twisted Tar** (Luxury Lucknowi Chikankari Atelier). This architecture transforms the static storefront into a fully manageable, database-driven e-commerce platform with a professional administration dashboard and advanced SEO optimization engine.
 
 ---
 
@@ -101,7 +101,7 @@ The complete schema is located in [`supabase-schema.sql`](file:///d:/Arena%20Udi
   - Concierge & Bespoke (`contact`)
 - Visual form fields for page titles, H1 primary headings, H2 subheadings, hero subtitles, body text, and button CTAs.
 
-### 5. Rank Math-Style SEO Suite
+### 5. Advanced SEO Management Suite
 - **Dynamic SEO Scoring (0–100):** Real-time algorithm inspecting:
   - Focus keyword presence in SEO Title
   - Focus keyword presence in Meta Description
