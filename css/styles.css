@@ -2727,6 +2727,10 @@ h1, h2, h3, h4, h5, h6 {
   .form-grid-2 {
     grid-template-columns: 1fr;
   }
+  .narrative-split-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
   .mobile-bottom-nav {
     display: block;
   }

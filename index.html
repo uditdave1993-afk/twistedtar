@@ -25,7 +25,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Master Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.4.2">
+  <link rel="stylesheet" href="css/styles.css?v=2.4.3">
 
   <!-- Universal Database & CMS Data Engine (Dual-Mode Supabase + Local) -->
   <script src="js/db.js"></script>
@@ -3912,25 +3912,66 @@ function AboutPage({ craftStitches, navigateTo }) {
         </div>
 
         {/* Narrative Split */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center", marginBottom: "5rem" }}>
+        <div className="narrative-split-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: "3.5rem", alignItems: "center", marginBottom: "4.5rem" }}>
           <div>
             <span className="overline">Awadh Craftsmanship</span>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "2.2rem", marginBottom: "1.25rem", color: "var(--color-forest-ink)" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "2.35rem", marginBottom: "1.25rem", color: "var(--color-forest-ink)", lineHeight: "1.2" }}>
               Where Time Breathes Through Needle and Gossamer Cloth
             </h2>
-            <p style={{ color: "var(--color-text-muted)", marginBottom: "1rem", lineHeight: "1.7" }}>
-              Legend holds that Empress Noor Jahan introduced Chikankari to the Mughal courts after being captivated by Turkish lace. Under the patronage of the Nawabs of Lucknow, the craft evolved into a spiritual discipline—an unspoken ode to grace, modesty, and sensory tranquility.
+            <p style={{ color: "var(--color-text-muted)", marginBottom: "1rem", lineHeight: "1.75", fontSize: "0.98rem" }}>
+              Legend holds that Empress Noor Jahan introduced Chikankari to the Mughal courts after being captivated by Turkish lace. Under the royal patronage of the Nawabs of Awadh, the craft transformed from imperial embellishment into a spiritual discipline—an unspoken ode to grace, shadow, and sensory tranquility.
             </p>
-            <p style={{ color: "var(--color-text-muted)", lineHeight: "1.7" }}>
-              Every Twisted Tar kurti represents between 20 to 90 hours of uninterrupted, meditative hand embroidery by female artisans in the villages surrounding Lucknow. By keeping production entirely within these artisan clusters, we safeguard ancestral knowledge while fostering economic dignity.
+            <p style={{ color: "var(--color-text-muted)", marginBottom: "1rem", lineHeight: "1.75", fontSize: "0.98rem" }}>
+              Every Twisted Tar ensemble represents between 20 to 90 hours of uninterrupted, meditative hand needlework by generational women artisans in the rural clusters surrounding Lucknow. By preserving single-artisan craftsmanship—where one artisan completes an entire garment rather than assembly lines—we preserve the distinct tension, rhythm, and poetry of her hand.
             </p>
+            <p style={{ color: "var(--color-text-muted)", marginBottom: "1.5rem", lineHeight: "1.75", fontSize: "0.98rem" }}>
+              We select only the purest natural textiles: featherweight mulmul cotton that softens with every wash, hand-spun chanderi silk with subtle metallic sheen, and breathable modal. In contrast to stiff synthetic machine embroidery, our shadow-work (Bakhiya) and embossed knots (Phanda) float weightlessly across the skin, creating an heirloom meant to be cherished across generations.
+            </p>
+
+            {/* Atelier Craft Pillars */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", paddingTop: "1.25rem", borderTop: "1px solid var(--color-border-delicate)", marginBottom: "1.5rem" }}>
+              <div>
+                <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.5rem", fontWeight: "700", color: "var(--color-gold-antique)", lineHeight: "1" }}>32</div>
+                <div style={{ fontSize: "0.74rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--color-forest-ink)", marginTop: "0.25rem" }}>Classical Stitches</div>
+                <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: "0.15rem" }}>Preserving endangered Awadh needle techniques</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.5rem", fontWeight: "700", color: "var(--color-gold-antique)", lineHeight: "1" }}>60–90h</div>
+                <div style={{ fontSize: "0.74rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--color-forest-ink)", marginTop: "0.25rem" }}>Hand Embroidery</div>
+                <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: "0.15rem" }}>Devoted per 3-piece heirloom ensemble</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.5rem", fontWeight: "700", color: "var(--color-gold-antique)", lineHeight: "1" }}>100%</div>
+                <div style={{ fontSize: "0.74rem", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--color-forest-ink)", marginTop: "0.25rem" }}>Pure Mulmul & Silk</div>
+                <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: "0.15rem" }}>Zero synthetic polyester blends</div>
+              </div>
+            </div>
+
+            {/* Founder Creed Quote */}
+            <div style={{ background: "rgba(197, 162, 98, 0.08)", borderLeft: "3px solid var(--color-gold-antique)", padding: "0.85rem 1.25rem", borderRadius: "0 8px 8px 0" }}>
+              <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.05rem", color: "var(--color-forest-ink)", margin: 0, lineHeight: "1.5" }}>
+                "In an era of disposable fashion, we measure our garments not in seasonal quarters, but in generations."
+              </p>
+              <span style={{ fontSize: "0.72rem", color: "var(--color-gold-antique)", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginTop: "0.4rem" }}>
+                — Udit Dave &middot; Founder, Twisted Tar
+              </span>
+            </div>
           </div>
           <div>
-            <img
-              src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80"
-              alt="Artisan hand embroidering Lucknowi chikankari fabric"
-              style={{ borderRadius: "var(--radius-sm)", boxShadow: "var(--shadow-lg)" }}
-            />
+            <div style={{ position: "relative" }}>
+              <img
+                src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80"
+                alt="Artisan hand embroidering Lucknowi chikankari fabric"
+                style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "var(--radius-sm)", boxShadow: "var(--shadow-lg)", display: "block" }}
+              />
+              <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", background: "rgba(20, 40, 32, 0.88)", backdropFilter: "blur(8px)", color: "#FFFFFF", padding: "0.75rem 1rem", borderRadius: "6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <div style={{ fontSize: "0.72rem", color: "var(--color-gold-antique)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: "700" }}>Artisan Cluster</div>
+                  <div style={{ fontSize: "0.82rem", fontWeight: "500" }}>Rural Awadh &middot; Hand-embroidered in Uttar Pradesh</div>
+                </div>
+                <span style={{ fontSize: "0.7rem", background: "rgba(197, 162, 98, 0.2)", border: "1px solid var(--color-gold-antique)", color: "var(--color-gold-antique)", padding: "0.2rem 0.5rem", borderRadius: "9999px", fontWeight: "600" }}>GI Certified</span>
+              </div>
+            </div>
           </div>
         </div>
 
