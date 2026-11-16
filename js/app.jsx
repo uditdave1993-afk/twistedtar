@@ -1279,7 +1279,6 @@ function TwistedTarApp() {
           {/* Mobile Menu Button */}
           <button
             className="btn-icon mobile-menu-btn"
-            style={{ display: "none" }}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
           >
@@ -1346,7 +1345,7 @@ function TwistedTarApp() {
                     </div>
                     <div className="dropdown-item-content">
                       <div className="dropdown-item-title-row">
-                        <span className="dropdown-item-title">Three-Piece Suits</span>
+                        <span className="dropdown-item-title">3 Piece Suit</span>
                         <span className="dropdown-item-badge">4 Designs</span>
                       </div>
                       <span className="dropdown-item-desc">
@@ -1372,7 +1371,7 @@ function TwistedTarApp() {
                     </div>
                     <div className="dropdown-item-content">
                       <div className="dropdown-item-title-row">
-                        <span className="dropdown-item-title">Two-Piece Suits</span>
+                        <span className="dropdown-item-title">2 Piece Suit</span>
                         <span className="dropdown-item-badge">4 Designs</span>
                       </div>
                       <span className="dropdown-item-desc">
@@ -1398,7 +1397,7 @@ function TwistedTarApp() {
                     </div>
                     <div className="dropdown-item-content">
                       <div className="dropdown-item-title-row">
-                        <span className="dropdown-item-title">Short Kurtis</span>
+                        <span className="dropdown-item-title">Short Kurti</span>
                         <span className="dropdown-item-badge">4 Designs</span>
                       </div>
                       <span className="dropdown-item-desc">
@@ -1493,6 +1492,150 @@ function TwistedTarApp() {
           </div>
         </div>
       </header>
+
+      {/* MOBILE NAVIGATION DRAWER */}
+      <div
+        className={`mobile-drawer-overlay ${mobileMenuOpen ? "open" : ""}`}
+        onClick={() => setMobileMenuOpen(false)}
+        aria-hidden={!mobileMenuOpen}
+      />
+      <div
+        className={`mobile-drawer ${mobileMenuOpen ? "open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation Menu"
+      >
+        <div className="mobile-drawer-header">
+          <img src="assets/logo.svg" alt="Twisted Tar" height="38" />
+          <button
+            type="button"
+            className="btn-icon"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close Navigation Menu"
+          >
+            <Icons.Close />
+          </button>
+        </div>
+
+        <nav className="mobile-drawer-nav">
+          <a
+            href="#home"
+            className={`mobile-drawer-link ${route.page === "home" ? "active" : ""}`}
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo("home");
+            }}
+          >
+            <span>Home</span>
+          </a>
+
+          {/* Expandable on tap for mobile */}
+          <div className="mobile-dropdown-group">
+            <button
+              type="button"
+              className={`mobile-drawer-link mobile-submenu-toggle ${productsDropdownOpen ? "open" : ""} ${route.page === "shop" ? "active" : ""}`}
+              onClick={() => setProductsDropdownOpen(!productsDropdownOpen)}
+              aria-expanded={productsDropdownOpen}
+            >
+              <span>Our Products</span>
+              <span className="dropdown-caret">
+                <Icons.ChevronDown />
+              </span>
+            </button>
+
+            {productsDropdownOpen && (
+              <div className="mobile-submenu">
+                <a
+                  href="#shop/3-piece"
+                  className={`mobile-submenu-item ${route.page === "shop" && shopCategory === "3-piece" ? "active" : ""}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShopCategory("3-piece");
+                    navigateTo("shop");
+                  }}
+                >
+                  <span>3 Piece Suit</span>
+                  <span className="mobile-submenu-badge">4 Designs</span>
+                </a>
+                <a
+                  href="#shop/2-piece"
+                  className={`mobile-submenu-item ${route.page === "shop" && shopCategory === "2-piece" ? "active" : ""}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShopCategory("2-piece");
+                    navigateTo("shop");
+                  }}
+                >
+                  <span>2 Piece Suit</span>
+                  <span className="mobile-submenu-badge">4 Designs</span>
+                </a>
+                <a
+                  href="#shop/short"
+                  className={`mobile-submenu-item ${route.page === "shop" && shopCategory === "short" ? "active" : ""}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShopCategory("short");
+                    navigateTo("shop");
+                  }}
+                >
+                  <span>Short Kurti</span>
+                  <span className="mobile-submenu-badge">4 Designs</span>
+                </a>
+                <a
+                  href="#shop"
+                  className="mobile-submenu-item"
+                  style={{ fontSize: "0.95rem", color: "var(--color-gold-antique)" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShopCategory("all");
+                    navigateTo("shop");
+                  }}
+                >
+                  <span>All Collections &rarr;</span>
+                </a>
+              </div>
+            )}
+          </div>
+
+          <a
+            href="#about"
+            className={`mobile-drawer-link ${route.page === "about" ? "active" : ""}`}
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo("about");
+            }}
+          >
+            <span>Our Story</span>
+          </a>
+
+          <a
+            href="#blog"
+            className={`mobile-drawer-link ${route.page === "blog" ? "active" : ""}`}
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo("blog");
+            }}
+          >
+            <span>Journal</span>
+          </a>
+
+          <a
+            href="#contact"
+            className={`mobile-drawer-link ${route.page === "contact" ? "active" : ""}`}
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo("contact");
+            }}
+          >
+            <span>Contact</span>
+          </a>
+        </nav>
+
+        <div className="mobile-drawer-footer">
+          <p><strong>Studio:</strong> Hazratganj, Lucknow, UP</p>
+          <p>Handcrafted Chikankari &middot; Est. 2026</p>
+        </div>
+      </div>
 
       {/* 3. MAIN ROUTED CONTENT */}
       <main id="main-content" tabIndex="-1">
