@@ -1,0 +1,25 @@
+# ==============================================================================
+# Twisted Tar — Authentic Lucknowi Chikankari Atelier
+# Robots.txt Specification (Rank Math Optimized)
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Allow: /#shop
+Allow: /#heritage
+Allow: /#craftsmanship
+Allow: /#reviews
+Allow: /#journal
+Allow: /#contact
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+
+# Disallow Administrative Control Panels
+Disallow: /admin.html
+Disallow: /admin
+Disallow: /supabase-schema.sql
+Disallow: /BACKEND_SETUP.md
+
+# Sitemaps
+Sitemap: https://uditdave1993-afk.github.io/twistedtar/sitemap.xml

@@ -27,6 +27,9 @@
   <!-- Master Stylesheet -->
   <link rel="stylesheet" href="css/styles.css?v=2.4.0">
 
+  <!-- Universal Database & CMS Data Engine (Dual-Mode Supabase + Local) -->
+  <script src="js/db.js"></script>
+
   <!-- React 18, React DOM, and Babel Standalone (Local Vendor with CDN Fallback) -->
   <script src="js/vendor/react.production.min.js"></script>
   <script>
@@ -1066,6 +1069,47 @@ function TwistedTarApp() {
   const [route, setRoute] = useState({ page: "home", param: null });
   const [currency, setCurrency] = useState("INR");
 
+  // Dynamic Database-backed Collections (Dual-Mode: Local + Supabase)
+  const [categories, setCategories] = useState(() => {
+    if (window.TwistedTarDB && typeof window.TwistedTarDB.getCategories === 'function') {
+      return window.TwistedTarDB.getCategories().filter(c => c.status !== 'draft');
+    }
+    return CATEGORIES;
+  });
+
+  const [productsList, setProductsList] = useState(() => {
+    if (window.TwistedTarDB && typeof window.TwistedTarDB.getProducts === 'function') {
+      return window.TwistedTarDB.getProducts().filter(p => p.status !== 'draft');
+    }
+    return INITIAL_PRODUCTS;
+  });
+
+  const [siteSettings, setSiteSettings] = useState(() => {
+    if (window.TwistedTarDB && typeof window.TwistedTarDB.getSettings === 'function') {
+      return window.TwistedTarDB.getSettings();
+    }
+    return null;
+  });
+
+  // Listen for Live Admin Updates & Multi-tab Storage Events
+  useEffect(() => {
+    const handleDbSync = () => {
+      if (!window.TwistedTarDB) return;
+      const freshCats = window.TwistedTarDB.getCategories().filter(c => c.status !== 'draft');
+      const freshProds = window.TwistedTarDB.getProducts().filter(p => p.status !== 'draft');
+      setCategories(freshCats);
+      setProductsList(freshProds);
+      setSiteSettings(window.TwistedTarDB.getSettings());
+    };
+
+    window.addEventListener('tt_db_updated', handleDbSync);
+    window.addEventListener('storage', handleDbSync);
+    return () => {
+      window.removeEventListener('tt_db_updated', handleDbSync);
+      window.removeEventListener('storage', handleDbSync);
+    };
+  }, []);
+
   // Cart & Wishlist with localStorage persistence
   const [cart, setCart] = useState(() => {
     try {
@@ -1124,11 +1168,18 @@ function TwistedTarApp() {
     try { localStorage.setItem("tt_orders", JSON.stringify(demoOrders)); } catch {}
   }, [demoOrders]);
 
-  // Handle Hash Routing
+  // Handle Hash Routing & Admin Redirects
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace("#", "") || "home";
       const [path, param] = hash.split("/");
+      if (path === "admin") {
+        window.location.href = "admin.html";
+        return;
+      }
+      if (path === "shop" && param) {
+        setShopCategory(param);
+      }
       setRoute({ page: path, param: param || null });
       window.scrollTo(0, 0);
     };
@@ -1257,7 +1308,7 @@ function TwistedTarApp() {
 
   // Filter products
   const filteredProducts = useMemo(() => {
-    return INITIAL_PRODUCTS.filter((product) => {
+    return productsList.filter((product) => {
       // Category
       if (shopCategory !== "all" && product.category !== shopCategory) {
         return false;
@@ -1288,15 +1339,15 @@ function TwistedTarApp() {
       if (filters.sort === "newest") return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
       return 0; // featured
     });
-  }, [shopCategory, searchQuery, filters]);
+  }, [shopCategory, searchQuery, filters, productsList]);
 
   // Current active product for PDP
   const activeProduct = useMemo(() => {
     if (route.page === "product" && route.param) {
-      return INITIAL_PRODUCTS.find((p) => p.id === route.param || p.slug === route.param) || INITIAL_PRODUCTS[0];
+      return productsList.find((p) => p.id === route.param || p.slug === route.param) || productsList[0];
     }
     return null;
-  }, [route]);
+  }, [route, productsList]);
 
   // Current active article for Blog reader
   const activeArticle = useMemo(() => {
@@ -1305,6 +1356,82 @@ function TwistedTarApp() {
     }
     return null;
   }, [route]);
+
+  // Dynamic Rank Math SEO Engine for Live Storefront
+  useEffect(() => {
+    const baseUrl = "https://uditdave1993-afk.github.io/twistedtar";
+    let title = "Twisted Tar — Authentic Lucknowi Chikankari Luxury Kurtis & Suits";
+    let desc = "Discover Twisted Tar's luxury collection of authentic Lucknowi chikankari kurtis, 3-piece sets, 2-piece sets, and short tunics handcrafted in pure mulmul cotton, chanderi silk, and modal.";
+    let canonical = `${baseUrl}/#${route.page}${route.param ? '/' + route.param : ''}`;
+
+    if (route.page === "product" && activeProduct) {
+      title = activeProduct.seoTitle || `${activeProduct.name} | Lucknowi Chikankari | Twisted Tar`;
+      desc = activeProduct.metaDescription || activeProduct.shortDesc || desc;
+    } else if (route.page === "shop") {
+      if (shopCategory !== "all") {
+        const catObj = categories.find(c => c.id === shopCategory || c.slug === shopCategory);
+        if (catObj) {
+          title = catObj.seoTitle || `${catObj.name} Chikankari Suits | Twisted Tar`;
+          desc = catObj.metaDescription || catObj.description || desc;
+        }
+      } else {
+        title = "Shop Luxury Chikankari Suits & Kurtis Collection | Twisted Tar";
+      }
+    } else if (route.page === "about") {
+      title = "Our Heritage & 32 Stitches of Lucknowi Chikankari | Twisted Tar";
+    } else if (route.page === "contact") {
+      title = "Atelier Concierge & Customer Care | Twisted Tar";
+    }
+
+    document.title = title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute("content", desc);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute("content", desc);
+
+    // Dynamic Schema.org JSON-LD
+    let schemaTag = document.getElementById("dynamic-schema-ld");
+    if (!schemaTag) {
+      schemaTag = document.createElement("script");
+      schemaTag.id = "dynamic-schema-ld";
+      schemaTag.type = "application/ld+json";
+      document.head.appendChild(schemaTag);
+    }
+
+    if (route.page === "product" && activeProduct) {
+      schemaTag.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": activeProduct.name,
+        "image": activeProduct.image,
+        "description": activeProduct.shortDesc || activeProduct.description,
+        "sku": activeProduct.sku,
+        "brand": { "@type": "Brand", "name": "Twisted Tar" },
+        "offers": {
+          "@type": "Offer",
+          "url": canonical,
+          "priceCurrency": "INR",
+          "price": activeProduct.price,
+          "priceValidUntil": "2027-12-31",
+          "itemCondition": "https://schema.org/NewCondition",
+          "availability": activeProduct.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+        }
+      });
+    } else {
+      schemaTag.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ClothingStore",
+        "name": "Twisted Tar",
+        "url": baseUrl,
+        "logo": `${baseUrl}/assets/logo.svg`,
+        "description": "Luxury Lucknowi Chikankari Atelier handcrafted in Awadh, India.",
+        "telephone": "+91-9876543210",
+        "priceRange": "₹₹₹"
+      });
+    }
+  }, [route, activeProduct, shopCategory, categories]);
 
   // Navigation Helper
   const navigateTo = (page, param = null) => {
@@ -1336,10 +1463,10 @@ function TwistedTarApp() {
             </button>
           </div>
           <div className="announcement-text">
-            Complimentary Insured Shipping Across India on Orders Above ₹1,999 · Worldwide Courier Available
+            {siteSettings?.general?.announcementText || "Complimentary Insured Shipping Across India on Orders Above ₹1,999 · Worldwide Courier Available"}
           </div>
           <div style={{ fontSize: "0.75rem", color: "var(--color-gold-antique)" }}>
-            Code: <strong>TWISTED10</strong> for 10% Off
+            Code: <strong>{siteSettings?.general?.promoCode || "TWISTED10"}</strong> for 10% Off
           </div>
         </div>
       </div>
@@ -1399,83 +1526,36 @@ function TwistedTarApp() {
                 </div>
 
                 <div className="nav-dropdown-list">
-                  {/* 1. Three-Piece Suits */}
-                  <a
-                    href="#shop/3-piece"
-                    role="menuitem"
-                    className={`nav-dropdown-item ${route.page === "shop" && shopCategory === "3-piece" ? "active" : ""}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShopCategory("3-piece");
-                      navigateTo("shop");
-                      setProductsDropdownOpen(false);
-                    }}
-                  >
-                    <div className="dropdown-item-icon-box">
-                      <Icons.Needle />
-                    </div>
-                    <div className="dropdown-item-content">
-                      <div className="dropdown-item-title-row">
-                        <span className="dropdown-item-title">3 Piece Suit</span>
-                        <span className="dropdown-item-badge">4 Designs</span>
-                      </div>
-                      <span className="dropdown-item-desc">
-                        Regal kurta, tailored bottom & hand-embroidered organza dupatta
-                      </span>
-                    </div>
-                  </a>
-
-                  {/* 2. Two-Piece Suits */}
-                  <a
-                    href="#shop/2-piece"
-                    role="menuitem"
-                    className={`nav-dropdown-item ${route.page === "shop" && shopCategory === "2-piece" ? "active" : ""}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShopCategory("2-piece");
-                      navigateTo("shop");
-                      setProductsDropdownOpen(false);
-                    }}
-                  >
-                    <div className="dropdown-item-icon-box">
-                      <Icons.Grid />
-                    </div>
-                    <div className="dropdown-item-content">
-                      <div className="dropdown-item-title-row">
-                        <span className="dropdown-item-title">2 Piece Suit</span>
-                        <span className="dropdown-item-badge">4 Designs</span>
-                      </div>
-                      <span className="dropdown-item-desc">
-                        Graceful handcrafted embroidered kurti with tailored palazzo or pants
-                      </span>
-                    </div>
-                  </a>
-
-                  {/* 3. Short Kurtis */}
-                  <a
-                    href="#shop/short"
-                    role="menuitem"
-                    className={`nav-dropdown-item ${route.page === "shop" && shopCategory === "short" ? "active" : ""}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShopCategory("short");
-                      navigateTo("shop");
-                      setProductsDropdownOpen(false);
-                    }}
-                  >
-                    <div className="dropdown-item-icon-box">
-                      <Icons.Sparkle />
-                    </div>
-                    <div className="dropdown-item-content">
-                      <div className="dropdown-item-title-row">
-                        <span className="dropdown-item-title">Short Kurti</span>
-                        <span className="dropdown-item-badge">4 Designs</span>
-                      </div>
-                      <span className="dropdown-item-desc">
-                        Contemporary hip-length Chikankari tunics for effortless styling
-                      </span>
-                    </div>
-                  </a>
+                  {categories.map((cat, idx) => {
+                    const count = productsList.filter(p => p.category === cat.id).length;
+                    return (
+                      <a
+                        key={cat.id}
+                        href={`#shop/${cat.id}`}
+                        role="menuitem"
+                        className={`nav-dropdown-item ${route.page === "shop" && shopCategory === cat.id ? "active" : ""}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShopCategory(cat.id);
+                          navigateTo("shop");
+                          setProductsDropdownOpen(false);
+                        }}
+                      >
+                        <div className="dropdown-item-icon-box">
+                          {idx === 0 ? <Icons.Needle /> : idx === 1 ? <Icons.Grid /> : <Icons.Sparkle />}
+                        </div>
+                        <div className="dropdown-item-content">
+                          <div className="dropdown-item-title-row">
+                            <span className="dropdown-item-title">{cat.name}</span>
+                            <span className="dropdown-item-badge">{count} Designs</span>
+                          </div>
+                          <span className="dropdown-item-desc">
+                            {cat.description || cat.tagline}
+                          </span>
+                        </div>
+                      </a>
+                    );
+                  })}
                 </div>
 
                 {/* Dropdown Footer: Shop All */}
@@ -1490,7 +1570,7 @@ function TwistedTarApp() {
                       setProductsDropdownOpen(false);
                     }}
                   >
-                    <span>Explore All 12 Royal Ensembles</span>
+                    <span>Explore All {productsList.length} Royal Ensembles</span>
                     <Icons.ChevronRight />
                   </a>
                 </div>
@@ -1616,42 +1696,24 @@ function TwistedTarApp() {
 
             {productsDropdownOpen && (
               <div className="mobile-submenu">
-                <a
-                  href="#shop/3-piece"
-                  className={`mobile-submenu-item ${route.page === "shop" && shopCategory === "3-piece" ? "active" : ""}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShopCategory("3-piece");
-                    navigateTo("shop");
-                  }}
-                >
-                  <span>3 Piece Suit</span>
-                  <span className="mobile-submenu-badge">4 Designs</span>
-                </a>
-                <a
-                  href="#shop/2-piece"
-                  className={`mobile-submenu-item ${route.page === "shop" && shopCategory === "2-piece" ? "active" : ""}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShopCategory("2-piece");
-                    navigateTo("shop");
-                  }}
-                >
-                  <span>2 Piece Suit</span>
-                  <span className="mobile-submenu-badge">4 Designs</span>
-                </a>
-                <a
-                  href="#shop/short"
-                  className={`mobile-submenu-item ${route.page === "shop" && shopCategory === "short" ? "active" : ""}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShopCategory("short");
-                    navigateTo("shop");
-                  }}
-                >
-                  <span>Short Kurti</span>
-                  <span className="mobile-submenu-badge">4 Designs</span>
-                </a>
+                {categories.map((cat) => {
+                  const count = productsList.filter(p => p.category === cat.id).length;
+                  return (
+                    <a
+                      key={cat.id}
+                      href={`#shop/${cat.id}`}
+                      className={`mobile-submenu-item ${route.page === "shop" && shopCategory === cat.id ? "active" : ""}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShopCategory(cat.id);
+                        navigateTo("shop");
+                      }}
+                    >
+                      <span>{cat.name}</span>
+                      <span className="mobile-submenu-badge">{count} Designs</span>
+                    </a>
+                  );
+                })}
                 <a
                   href="#shop"
                   className="mobile-submenu-item"
@@ -1662,7 +1724,7 @@ function TwistedTarApp() {
                     navigateTo("shop");
                   }}
                 >
-                  <span>All Collections &rarr;</span>
+                  <span>All Collections ({productsList.length}) &rarr;</span>
                 </a>
               </div>
             )}
@@ -1712,8 +1774,8 @@ function TwistedTarApp() {
       <main id="main-content" tabIndex="-1">
         {route.page === "home" && (
           <HomePage
-            categories={CATEGORIES}
-            products={INITIAL_PRODUCTS}
+            categories={categories}
+            products={productsList}
             reviews={REVIEWS}
             blogArticles={BLOG_ARTICLES}
             craftStitches={CRAFT_STITCHES}
@@ -1737,7 +1799,7 @@ function TwistedTarApp() {
             totalCount={filteredProducts.length}
             activeCategory={shopCategory}
             onSelectCategory={setShopCategory}
-            categories={CATEGORIES}
+            categories={categories}
             filters={filters}
             setFilters={setFilters}
             searchQuery={searchQuery}
@@ -1754,7 +1816,7 @@ function TwistedTarApp() {
         {route.page === "product" && activeProduct && (
           <ProductDetailPage
             product={activeProduct}
-            allProducts={INITIAL_PRODUCTS}
+            allProducts={productsList}
             formatPrice={formatPrice}
             wishlist={wishlist}
             toggleWishlist={toggleWishlist}
@@ -1846,7 +1908,7 @@ function TwistedTarApp() {
         {route.page === "wishlist" && (
           <WishlistPage
             wishlist={wishlist}
-            products={INITIAL_PRODUCTS}
+            products={productsList}
             formatPrice={formatPrice}
             toggleWishlist={toggleWishlist}
             onAddToCart={addToCart}
@@ -1918,7 +1980,7 @@ function TwistedTarApp() {
       <SocialProofToast
         activities={SOCIAL_PROOF_ACTIVITIES}
         onSelectProduct={(productId, category) => {
-          const prod = INITIAL_PRODUCTS.find((p) => p.id === productId);
+          const prod = productsList.find((p) => p.id === productId);
           if (prod) {
             setQuickViewProduct(prod);
           } else if (category) {
@@ -2579,7 +2641,7 @@ function ShopPage({
             className={`btn btn-sm ${activeCategory === "all" ? "btn-primary" : "btn-secondary"}`}
             onClick={() => onSelectCategory("all")}
           >
-            All Collections ({INITIAL_PRODUCTS.length})
+            All Collections ({totalCount || products.length})
           </button>
           {categories.map((c) => (
             <button
@@ -4583,10 +4645,14 @@ function Footer({ navigateTo, showToast }) {
           <div>
             © 2026 Twisted Tar. All rights reserved. Handcrafted in Lucknow, India.
           </div>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
+          <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
             <a href="#privacy" onClick={(e) => { e.preventDefault(); navigateTo("privacy"); }}>Privacy Policy</a>
             <a href="#terms" onClick={(e) => { e.preventDefault(); navigateTo("terms"); }}>Terms of Service</a>
             <a href="#shipping-returns" onClick={(e) => { e.preventDefault(); navigateTo("shipping-returns"); }}>Exchanges</a>
+            <a href="admin.html" target="_blank" style={{ color: "var(--color-gold-antique)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "5px", fontWeight: "600" }}>
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--color-gold-antique)", display: "inline-block" }}></span>
+              Atelier Admin Portal &rarr;
+            </a>
           </div>
         </div>
       </div>

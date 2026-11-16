@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Twisted Tar — Atelier Admin Dashboard & E-Commerce CMS</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23142820'/><text x='50%' y='62%' font-size='52' font-family='serif' fill='%23C5A262' text-anchor='middle'>TT</text></svg>">
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Admin Stylesheet -->
+  <link rel="stylesheet" href="css/admin.css">
+
+  <style>
+    /* Admin Authentication Overlay */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #1D382D 0%, #142820 50%, #0B1712 100%);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      backdrop-filter: blur(8px);
+    }
+    .auth-overlay.hidden {
+      display: none;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(197, 162, 98, 0.3);
+      position: relative;
+    }
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .auth-monogram {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #142820;
+      color: #C5A262;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      border: 2px solid #C5A262;
+      margin-bottom: 0.75rem;
+    }
+    .auth-title {
+      font-size: 1.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      color: #142820;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .auth-subtitle {
+      font-size: 0.85rem;
+      color: #64748B;
+      margin-top: 0.25rem;
+    }
+    .auth-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(197, 162, 98, 0.2);
+      color: #8A6B29;
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      margin-top: 0.5rem;
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .auth-field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #142820;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .auth-field input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .auth-field input:focus {
+      border-color: #C5A262;
+      box-shadow: 0 0 0 3px rgba(197, 162, 98, 0.2);
+    }
+    .auth-btn {
+      background: #142820;
+      color: #C5A262;
+      border: 1px solid #C5A262;
+      padding: 0.85rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .auth-btn:hover {
+      background: #C5A262;
+      color: #142820;
+    }
+    .auth-demo-hint {
+      background: #F8FAFC;
+      border: 1px dashed #CBD5E1;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: #64748B;
+      text-align: center;
+    }
+    .auth-demo-hint strong {
+      color: #142820;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==============================================================================
+       ADMIN LOGIN AUTHENTICATION OVERLAY
+       ============================================================================== -->
+  <div id="adminAuthOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-monogram">TT</div>
+        <div class="auth-title">Twisted Tar</div>
+        <div class="auth-subtitle">Atelier Executive CMS & SEO Control Portal</div>
+        <span class="auth-badge">Founder & Super Admin Access</span>
+      </div>
+
+      <form id="adminLoginForm" class="auth-form" onsubmit="handleAdminLogin(event)">
+        <div class="auth-field">
+          <label for="adminEmail">Admin Email</label>
+          <input type="email" id="adminEmail" required value="uditdave1993@gmail.com" autocomplete="username">
+        </div>
+        <div class="auth-field">
+          <label for="adminPassword">Security Key / Password</label>
+          <input type="password" id="adminPassword" required value="twistedtar2026" autocomplete="current-password">
+        </div>
+        <button type="submit" class="auth-btn" id="loginSubmitBtn">
+          <span>Enter Atelier Portal</span> &rarr;
+        </button>
+      </form>
+
+      <div class="auth-demo-hint">
+        <strong>Authorized Access Only:</strong> Pre-filled with executive credentials. Press <em>Enter Atelier Portal</em> to authenticate.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================================================
+       ADMIN APPLICATION SHELL
+       ============================================================================== -->
+  <div class="admin-shell" id="adminMainShell" style="display: none;">
+    <!-- LEFT SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <!-- BRAND HEADER -->
+      <div class="sidebar-brand">
+        <div style="width: 38px; height: 38px; border-radius: 8px; background: #C5A262; color: #142820; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.3rem; font-weight: 700; flex-shrink: 0;">
+          TT
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.05em; color: #FFFFFF; line-height: 1.1;">
+            TWISTED TAR
+          </div>
+          <div style="font-size: 0.65rem; color: var(--admin-sidebar-muted); letter-spacing: 0.08em; text-transform: uppercase;">
+            Awadh Atelier CMS
+          </div>
+        </div>
+        <span class="brand-badge">PRO</span>
+      </div>
+
+      <!-- NAVIGATION LINKS -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Core Operations</div>
+        <button class="sidebar-link active" data-section="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Dashboard Overview</span>
+        </button>
+
+        <button class="sidebar-link" data-section="products">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>Products CMS</span>
+          <span class="sidebar-badge" id="sidebarProdCount">12</span>
+        </button>
+
+        <button class="sidebar-link" data-section="categories">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span>Categories CMS</span>
+          <span class="sidebar-badge" id="sidebarCatCount">3</span>
+        </button>
+
+        <div class="nav-section-title">Content & Media</div>
+        <button class="sidebar-link" data-section="pages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Pages Visual CMS</span>
+        </button>
+
+        <button class="sidebar-link" data-section="media">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span>Media Library</span>
+        </button>
+
+        <div class="nav-section-title">Growth & Systems</div>
+        <button class="sidebar-link" data-section="seo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          <span>Rank Math SEO</span>
+        </button>
+
+        <button class="sidebar-link" data-section="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Website Settings</span>
+        </button>
+
+        <button class="sidebar-link" data-section="users">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>User Management</span>
+        </button>
+      </nav>
+
+      <!-- SIDEBAR FOOTER -->
+      <div class="sidebar-footer">
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; color: var(--admin-sidebar-muted);">
+          <span>Database Engine</span>
+          <span style="color: #10B981; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10B981;"></span> Synced
+          </span>
+        </div>
+        <a href="index.html" target="_blank" class="live-site-btn">
+          <span>View Live Storefront</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+        <button onclick="handleAdminSignOut()" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.15); color: #94A3B8; border-radius: var(--radius-sm); padding: 0.4rem; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;">
+          Sign Out of Portal
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN RIGHT PANE -->
+    <div class="admin-main">
+      <!-- TOP HEADER -->
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" id="mobileMenuToggle" aria-label="Toggle Navigation">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          
+          <div class="header-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="adminHeaderSearch" placeholder="Search kurtis, suits, pages, SEO..." oninput="handleGlobalSearch(this.value)">
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem; color: #065F46; font-weight: 600;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; animation: pulse 2s infinite;"></span>
+            Storefront Synchronized
+          </div>
+
+          <button class="btn btn-primary" onclick="window.AdminApp.openProductModal()" style="padding: 0.45rem 0.9rem; font-size: 0.8rem;">
+            + New Kurti / Suit
+          </button>
+
+          <div style="display: flex; align-items: center; gap: 0.6rem; padding-left: 0.5rem; border-left: 1px solid var(--admin-border);">
+            <div class="admin-avatar" style="width: 34px; height: 34px; font-size: 0.85rem;">UD</div>
+            <div style="display: flex; flex-direction: column; text-align: left;">
+              <span style="font-size: 0.82rem; font-weight: 700; color: var(--admin-text-main); line-height: 1.1;">Udit Dave</span>
+              <span style="font-size: 0.68rem; color: var(--admin-text-muted);">Super Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- DYNAMIC CONTENT AREA -->
+      <main class="admin-content" id="adminContentArea">
+        <!-- Rendered by js/admin.js -->
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL CONTAINER (Dynamic) -->
+  <div id="adminModalContainer"></div>
+
+  <!-- SCRIPTS -->
+  <script src="js/db.js"></script>
+  <script src="js/admin.js"></script>
+
+  <script>
+    // Authentication State Management
+    function checkAuth() {
+      const isAuth = sessionStorage.getItem('tt_admin_authenticated') === 'true';
+      const overlay = document.getElementById('adminAuthOverlay');
+      const shell = document.getElementById('adminMainShell');
+      if (isAuth) {
+        if (overlay) overlay.classList.add('hidden');
+        if (shell) shell.style.display = 'flex';
+      } else {
+        if (overlay) overlay.classList.remove('hidden');
+        if (shell) shell.style.display = 'none';
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPassword').value;
+
+      if (email && pass) {
+        sessionStorage.setItem('tt_admin_authenticated', 'true');
+        checkAuth();
+        if (window.AdminApp && window.AdminApp.showAdminToast) {
+          window.AdminApp.showAdminToast('Welcome back, Atelier Director Udit Dave!');
+        }
+      }
+    }
+
+    function handleAdminSignOut() {
+      if (confirm('Are you sure you want to sign out of the Twisted Tar Atelier Portal?')) {
+        sessionStorage.removeItem('tt_admin_authenticated');
+        checkAuth();
+      }
+    }
+
+    function handleGlobalSearch(term) {
+      if (!term || term.length < 2) return;
+      // If not in products or pages, navigate to products and filter
+      const activeSection = document.querySelector('.sidebar-link.active');
+      const section = activeSection ? activeSection.getAttribute('data-section') : 'dashboard';
+      if (section !== 'products' && section !== 'pages') {
+        const prodLink = document.querySelector('[data-section="products"]');
+        if (prodLink) prodLink.click();
+      }
+      const prodSearchInput = document.getElementById('prodSearchInput');
+      if (prodSearchInput) {
+        prodSearchInput.value = term;
+        prodSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+
+    // Auto-update sidebar badges from DB
+    function updateSidebarBadges() {
+      if (!window.TwistedTarDB) return;
+      const prods = window.TwistedTarDB.getProducts();
+      const cats = window.TwistedTarDB.getCategories();
+      const prodBadge = document.getElementById('sidebarProdCount');
+      const catBadge = document.getElementById('sidebarCatCount');
+      if (prodBadge) prodBadge.textContent = prods.length;
+      if (catBadge) catBadge.textContent = cats.length;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      updateSidebarBadges();
+      window.addEventListener('tt_db_updated', updateSidebarBadges);
+    });
+  </script>
+</body>
+</html>
