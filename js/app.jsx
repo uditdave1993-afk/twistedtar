@@ -2291,7 +2291,7 @@ function HomePage({
       </section>
 
       {/* Editorial Journal / Blog Preview */}
-      <section className="section" style={{ backgroundColor: "var(--color-bg-secondary)" }}>
+      <section className="section section-journal" style={{ backgroundColor: "#FAF0F2", background: "linear-gradient(180deg, #FDF4F6 0%, #FAF0F2 100%)", borderTop: "1px solid rgba(225, 198, 205, 0.4)", borderBottom: "1px solid rgba(225, 198, 205, 0.4)" }}>
         <div className="container">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "2.5rem" }}>
             <div>
