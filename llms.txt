@@ -1,0 +1,32 @@
+# Twisted Tar — Luxury Lucknowi Chikankari Atelier
+
+> Twisted Tar is a heritage luxury atelier dedicated to safeguarding and celebrating authentic Lucknowi Chikankari hand embroidery from Awadh, India. Handcrafted exclusively by master women artisans across rural Awadh, each garment represents 20 to 90 hours of uninterrupted needlework.
+
+## Core Collections
+- [3-Piece Kurtis](https://uditdave1993-afk.github.io/twistedtar/): Regal three-piece ensembles comprising an embroidered kurti, handcrafted bottom, and ethereal organza/chanderi dupatta.
+- [2-Piece Kurtis](https://uditdave1993-afk.github.io/twistedtar/): Tailored embroidered kurti paired with cigarette trousers or flared palazzos.
+- [Short Kurtis & Tunics](https://uditdave1993-afk.github.io/twistedtar/): Contemporary hip-length chikankari tunics designed for pairing with denim, linen, or trousers.
+
+## Signature Awadh Stitches
+1. **Bakhiya (Shadow Work)**: Herringbone stitch on the reverse of gossamer mulmul or georgette, casting an ethereal silhouette on the front.
+2. **Phanda (Millet Stitches)**: Compact, raised pearl-like French knots creating textured floral centers and petal veins.
+3. **Murri (Rice-Grain Knots)**: Delicate elongated knots shaped like grains of basmati rice, a historic Nawabi court tradition.
+4. **Keel Kangan & Tepchi**: Delicate running stitches tracing intricate floral vines (bels) along necklines and hems.
+5. **Jaali (Lattice Openwork)**: Openwork lace formed by gently separating warp and weft yarns with needlework without cutting cloth.
+
+## Fabrics & Authenticity
+- Pure handwoven Chanderi silk with 100% breathable mulmul lining.
+- Featherlight gossamer mulmul cotton for tropical breathability.
+- Natural modal and flowy georgette.
+- 100% authentic GI-certified Lucknow handicraft — no machine embroidery or computerized prints.
+
+## Atelier Details & Contact
+- **Physical Atelier**: Studio 14, Heritage Arcade, Hazratganj, Lucknow, UP 226001, India.
+- **Concierge Telephone**: +91 522 492 8170 / WhatsApp Concierge available.
+- **Concierge Email**: concierge@twistedtar.com
+- **Operating Hours**: Monday – Saturday: 10:00 AM – 7:00 PM IST
+- **Complimentary Insured Shipping**: Orders above ₹1,999 across India; worldwide international courier available.
+- **Return & Exchange**: 10-day exchange guarantee.
+
+## Detailed Context
+For full technical documentation, fabric care, and artisan cluster profiles, see [llms-full.txt](https://uditdave1993-afk.github.io/twistedtar/llms-full.txt).

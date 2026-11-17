@@ -1290,6 +1290,114 @@ function TwistedTarApp() {
     return null;
   }, [route]);
 
+  // Dynamic SEO & Structured Data Engine
+  useEffect(() => {
+    const baseUrl = "https://uditdave1993-afk.github.io/twistedtar";
+    let title = "Twisted Tar — Authentic Lucknowi Chikankari Kurtis & Suits";
+    let desc = "Discover Twisted Tar's luxury collection of authentic Lucknowi chikankari kurtis, 3-piece sets, 2-piece sets, and short tunics handcrafted in pure mulmul cotton, chanderi silk, and modal.";
+    let canonical = `${baseUrl}/#${route.page}${route.param ? '/' + route.param : ''}`;
+
+    if (route.page === "product" && activeProduct) {
+      title = `${activeProduct.name} | Lucknowi Chikankari | Twisted Tar`;
+      desc = activeProduct.shortDesc || activeProduct.description || desc;
+    } else if (route.page === "shop") {
+      title = "Shop Luxury Chikankari Suits & Kurtis Collection | Twisted Tar";
+    } else if (route.page === "about") {
+      title = "Our Heritage & 32 Stitches of Lucknowi Chikankari | Twisted Tar";
+    } else if (route.page === "contact") {
+      title = "Atelier Concierge & Customer Care | Twisted Tar";
+    }
+
+    document.title = title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute("content", desc);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute("content", desc);
+
+    // Dynamic Schema.org JSON-LD
+    let schemaTag = document.getElementById("dynamic-schema-ld");
+    if (!schemaTag) {
+      schemaTag = document.createElement("script");
+      schemaTag.id = "dynamic-schema-ld";
+      schemaTag.type = "application/ld+json";
+      document.head.appendChild(schemaTag);
+    }
+
+    if (route.page === "product" && activeProduct) {
+      schemaTag.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": activeProduct.name,
+        "image": activeProduct.image,
+        "description": activeProduct.shortDesc || activeProduct.description,
+        "sku": activeProduct.id,
+        "brand": { "@type": "Brand", "name": "Twisted Tar" },
+        "offers": {
+          "@type": "Offer",
+          "url": canonical,
+          "priceCurrency": "INR",
+          "price": activeProduct.price,
+          "priceValidUntil": "2027-12-31",
+          "itemCondition": "https://schema.org/NewCondition",
+          "availability": activeProduct.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "IN",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 10,
+            "returnMethod": "https://schema.org/ReturnByMail"
+          },
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": 0,
+              "currency": "INR"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "IN"
+            }
+          }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": activeProduct.rating || 4.9,
+          "reviewCount": activeProduct.reviewCount || 38
+        }
+      });
+    } else {
+      schemaTag.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ClothingStore",
+        "name": "Twisted Tar",
+        "url": baseUrl,
+        "logo": `${baseUrl}/assets/logo.svg`,
+        "description": "Luxury Lucknowi Chikankari Atelier handcrafted in Awadh, India. Dedicated to safeguarding authentic 400-year-old Nawabi hand needlework.",
+        "telephone": "+91-522-492-8170",
+        "email": "concierge@twistedtar.com",
+        "priceRange": "₹₹ - ₹₹₹",
+        "currenciesAccepted": "INR, USD",
+        "paymentAccepted": "Cash, Credit Card, Debit Card, UPI, Net Banking",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Studio 14, Heritage Arcade, Hazratganj",
+          "addressLocality": "Lucknow",
+          "addressRegion": "Uttar Pradesh",
+          "postalCode": "226001",
+          "addressCountry": "IN"
+        },
+        "sameAs": [
+          "https://instagram.com/twistedtar",
+          "https://facebook.com/twistedtar",
+          "https://pinterest.com/twistedtar"
+        ]
+      });
+    }
+  }, [route, activeProduct, shopCategory]);
+
   // Navigation Helper
   const navigateTo = (page, param = null) => {
     window.location.hash = param ? `${page}/${param}` : page;

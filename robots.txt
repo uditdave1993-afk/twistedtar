@@ -1,25 +1,61 @@
 # ==============================================================================
 # Twisted Tar — Authentic Lucknowi Chikankari Atelier
-# Robots.txt Specification (Search Engine Optimized)
+# Robots.txt Specification (Search, AEO & AI/LLM Optimized)
 # ==============================================================================
 
+# Default Search Engines (Google, Bing, DuckDuckGo, Yahoo, etc.)
 User-agent: *
 Allow: /
-Allow: /#shop
-Allow: /#heritage
-Allow: /#craftsmanship
-Allow: /#reviews
-Allow: /#journal
-Allow: /#contact
 Allow: /assets/
 Allow: /css/
 Allow: /js/
+Allow: /images/
 
-# Disallow Administrative Control Panels
+# Disallow Administrative & Source Setup Files
 Disallow: /admin.html
 Disallow: /admin
 Disallow: /supabase-schema.sql
 Disallow: /BACKEND_SETUP.md
+Disallow: /FULL-AUDIT-REPORT.md
+Disallow: /ACTION-PLAN.md
+Disallow: /GEO-ANALYSIS.md
 
-# Sitemaps
+# ------------------------------------------------------------------------------
+# Generative AI & Answer Engine Bots (GEO / AEO Optimization)
+# Explicitly allowing AI search discovery & citation engines
+# ------------------------------------------------------------------------------
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Training Scrapers (Controlled)
+User-agent: CCBot
+Disallow: /
+
+# ------------------------------------------------------------------------------
+# Discovery & Sitemaps
+# ------------------------------------------------------------------------------
 Sitemap: https://uditdave1993-afk.github.io/twistedtar/sitemap.xml
+
+# LLM Context File (AI Crawler Guidance Standard)
+# https://uditdave1993-afk.github.io/twistedtar/llms.txt

@@ -1,192 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- Core Website Pages -->
+
+  <!-- Primary Canonical Website URL -->
   <url>
     <loc>https://uditdave1993-afk.github.io/twistedtar/</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#shop</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#shop/3-piece</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#shop/2-piece</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#shop/short</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#heritage</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#craftsmanship</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#reviews</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#journal</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#contact</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
 
-  <!-- 3 Piece Suits -->
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/hazratganj-noor-3-piece-chanderi-set</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <!-- Product Imagery (Google Image SEO) -->
     <image:image>
       <image:loc>https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Hazratganj Noor Chanderi Set</image:title>
-      <image:caption>Authentic handcrafted 3 piece Lucknowi chikankari suit in pure chanderi silk</image:caption>
+      <image:title>Hazratganj Noor 3-Piece Chanderi Silk Set</image:title>
+      <image:caption>Authentic handcrafted 3-piece Lucknowi Chikankari suit in pure Chanderi silk with scalloped organza dupatta</image:caption>
     </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/nawab-begum-ivory-anarkali-suit</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Nawab Begum Ivory Anarkali Set</image:title>
+      <image:title>Nawab Begum Ivory Mulmul Anarkali Set</image:title>
+      <image:caption>Royal flared ivory mulmul Chikankari Anarkali with intricate Murri and Bakhiya needlework</image:caption>
     </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/chowk-darbar-emerald-mulmul-set</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Chowk Darbar Emerald Mulmul Set</image:title>
+      <image:title>Chowk Darbar Emerald Mulmul 3-Piece Set</image:title>
+      <image:caption>Jewel-toned emerald green handcrafted Chikankari set in pure breathable mulmul cotton</image:caption>
     </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/kaisarbagh-blush-organza-suit</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://images.unsplash.com/photo-1596783074918-c84cb06531ca?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Kaisarbagh Blush Organza Suit</image:title>
+      <image:loc>https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Kaisarbagh Blush Organza 3-Piece Suit</image:title>
+      <image:caption>Pastel blush pink organza ensemble with Phanda floral embroidery and scalloped borders</image:caption>
     </image:image>
-  </url>
-
-  <!-- 2 Piece Suits -->
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/ruqayya-lavender-kurti-palazzo</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Ruqayya Lavender Kurti &amp; Palazzo</image:title>
+      <image:title>Rumi Darwaza Indigo Mulmul 2-Piece Set</image:title>
+      <image:caption>Deep indigo blue handcrafted 2-piece kurti and cigarette trousers</image:caption>
     </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/sitara-sage-green-kurti-pant</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Sitara Sage Green Kurti &amp; Pant</image:title>
+      <image:loc>https://images.unsplash.com/photo-1589810635657-232948472d98?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Aminabad Peach Silk-Cotton 2-Piece Kurti</image:title>
+      <image:caption>Warm peach cotton-silk 2-piece set with handcrafted jaali lattice yoke</image:caption>
     </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/zeenat-dusty-rose-co-ord-set</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Zeenat Dusty Rose Co-Ord Set</image:title>
+      <image:loc>https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Baradari Sage Luxury Linen Co-ord Set</image:title>
+      <image:caption>Sage green breathable linen-cotton handcrafted co-ord set with Bakhiya needlework</image:caption>
     </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/tahira-powder-blue-cigarette-set</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
-      <image:loc>https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Tahira Powder Blue Cigarette Set</image:title>
+      <image:loc>https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Qaisarbagh Noir Black-on-Black 2-Piece Set</image:title>
+      <image:caption>Midnight black pure mulmul kurti with tonal black-on-black Chikankari shadow work</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Gomti Breeze White Short Kurti</image:title>
+      <image:caption>Pristine white everyday Chikankari short tunic for denim pairing</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Dilkusha Coral Everyday Handcrafted Tunic</image:title>
+      <image:caption>Vibrant coral short tunic with embroidered neckline and floral motif sleeves</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Asafi Lavender Short Chikankari Kurti</image:title>
+      <image:caption>Soft pastel lavender handcrafted tunic in pure mulmul cotton</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Nadan Mahal Lemon Cotton Short Kurti</image:title>
+      <image:caption>Sunny yellow breathable short tunic with Phanda and Tepchi needlework</image:caption>
     </image:image>
   </url>
 
-  <!-- Short Kurtis -->
+  <!-- LLM Context & Knowledge Guidance File -->
   <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/safed-motia-peplum-short-kurti</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://uditdave1993-afk.github.io/twistedtar/llms.txt</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Safed Motia Peplum Short Kurti</image:title>
-    </image:image>
   </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/gulmohar-coral-a-line-tunic</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Gulmohar Coral A-Line Tunic</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/neelam-indigo-angarkha-short-kurti</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Neelam Indigo Angarkha Short Kurti</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://uditdave1993-afk.github.io/twistedtar/#product/zohra-lemon-zest-cotton-tunic</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
-      <image:title>Zohra Lemon Zest Cotton Tunic</image:title>
-    </image:image>
-  </url>
+
 </urlset>
