@@ -1,6 +1,14 @@
 # AI Skills & Agent Directory
 .agents/
+.agent/
 .github/
+.cursor/
+.windsurf/
+.continue/
+.cline/
+.clinerules
+seo.plugin
+install.ps1
 
 # Portable tools
 .mingit/
