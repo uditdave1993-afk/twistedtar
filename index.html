@@ -25,7 +25,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Master Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.4.6">
+  <link rel="stylesheet" href="css/styles.css?v=2.4.7">
 
   <!-- Universal Database & CMS Data Engine (Dual-Mode Supabase + Local) -->
   <script src="js/db.js"></script>
@@ -971,39 +971,39 @@ const Icons = {
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
     </svg>
   ),
-  WhatsApp: ({ size = 22 } = {}) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#25D366" />
-      <path d="M17.5 14.3c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.7.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5s-.7-1.7-1-2.3c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.5.2-1.7-.1-.2-.3-.3-.6-.4z" fill="#FFFFFF" />
+  WhatsApp: ({ size = 26, className = "" } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" className={className} style={{ display: "block", overflow: "visible" }}>
+      <circle cx="16" cy="16" r="16" fill="#25D366" />
+      <path d="M22.8 19.2C22.4 19 20.5 18.1 20.2 18C19.8 17.8 19.6 17.8 19.3 18.1C19.1 18.4 18.4 19.3 18.1 19.6C17.9 19.8 17.7 19.8 17.3 19.6C17 19.5 15.7 19.1 14.2 17.7C13 16.6 12.2 15.3 12 15C11.8 14.6 12 14.4 12.2 14.2C12.3 14 12.6 13.7 12.7 13.5C12.9 13.3 12.9 13.2 13.1 12.9C13.2 12.6 13.1 12.4 13.1 12.2C13 12 12.2 10.1 11.9 9.3C11.6 8.5 11.3 8.6 11.1 8.6H10.4C10.1 8.6 9.7 8.7 9.3 9.1C9 9.5 7.9 10.5 7.9 12.7C7.9 14.9 9.5 17 9.7 17.3C10 17.6 12.8 21.9 17.2 23.8C18.2 24.2 19 24.5 19.7 24.7C20.7 25 21.6 25 22.3 24.9C23.1 24.8 24.8 23.9 25.1 22.9C25.5 21.9 25.5 21 25.4 20.8C25.3 20.6 25 20.5 24.6 20.3L22.8 19.2Z" fill="#FFFFFF" />
     </svg>
   ),
-  Facebook: ({ size = 22 } = {}) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#1877F2" />
-      <path d="M15.5 12.05h-2.28V20.5h-3.5v-8.45H7.5V9.1h2.22V7.12c0-1.84.88-4.7 4.7-4.7l3.45.01v3.34h-2.5c-.37 0-.88.18-.88.96v2.37h3.42l-.41 2.95z" fill="#FFFFFF" />
+  Facebook: ({ size = 26, className = "" } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" className={className} style={{ display: "block", overflow: "visible" }}>
+      <circle cx="16" cy="16" r="16" fill="#1877F2" />
+      <path d="M20.5 16.5H17.2V27H12.8V16.5H10.5V12.8H12.8V10.2C12.8 7.8 14 6 17.5 6H20.5V9.7H18.6C17.4 9.7 17.2 10.3 17.2 11.2V12.8H20.8L20.5 16.5Z" fill="#FFFFFF" />
     </svg>
   ),
-  Instagram: ({ size = 22 } = {}) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ borderRadius: "50%", overflow: "hidden" }}>
+  Instagram: ({ size = 26, className = "" } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" className={className} style={{ display: "block", overflow: "visible" }}>
       <defs>
-        <radialGradient id="tt-ig-grad-original" cx="30%" cy="107%" r="150%">
-          <stop offset="0%" stopColor="#fdf497" />
-          <stop offset="10%" stopColor="#fdf497" />
-          <stop offset="45%" stopColor="#fd5949" />
-          <stop offset="60%" stopColor="#d6249f" />
-          <stop offset="90%" stopColor="#285AEB" />
-        </radialGradient>
+        <linearGradient id="tt-ig-grad-full-svg" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#f09433" />
+          <stop offset="25%" stopColor="#e6683c" />
+          <stop offset="50%" stopColor="#dc2743" />
+          <stop offset="75%" stopColor="#cc2366" />
+          <stop offset="100%" stopColor="#bc1888" />
+        </linearGradient>
       </defs>
-      <circle cx="12" cy="12" r="12" fill="url(#tt-ig-grad-original)" />
-      <rect x="5.5" y="5.5" width="13" height="13" rx="3.8" stroke="#ffffff" strokeWidth="1.6" fill="none" />
-      <circle cx="12" cy="12" r="3.4" stroke="#ffffff" strokeWidth="1.6" fill="none" />
-      <circle cx="15.8" cy="8.2" r="1" fill="#ffffff" />
+      <rect width="32" height="32" rx="7.5" fill="url(#tt-ig-grad-full-svg)" />
+      <rect x="7" y="7" width="18" height="18" rx="5" stroke="#FFFFFF" strokeWidth="2.2" fill="none" />
+      <circle cx="16" cy="16" r="4.5" stroke="#FFFFFF" strokeWidth="2.2" fill="none" />
+      <circle cx="21.5" cy="10.5" r="1.3" fill="#FFFFFF" />
     </svg>
   ),
-  Pinterest: ({ size = 22 } = {}) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#E60023" />
-      <path d="M12 3.8c-4.5 0-8.2 3.7-8.2 8.2 0 3.5 2.1 6.5 5.2 7.6-.1-.7-.1-1.7 0-2.4.1-.7 1-4.4 1-4.4s-.3-.5-.3-1.4c0-1.3.8-2.2 1.7-2.2.8 0 1.2.6 1.2 1.4 0 .9-.6 2-1 3.1-.3 1 .5 1.8 1.5 1.8 1.8 0 3.2-1.9 3.2-4.6 0-2.4-1.7-4.1-4.2-4.1-2.9 0-4.6 2.2-4.6 4.4 0 .9.3 1.8.8 2.3.1.1.1.2 0 .4l-.3 1.2c0 .2-.2.2-.4.1-1.3-.6-2.1-2.4-2.1-3.9 0-3.2 2.3-6.1 6.7-6.1 3.5 0 6.2 2.5 6.2 5.8 0 3.5-2.2 6.3-5.3 6.3-1 0-2-.5-2.3-1.2l-.6 2.4c-.2.9-.8 2-1.3 2.7 1 .3 2 .5 3.1.5 4.5 0 8.2-3.7 8.2-8.2 0-4.5-3.7-8.2-8.2-8.2z" fill="#FFFFFF" />
+  Pinterest: ({ size = 26, className = "" } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" className={className} style={{ display: "block", overflow: "visible" }}>
+      <circle cx="16" cy="16" r="16" fill="#E60023" />
+      <path d="M16 6C10.5 6 6 10.5 6 16C6 20.2 8.6 23.8 12.3 25.2C12.2 24.4 12.2 23.1 12.4 22.2C12.6 21.4 13.7 16.7 13.7 16.7C13.7 16.7 13.4 16.1 13.4 15.1C13.4 13.5 14.3 12.3 15.5 12.3C16.5 12.3 17 13.1 17 14C17 15 16.4 16.4 16 17.8C15.7 19 16.6 20 17.8 20C20 20 21.7 17.7 21.7 14.3C21.7 11.3 19.5 9.2 16.4 9.2C12.8 9.2 10.7 11.9 10.7 14.7C10.7 15.8 11.1 17 11.6 17.6C11.7 17.7 11.7 17.8 11.7 17.9C11.6 18.3 11.3 19.5 11.3 19.7C11.2 19.9 11 20 10.8 19.9C9.2 19.2 8.2 16.9 8.2 14.6C8.2 10.6 11.1 6.9 16.6 6.9C21 6.9 24.4 10.1 24.4 14.3C24.4 18.7 21.6 22.2 17.7 22.2C16.4 22.2 15.2 21.5 14.8 20.7L14 23.8C13.7 25 12.9 26.4 12.3 27.3C13.5 27.7 14.7 28 16 28C22.6 28 28 22.6 28 16C28 9.4 22.6 6 16 6Z" fill="#FFFFFF" />
     </svg>
   ),
   Share: () => (
@@ -3180,7 +3180,7 @@ function ProductDetailPage({
                   className="product-share-btn share-whatsapp"
                   title="Share with Friends on WhatsApp"
                 >
-                  <Icons.WhatsApp size={18} />
+                  <Icons.WhatsApp size={20} />
                   <span>WhatsApp</span>
                 </a>
                 <a
@@ -3190,7 +3190,7 @@ function ProductDetailPage({
                   className="product-share-btn share-facebook"
                   title="Share on Facebook"
                 >
-                  <Icons.Facebook size={18} />
+                  <Icons.Facebook size={20} />
                   <span>Facebook</span>
                 </a>
                 <a
@@ -3200,7 +3200,7 @@ function ProductDetailPage({
                   className="product-share-btn share-pinterest"
                   title="Save to Pinterest Board"
                 >
-                  <Icons.Pinterest size={18} />
+                  <Icons.Pinterest size={20} />
                   <span>Pinterest</span>
                 </a>
                 <button
