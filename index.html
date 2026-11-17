@@ -25,7 +25,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Master Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=2.4.4">
+  <link rel="stylesheet" href="css/styles.css?v=2.4.5">
 
   <!-- Universal Database & CMS Data Engine (Dual-Mode Supabase + Local) -->
   <script src="js/db.js"></script>
@@ -974,6 +974,23 @@ const Icons = {
   WhatsApp: () => (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12.031 2C6.505 2 2.016 6.489 2.016 12.015c0 1.954.562 3.844 1.63 5.469L2.001 22l4.673-1.614c1.558.98 3.376 1.629 5.357 1.629 5.526 0 10.015-4.489 10.015-10.015C22.046 6.489 17.557 2 12.031 2zm5.836 14.185c-.244.686-1.233 1.258-1.745 1.332-.472.068-1.077.123-3.153-.736-2.657-1.1-4.359-3.799-4.492-3.975-.132-.176-1.076-1.432-1.076-2.732 0-1.3.682-1.94 0.925-2.203.244-.264.533-.33.71-.33.178 0 .355.002.51.01.166.009.388-.063.608.464.223.535.755 1.848.822 1.981.066.133.11.288.022.464-.088.176-.133.288-.266.442-.133.155-.278.344-.399.463-.133.133-.272.277-.117.543.155.266.69 1.137 1.48 1.84 1.016.905 1.871 1.187 2.137 1.32.266.133.421.111.576-.067.155-.177.665-.774.842-1.04.177-.266.355-.221.599-.133.244.089 1.551.73 1.817.863.266.133.443.2.51.311.066.111.066.643-.178 1.329z"/>
+    </svg>
+  ),
+  Facebook: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+  ),
+  Instagram: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+    </svg>
+  ),
+  Pinterest: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C24.002 5.367 18.624 0 12.017 0z"/>
     </svg>
   )
 };
@@ -1933,7 +1950,7 @@ function TwistedTarApp() {
       </main>
 
       {/* 4. FOOTER */}
-      <Footer navigateTo={navigateTo} showToast={showToast} />
+      <Footer navigateTo={navigateTo} showToast={showToast} siteSettings={siteSettings} />
 
       {/* 5. SLIDE-OUT CART DRAWER */}
       <CartDrawer
@@ -4683,7 +4700,7 @@ function SizeGuideModal({ sizeChart, onClose }) {
 }
 
 // --- FOOTER COMPONENT ---
-function Footer({ navigateTo, showToast }) {
+function Footer({ navigateTo, showToast, siteSettings }) {
   const [newsletterEmail, setNewsletterEmail] = useState("");
 
   const handleSubscribe = (e) => {
@@ -4692,6 +4709,12 @@ function Footer({ navigateTo, showToast }) {
       showToast("Thank you for joining our circle. Code TWISTED10 has been applied!");
       setNewsletterEmail("");
     }
+  };
+
+  const socialLinks = {
+    instagram: siteSettings?.social?.instagram || "https://instagram.com/twistedtar",
+    facebook: siteSettings?.social?.facebook || "https://facebook.com/twistedtar",
+    pinterest: siteSettings?.social?.pinterest || "https://pinterest.com/twistedtar"
   };
 
   return (
@@ -4706,6 +4729,40 @@ function Footer({ navigateTo, showToast }) {
             </p>
             <div style={{ marginTop: "1.5rem", fontSize: "0.82rem", color: "var(--color-gold-antique)" }}>
               Hazratganj Atelier · Lucknow 226001
+            </div>
+
+            {/* Quick Social Signal Icon Badges */}
+            <div className="footer-social-row" aria-label="Social Media Channels">
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-icon"
+                aria-label="Twisted Tar on Instagram"
+                title="Follow @twistedtar on Instagram"
+              >
+                <Icons.Instagram />
+              </a>
+              <a
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-icon"
+                aria-label="Twisted Tar on Facebook"
+                title="Join Twisted Tar on Facebook"
+              >
+                <Icons.Facebook />
+              </a>
+              <a
+                href={socialLinks.pinterest}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-icon"
+                aria-label="Twisted Tar on Pinterest"
+                title="Explore Lookbooks on Pinterest"
+              >
+                <Icons.Pinterest />
+              </a>
             </div>
           </div>
 
@@ -4733,7 +4790,7 @@ function Footer({ navigateTo, showToast }) {
             </ul>
           </div>
 
-          {/* Col 3: Newsletter */}
+          {/* Col 3: Newsletter & Social Signals */}
           <div className="footer-col">
             <h4>Stay Connected</h4>
             <p style={{ fontSize: "0.85rem", color: "rgba(253, 251, 247, 0.75)", marginBottom: "0.75rem" }}>
@@ -4751,6 +4808,52 @@ function Footer({ navigateTo, showToast }) {
                 Join
               </button>
             </form>
+
+            {/* Social Signals & Community Proof */}
+            <div className="footer-social-signals">
+              <span className="social-signals-title">Social Signals & Lookbooks</span>
+              <div className="social-signals-pills">
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-signal-pill"
+                  title="Instagram: @twistedtar (42K Artisans & Followers)"
+                >
+                  <div className="pill-left">
+                    <Icons.Instagram />
+                    <span>Instagram</span>
+                  </div>
+                  <span className="pill-badge">42K Community</span>
+                </a>
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-signal-pill"
+                  title="Facebook: Twisted Tar Atelier (18K Awadh Collective)"
+                >
+                  <div className="pill-left">
+                    <Icons.Facebook />
+                    <span>Facebook</span>
+                  </div>
+                  <span className="pill-badge">18K Members</span>
+                </a>
+                <a
+                  href={socialLinks.pinterest}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-signal-pill"
+                  title="Pinterest: Twisted Tar Chikankari (95K Monthly Views)"
+                >
+                  <div className="pill-left">
+                    <Icons.Pinterest />
+                    <span>Pinterest</span>
+                  </div>
+                  <span className="pill-badge">95K Views/mo</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -737,6 +737,24 @@
             <input type="text" id="setting_address" class="form-input" value="${escapeHtml(settings.contact.address)}" />
           </div>
 
+          <h3 style="font-size: 1.3rem; margin: 2rem 0 1.25rem; border-bottom: 1px solid var(--admin-border); padding-bottom: 0.5rem;">
+            Social Signals & Media Profiles
+          </h3>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label class="form-label">Instagram Profile URL</label>
+              <input type="url" id="setting_instagram" class="form-input" value="${escapeHtml(settings.social ? settings.social.instagram || 'https://instagram.com/twistedtar' : 'https://instagram.com/twistedtar')}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Facebook Page URL</label>
+              <input type="url" id="setting_facebook" class="form-input" value="${escapeHtml(settings.social ? settings.social.facebook || 'https://facebook.com/twistedtar' : 'https://facebook.com/twistedtar')}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pinterest Profile URL</label>
+              <input type="url" id="setting_pinterest" class="form-input" value="${escapeHtml(settings.social ? settings.social.pinterest || 'https://pinterest.com/twistedtar' : 'https://pinterest.com/twistedtar')}" />
+            </div>
+          </div>
+
           <h3 style="font-size: 1.3rem; margin: 2rem 0 1.25rem; border-bottom: 1px solid var(--admin-border); padding-bottom: 0.5rem; color: #10B981;">
             ⚡ Supabase Cloud Database Connection
           </h3>
@@ -1217,6 +1235,14 @@
       settings.contact.email = document.getElementById('setting_email').value.trim();
       settings.contact.address = document.getElementById('setting_address').value.trim();
       
+      if (!settings.social) settings.social = {};
+      const instaEl = document.getElementById('setting_instagram');
+      const fbEl = document.getElementById('setting_facebook');
+      const pinEl = document.getElementById('setting_pinterest');
+      if (instaEl) settings.social.instagram = instaEl.value.trim();
+      if (fbEl) settings.social.facebook = fbEl.value.trim();
+      if (pinEl) settings.social.pinterest = pinEl.value.trim();
+
       if (!settings.supabase) settings.supabase = {};
       settings.supabase.url = document.getElementById('setting_supabaseUrl').value.trim();
       settings.supabase.anonKey = document.getElementById('setting_supabaseKey').value.trim();
