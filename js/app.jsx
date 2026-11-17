@@ -11,7 +11,7 @@ const BRAND = {
   tagline: "The art of chikankari, woven into everyday elegance",
   description: "Authentic Lucknowi chikankari kurtis handcrafted by master women artisans. Woven from gossamer mulmul cotton, handwoven chanderi silk, and pure georgette.",
   origin: "Lucknow, Awadh · Est. 2026",
-  currency: { symbol: "₹", code: "INR", usdRate: 0.012 },
+  currency: { symbol: "₹", code: "INR" },
   freeShippingThreshold: 1999,
   contact: {
     phone: "+91 522 492 8170",
@@ -1128,14 +1128,10 @@ function TwistedTarApp() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  // Format Price with Currency
+  // Format Price with Currency (INR)
   const formatPrice = useCallback((amount) => {
-    if (currency === "USD") {
-      const usd = Math.round(amount * BRAND.currency.usdRate);
-      return `$${usd}`;
-    }
     return `₹${amount.toLocaleString("en-IN")}`;
-  }, [currency]);
+  }, []);
 
   // Toast Dispatcher
   const showToast = (message) => {
@@ -1478,7 +1474,7 @@ function TwistedTarApp() {
         "telephone": "+91-522-492-8170",
         "email": "concierge@twistedtar.com",
         "priceRange": "₹₹ - ₹₹₹",
-        "currenciesAccepted": "INR, USD",
+        "currenciesAccepted": "INR",
         "paymentAccepted": "Cash, Credit Card, Debit Card, UPI, Net Banking",
         "address": {
           "@type": "PostalAddress",
@@ -1509,22 +1505,11 @@ function TwistedTarApp() {
       {/* 1. TOP ANNOUNCEMENT BAR */}
       <div className="announcement-bar">
         <div className="container announcement-content">
-          <div className="currency-selector">
+          <div className="currency-selector" aria-label="Store Currency">
             <span>CURRENCY:</span>
-            <button
-              className={`currency-btn ${currency === "INR" ? "active" : ""}`}
-              onClick={() => setCurrency("INR")}
-              aria-label="Set currency to INR"
-            >
+            <span className="currency-btn active" style={{ cursor: "default" }}>
               ₹ INR
-            </button>
-            <button
-              className={`currency-btn ${currency === "USD" ? "active" : ""}`}
-              onClick={() => setCurrency("USD")}
-              aria-label="Set currency to USD"
-            >
-              $ USD
-            </button>
+            </span>
           </div>
           <div className="announcement-text">
             Complimentary Insured Shipping Across India on Orders Above ₹1,999 · Worldwide Courier Available
