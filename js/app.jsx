@@ -2771,8 +2771,8 @@ function ProductCard({
           <Icons.Heart filled={isWishlisted} />
         </button>
 
-        <img className="product-card-img" src={primaryImage} alt={product.name} loading="lazy" />
-        <img className="product-card-img product-card-img-secondary" src={secondaryImage} alt={`${product.name} alternate view`} loading="lazy" />
+        <img className="product-card-img" src={primaryImage} alt={product.name} loading="lazy" decoding="async" />
+        <img className="product-card-img product-card-img-secondary" src={secondaryImage} alt={`${product.name} alternate view`} loading="lazy" decoding="async" />
 
         <div className="product-card-quick-actions" onClick={(e) => e.stopPropagation()}>
           <button className="btn btn-primary btn-sm btn-block" onClick={onQuickView}>
@@ -3160,6 +3160,10 @@ function ProductDetailPage({
                 className="pdp-main-img"
                 src={product.images[selectedImageIndex] || product.images[0]}
                 alt={product.name}
+                fetchpriority="high"
+                decoding="async"
+                width="600"
+                height="800"
               />
             </div>
           </div>
