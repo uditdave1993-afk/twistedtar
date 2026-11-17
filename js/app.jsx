@@ -2404,6 +2404,10 @@ function HomePage({
               <img
                 src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80"
                 alt="Woman wearing handcrafted ivory Lucknowi chikankari kurti set"
+                fetchpriority="high"
+                decoding="async"
+                width="1000"
+                height="520"
               />
             </div>
             <div className="hero-floating-card">

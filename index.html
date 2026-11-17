@@ -15,6 +15,9 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://uditdave1993-afk.github.io/twistedtar/">
 
+  <!-- LCP Image Preload (Core Web Vitals Optimization) -->
+  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80" fetchpriority="high">
+
   <!-- Search Engine Auto-Discovery Links (robots.txt & sitemap.xml) -->
   <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
   <link rel="help" type="text/plain" title="Robots Directives" href="robots.txt">
@@ -2667,6 +2670,10 @@ function HomePage({
               <img
                 src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80"
                 alt="Woman wearing handcrafted ivory Lucknowi chikankari kurti set"
+                fetchpriority="high"
+                decoding="async"
+                width="1000"
+                height="520"
               />
             </div>
             <div className="hero-floating-card">
