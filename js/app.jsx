@@ -4675,50 +4675,6 @@ function Footer({ navigateTo, showToast, siteSettings }) {
             <div style={{ marginTop: "1.5rem", fontSize: "0.82rem", color: "var(--color-gold-antique)" }}>
               Hazratganj Atelier · Lucknow 226001
             </div>
-
-            {/* Quick Social Signal Icon Badges (Original Official Icons) */}
-            <div className="footer-social-row" aria-label="Official Social Channels">
-              <a
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-social-icon instagram"
-                aria-label="Twisted Tar on Instagram"
-                title="Follow @twistedtar on Instagram"
-              >
-                <Icons.Instagram size={36} />
-              </a>
-              <a
-                href={socialLinks.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-social-icon facebook"
-                aria-label="Twisted Tar on Facebook"
-                title="Join Twisted Tar on Facebook"
-              >
-                <Icons.Facebook size={36} />
-              </a>
-              <a
-                href={socialLinks.pinterest}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-social-icon pinterest"
-                aria-label="Twisted Tar on Pinterest"
-                title="Explore Lookbooks on Pinterest"
-              >
-                <Icons.Pinterest size={36} />
-              </a>
-              <a
-                href={`https://wa.me/${(BRAND.contact.phone).replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Twisted Tar! I would like to inquire about your Lucknowi Chikankari collection.")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-social-icon whatsapp"
-                aria-label="Chat with Twisted Tar on WhatsApp"
-                title="Chat with Concierge on WhatsApp"
-              >
-                <Icons.WhatsApp size={36} />
-              </a>
-            </div>
           </div>
 
           {/* Col 1: Collections */}
