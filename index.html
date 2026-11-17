@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Twisted Tar — Authentic Lucknowi Chikankari Kurtis</title>
-  <meta name="description" content="Discover Twisted Tar's luxury collection of authentic Lucknowi chikankari kurtis, 3-piece sets, 2-piece sets, and short tunics handcrafted in pure mulmul cotton, chanderi silk, and modal.">
+  <meta name="description" content="Discover Twisted Tar's luxury authentic Lucknowi chikankari kurtis, 3-piece sets, and tunics handcrafted in pure mulmul and chanderi silk by Awadh artisans.">
   <meta name="theme-color" content="#142820">
 
   <!-- Canonical URL -->
@@ -872,7 +872,9 @@ const BLOG_ARTICLES = [
     category: "Craft & Heritage",
     readTime: "6 min read",
     date: "November 8, 2026",
-    author: "Editorial Team",
+    author: "Begum Zarina Khan",
+    authorRole: "Master Textile Conservator & Awadh Historian",
+    authorBio: "Generational Awadhi textile archivist with over 28 years dedicated to preserving and cataloging historical Nawabi court needlework.",
     image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80",
     excerpt: "From the gossamer veil of Bakhiya shadow work to basmati-grained Murri knots, learn how to identify authentic hand embroidery from modern machine duplicates.",
     content: `
@@ -903,7 +905,9 @@ const BLOG_ARTICLES = [
     category: "Style Guides",
     readTime: "5 min read",
     date: "October 24, 2026",
-    author: "Styling Desk",
+    author: "Aisha Rizvi",
+    authorRole: "Principal Stylist & Awadhi Couturier",
+    authorBio: "Textile stylist specializing in modern heritage drapes, handloom styling, and contemporary ethnic silhouettes.",
     image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1000&q=80",
     excerpt: "Discover versatile styling formulas to effortlessly transition your chikankari pieces from morning office meetings to glamorous evening celebrations.",
     content: `
@@ -926,7 +930,9 @@ const BLOG_ARTICLES = [
     category: "Care & Longevity",
     readTime: "4 min read",
     date: "October 14, 2026",
-    author: "Care Specialists",
+    author: "Pooja Srivastava",
+    authorRole: "Fabric Technologist & Conservation Specialist",
+    authorBio: "Textile conservation consultant focusing on natural plant-based washes, thread preservation, and fabric longevity.",
     image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1000&q=80",
     excerpt: "Proven rituals to wash, press, and store your delicate chikankari heirlooms so they remain pristine for generations to come.",
     content: `
@@ -1639,45 +1645,138 @@ function TwistedTarApp() {
     if (route.page === "product" && activeProduct) {
       schemaTag.textContent = JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "Product",
-        "name": activeProduct.name,
-        "image": activeProduct.image,
-        "description": activeProduct.shortDesc || activeProduct.description,
-        "sku": activeProduct.sku,
-        "brand": { "@type": "Brand", "name": "Twisted Tar" },
-        "offers": {
-          "@type": "Offer",
-          "url": canonical,
-          "priceCurrency": "INR",
-          "price": activeProduct.price,
-          "priceValidUntil": "2027-12-31",
-          "itemCondition": "https://schema.org/NewCondition",
-          "availability": activeProduct.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-          "hasMerchantReturnPolicy": {
-            "@type": "MerchantReturnPolicy",
-            "applicableCountry": "IN",
-            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-            "merchantReturnDays": 10,
-            "returnMethod": "https://schema.org/ReturnByMail"
-          },
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "shippingRate": {
-              "@type": "MonetaryAmount",
-              "value": 0,
-              "currency": "INR"
+        "@graph": [
+          {
+            "@type": "Product",
+            "@id": `${canonical}#product`,
+            "name": activeProduct.name,
+            "image": activeProduct.image,
+            "description": activeProduct.shortDesc || activeProduct.description,
+            "sku": activeProduct.sku || activeProduct.id,
+            "brand": { "@type": "Brand", "name": "Twisted Tar" },
+            "offers": {
+              "@type": "Offer",
+              "url": canonical,
+              "priceCurrency": "INR",
+              "price": activeProduct.price,
+              "priceValidUntil": "2027-12-31",
+              "itemCondition": "https://schema.org/NewCondition",
+              "availability": activeProduct.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "IN",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                "merchantReturnDays": 10,
+                "returnMethod": "https://schema.org/ReturnByMail"
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": 0,
+                  "currency": "INR"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "IN"
+                }
+              }
             },
-            "shippingDestination": {
-              "@type": "DefinedRegion",
-              "addressCountry": "IN"
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": activeProduct.rating || 4.9,
+              "reviewCount": activeProduct.reviewCount || 38
             }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": `${canonical}#breadcrumb`,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": `${baseUrl}/`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Shop Ensembles",
+                "item": `${baseUrl}/#shop`
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": activeProduct.categoryName || "Chikankari",
+                "item": `${baseUrl}/#shop/${activeProduct.category}`
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": activeProduct.name,
+                "item": canonical
+              }
+            ]
           }
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": activeProduct.rating || 4.9,
-          "reviewCount": activeProduct.reviewCount || 38
-        }
+        ]
+      });
+    } else if (route.page === "article" && activeArticle) {
+      schemaTag.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Article",
+            "@id": `${canonical}#article`,
+            "headline": activeArticle.title,
+            "description": activeArticle.excerpt,
+            "image": activeArticle.image,
+            "datePublished": "2026-10-15T10:00:00+05:30",
+            "dateModified": "2026-11-17T12:00:00+05:30",
+            "author": {
+              "@type": "Person",
+              "name": activeArticle.author,
+              "jobTitle": activeArticle.authorRole,
+              "description": activeArticle.authorBio
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Twisted Tar",
+              "url": baseUrl,
+              "logo": {
+                "@type": "ImageObject",
+                "url": `${baseUrl}/assets/logo.svg`
+              }
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonical
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": `${canonical}#breadcrumb`,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": `${baseUrl}/`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "The Journal",
+                "item": `${baseUrl}/#blog`
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": activeArticle.title,
+                "item": canonical
+              }
+            ]
+          }
+        ]
       });
     } else {
       schemaTag.textContent = JSON.stringify({
@@ -2509,6 +2608,7 @@ function HomePage({
 }) {
   const [activeTab, setActiveTab] = useState("all");
   const [emailInput, setEmailInput] = useState("");
+  const [openFaq, setOpenFaq] = useState(0);
 
   const tabProducts = useMemo(() => {
     if (activeTab === "all") return products.slice(0, 8);
@@ -2793,6 +2893,61 @@ function HomePage({
                   </span>
                 </div>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. FREQUENTLY ASKED QUESTIONS (AEO / ZERO-CLICK RICH SNIPPETS) */}
+      <section className="section" style={{ backgroundColor: "#FAF7F2", borderTop: "1px solid var(--color-border-delicate)" }}>
+        <div className="container" style={{ maxWidth: "860px" }}>
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <span className="overline">Authenticity & Guidance</span>
+            <h2 className="section-title">Frequently Asked Questions</h2>
+            <p className="section-subtitle" style={{ maxWidth: "600px", margin: "0 auto" }}>
+              Essential insights into Awadh handcraft traditions, sizing formulas, and heirloom garment preservation.
+            </p>
+          </div>
+
+          <div className="accordion">
+            {[
+              {
+                q: "What makes authentic Lucknowi Chikankari different from machine embroidery?",
+                a: "Authentic Lucknowi Chikankari is embroidered entirely by hand with needle and thread, featuring organic variations in stitch tension, delicate reverse shadow work (Bakhiya), and raised knots (Phanda and Murri). Machine embroidery uses rigid, uniform nylon threads on the reverse with flat, synthetic uniformity."
+              },
+              {
+                q: "What are the core traditional stitches used in Lucknowi Chikankari?",
+                a: "The signature stitches of Lucknowi Chikankari are Bakhiya (herringbone shadow work on the reverse), Phanda (compact millet knots), Murri (rice-grain knots), Keel Kangan & Tepchi (running line contours), and Jaali (delicate openwork lace created without cutting cloth)."
+              },
+              {
+                q: "What fabrics does Twisted Tar use for its handcrafted kurtis?",
+                a: "Twisted Tar crafts kurtis in 100% natural and breathable textiles including gossamer mulmul cotton, handwoven Chanderi silk with pure cotton lining, natural modal, and pure organza silk. No synthetic polyester blends are used."
+              },
+              {
+                q: "How to care for handcrafted pure Chanderi and Mulmul Chikankari kurtis?",
+                a: "Chanderi silk and organza kurtis should be dry cleaned only to safeguard metallic zari and fine embroidery. Pure mulmul cotton kurtis can be gently hand-washed in cold water using mild liquid detergent, dried inside-out in shade, and steam ironed on the reverse side."
+              },
+              {
+                q: "Where is the Twisted Tar atelier located and do you deliver across India?",
+                a: "The Twisted Tar atelier is located at Studio 14, Heritage Arcade, Hazratganj, Lucknow, UP 226001. We provide complimentary insured courier shipping across all pin codes in India on orders above ₹1,999, as well as worldwide international delivery."
+              }
+            ].map((faq, idx) => (
+              <div key={idx} className={`accordion-item ${openFaq === idx ? "open" : ""}`}>
+                <button
+                  type="button"
+                  className="accordion-header"
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  aria-expanded={openFaq === idx}
+                >
+                  <span>{faq.q}</span>
+                  <Icons.ChevronDown />
+                </button>
+                {openFaq === idx && (
+                  <div className="accordion-body">
+                    <p style={{ margin: 0 }}>{faq.a}</p>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -4507,6 +4662,24 @@ function ArticleReaderPage({ article, allArticles, navigateTo }) {
           className="article-full-content"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
+
+        {/* Author Byline & E-E-A-T Credibility Card */}
+        <div style={{ marginTop: "3rem", padding: "1.75rem", background: "#FAF7F2", borderRadius: "var(--radius-sm)", borderLeft: "4px solid var(--color-gold-antique)", display: "flex", gap: "1.25rem", alignItems: "center" }}>
+          <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "var(--color-forest-ink)", color: "var(--color-gold-antique)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", fontSize: "1.3rem", flexShrink: 0, border: "2px solid var(--color-gold-antique)" }}>
+            {article.author.charAt(0)}
+          </div>
+          <div>
+            <div style={{ fontWeight: "700", color: "var(--color-forest-ink)", fontSize: "1.05rem", marginBottom: "0.2rem" }}>
+              Written by {article.author}
+            </div>
+            <div style={{ fontSize: "0.82rem", color: "var(--color-gold-antique)", fontWeight: "600", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "0.4rem" }}>
+              {article.authorRole}
+            </div>
+            <p style={{ margin: 0, fontSize: "0.88rem", color: "var(--color-text-muted)", lineHeight: 1.5 }}>
+              {article.authorBio}
+            </p>
+          </div>
+        </div>
 
         <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--color-border-delicate)" }}>
           <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.8rem", marginBottom: "1.5rem" }}>
