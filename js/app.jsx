@@ -897,26 +897,54 @@ const Icons = {
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
     </svg>
   ),
-  WhatsApp: () => (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12.031 2C6.505 2 2.016 6.489 2.016 12.015c0 1.954.562 3.844 1.63 5.469L2.001 22l4.673-1.614c1.558.98 3.376 1.629 5.357 1.629 5.526 0 10.015-4.489 10.015-10.015C22.046 6.489 17.557 2 12.031 2zm5.836 14.185c-.244.686-1.233 1.258-1.745 1.332-.472.068-1.077.123-3.153-.736-2.657-1.1-4.359-3.799-4.492-3.975-.132-.176-1.076-1.432-1.076-2.732 0-1.3.682-1.94 0.925-2.203.244-.264.533-.33.71-.33.178 0 .355.002.51.01.166.009.388-.063.608.464.223.535.755 1.848.822 1.981.066.133.11.288.022.464-.088.176-.133.288-.266.442-.133.155-.278.344-.399.463-.133.133-.272.277-.117.543.155.266.69 1.137 1.48 1.84 1.016.905 1.871 1.187 2.137 1.32.266.133.421.111.576-.067.155-.177.665-.774.842-1.04.177-.266.355-.221.599-.133.244.089 1.551.73 1.817.863.266.133.443.2.51.311.066.111.066.643-.178 1.329z"/>
+  WhatsApp: ({ size = 22 } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#25D366" />
+      <path d="M17.5 14.3c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.7.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5s-.7-1.7-1-2.3c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.5.2-1.7-.1-.2-.3-.3-.6-.4z" fill="#FFFFFF" />
     </svg>
   ),
-  Facebook: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  Facebook: ({ size = 22 } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#1877F2" />
+      <path d="M15.5 12.05h-2.28V20.5h-3.5v-8.45H7.5V9.1h2.22V7.12c0-1.84.88-4.7 4.7-4.7l3.45.01v3.34h-2.5c-.37 0-.88.18-.88.96v2.37h3.42l-.41 2.95z" fill="#FFFFFF" />
     </svg>
   ),
-  Instagram: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  Instagram: ({ size = 22 } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ borderRadius: "50%", overflow: "hidden" }}>
+      <defs>
+        <radialGradient id="tt-ig-grad-original-app" cx="30%" cy="107%" r="150%">
+          <stop offset="0%" stopColor="#fdf497" />
+          <stop offset="10%" stopColor="#fdf497" />
+          <stop offset="45%" stopColor="#fd5949" />
+          <stop offset="60%" stopColor="#d6249f" />
+          <stop offset="90%" stopColor="#285AEB" />
+        </radialGradient>
+      </defs>
+      <circle cx="12" cy="12" r="12" fill="url(#tt-ig-grad-original-app)" />
+      <rect x="5.5" y="5.5" width="13" height="13" rx="3.8" stroke="#ffffff" strokeWidth="1.6" fill="none" />
+      <circle cx="12" cy="12" r="3.4" stroke="#ffffff" strokeWidth="1.6" fill="none" />
+      <circle cx="15.8" cy="8.2" r="1" fill="#ffffff" />
     </svg>
   ),
-  Pinterest: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C24.002 5.367 18.624 0 12.017 0z"/>
+  Pinterest: ({ size = 22 } = {}) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#E60023" />
+      <path d="M12 3.8c-4.5 0-8.2 3.7-8.2 8.2 0 3.5 2.1 6.5 5.2 7.6-.1-.7-.1-1.7 0-2.4.1-.7 1-4.4 1-4.4s-.3-.5-.3-1.4c0-1.3.8-2.2 1.7-2.2.8 0 1.2.6 1.2 1.4 0 .9-.6 2-1 3.1-.3 1 .5 1.8 1.5 1.8 1.8 0 3.2-1.9 3.2-4.6 0-2.4-1.7-4.1-4.2-4.1-2.9 0-4.6 2.2-4.6 4.4 0 .9.3 1.8.8 2.3.1.1.1.2 0 .4l-.3 1.2c0 .2-.2.2-.4.1-1.3-.6-2.1-2.4-2.1-3.9 0-3.2 2.3-6.1 6.7-6.1 3.5 0 6.2 2.5 6.2 5.8 0 3.5-2.2 6.3-5.3 6.3-1 0-2-.5-2.3-1.2l-.6 2.4c-.2.9-.8 2-1.3 2.7 1 .3 2 .5 3.1.5 4.5 0 8.2-3.7 8.2-8.2 0-4.5-3.7-8.2-8.2-8.2z" fill="#FFFFFF" />
+    </svg>
+  ),
+  Share: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+    </svg>
+  ),
+  Copy: () => (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
   )
 };
@@ -3003,6 +3031,59 @@ function ProductDetailPage({
               {pincodeStatus && <div className="pincode-result">{pincodeStatus}</div>}
             </div>
 
+            {/* Social Share Bar with Original Icons */}
+            <div className="product-share-bar" aria-label="Share this ensemble">
+              <span className="share-label">
+                <Icons.Share /> Share Ensemble:
+              </span>
+              <div className="share-btn-group">
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(`Take a look at this authentic Lucknowi chikankari ensemble: ${product.name} (₹${product.price}) on Twisted Tar: ${window.location.href}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="product-share-btn share-whatsapp"
+                  title="Share with Friends on WhatsApp"
+                >
+                  <Icons.WhatsApp size={18} />
+                  <span>WhatsApp</span>
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="product-share-btn share-facebook"
+                  title="Share on Facebook"
+                >
+                  <Icons.Facebook size={18} />
+                  <span>Facebook</span>
+                </a>
+                <a
+                  href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}&media=${encodeURIComponent(product.images?.[0] || "")}&description=${encodeURIComponent(`${product.name} - Luxury Lucknowi Chikankari on Twisted Tar`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="product-share-btn share-pinterest"
+                  title="Save to Pinterest Board"
+                >
+                  <Icons.Pinterest size={18} />
+                  <span>Pinterest</span>
+                </a>
+                <button
+                  type="button"
+                  className="product-share-btn share-copy"
+                  onClick={() => {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(window.location.href);
+                    }
+                    showToast("Ensemble link copied to clipboard!");
+                  }}
+                  title="Copy link to clipboard"
+                >
+                  <Icons.Copy />
+                  <span>Copy Link</span>
+                </button>
+              </div>
+            </div>
+
             {/* Accordion Panels */}
             <div className="accordion">
               {/* 1. Craft & Embroidery */}
@@ -4595,37 +4676,47 @@ function Footer({ navigateTo, showToast, siteSettings }) {
               Hazratganj Atelier · Lucknow 226001
             </div>
 
-            {/* Quick Social Signal Icon Badges */}
-            <div className="footer-social-row" aria-label="Social Media Channels">
+            {/* Quick Social Signal Icon Badges (Original Official Icons) */}
+            <div className="footer-social-row" aria-label="Official Social Channels">
               <a
                 href={socialLinks.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="footer-social-icon"
+                className="footer-social-icon instagram"
                 aria-label="Twisted Tar on Instagram"
                 title="Follow @twistedtar on Instagram"
               >
-                <Icons.Instagram />
+                <Icons.Instagram size={36} />
               </a>
               <a
                 href={socialLinks.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="footer-social-icon"
+                className="footer-social-icon facebook"
                 aria-label="Twisted Tar on Facebook"
                 title="Join Twisted Tar on Facebook"
               >
-                <Icons.Facebook />
+                <Icons.Facebook size={36} />
               </a>
               <a
                 href={socialLinks.pinterest}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="footer-social-icon"
+                className="footer-social-icon pinterest"
                 aria-label="Twisted Tar on Pinterest"
                 title="Explore Lookbooks on Pinterest"
               >
-                <Icons.Pinterest />
+                <Icons.Pinterest size={36} />
+              </a>
+              <a
+                href={`https://wa.me/${(BRAND.contact.phone).replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Twisted Tar! I would like to inquire about your Lucknowi Chikankari collection.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-icon whatsapp"
+                aria-label="Chat with Twisted Tar on WhatsApp"
+                title="Chat with Concierge on WhatsApp"
+              >
+                <Icons.WhatsApp size={36} />
               </a>
             </div>
           </div>
@@ -4673,20 +4764,22 @@ function Footer({ navigateTo, showToast, siteSettings }) {
               </button>
             </form>
 
-            {/* Social Signals & Community Proof */}
+            {/* Social Signals & Community Proof (Original Brand Badges) */}
             <div className="footer-social-signals">
-              <span className="social-signals-title">Social Signals & Lookbooks</span>
+              <span className="social-signals-title">Official Social Signals & Lookbooks</span>
               <div className="social-signals-pills">
                 <a
                   href={socialLinks.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-signal-pill"
+                  className="social-signal-pill ig-pill"
                   title="Instagram: @twistedtar (42K Artisans & Followers)"
                 >
                   <div className="pill-left">
-                    <Icons.Instagram />
-                    <span>Instagram</span>
+                    <span className="pill-icon-box">
+                      <Icons.Instagram size={24} />
+                    </span>
+                    <span className="pill-name">Instagram</span>
                   </div>
                   <span className="pill-badge">42K Community</span>
                 </a>
@@ -4694,12 +4787,14 @@ function Footer({ navigateTo, showToast, siteSettings }) {
                   href={socialLinks.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-signal-pill"
+                  className="social-signal-pill fb-pill"
                   title="Facebook: Twisted Tar Atelier (18K Awadh Collective)"
                 >
                   <div className="pill-left">
-                    <Icons.Facebook />
-                    <span>Facebook</span>
+                    <span className="pill-icon-box">
+                      <Icons.Facebook size={24} />
+                    </span>
+                    <span className="pill-name">Facebook</span>
                   </div>
                   <span className="pill-badge">18K Members</span>
                 </a>
@@ -4707,12 +4802,14 @@ function Footer({ navigateTo, showToast, siteSettings }) {
                   href={socialLinks.pinterest}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-signal-pill"
+                  className="social-signal-pill pin-pill"
                   title="Pinterest: Twisted Tar Chikankari (95K Monthly Views)"
                 >
                   <div className="pill-left">
-                    <Icons.Pinterest />
-                    <span>Pinterest</span>
+                    <span className="pill-icon-box">
+                      <Icons.Pinterest size={24} />
+                    </span>
+                    <span className="pill-name">Pinterest</span>
                   </div>
                   <span className="pill-badge">95K Views/mo</span>
                 </a>
